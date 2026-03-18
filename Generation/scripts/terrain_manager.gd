@@ -102,3 +102,4 @@ func _get_free_chunk() -> TerrainChunk:
 		if not chunk.is_in_use:
 			return chunk
 	return null
+	

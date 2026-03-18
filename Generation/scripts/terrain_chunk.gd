@@ -85,7 +85,7 @@ func recycle() -> void:
 	pending_recycle = true
 	hide()
 	
-	# If no thread is running, we can recycle it instantly
+	# If no thread is running, we can recycle it instantlysdaw
 	if task_id == -1:
 		_finish_recycle()
 

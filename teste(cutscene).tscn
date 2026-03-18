@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://bi1qmqu7iej7v"]
+
+[ext_resource type="Script" uid="uid://6exiuqy4rt0f" path="res://Generation/scripts/cutscene.gd" id="1_m343f"]
+
+[node name="Dialogue" type="CanvasLayer" unique_id=332849883]
+script = ExtResource("1_m343f")
+
+[node name="Fadescreen" type="ColorRect" parent="." unique_id=465283152]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Control" type="Control" parent="." unique_id=1510011949]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Diabo_anjo" type="TextureRect" parent="Control" unique_id=242726219]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -22.5
+offset_right = 24.0
+offset_bottom = 2.0
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="." unique_id=1499205636]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -160.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Texto" type="RichTextLabel" parent="Panel" unique_id=227430968]
+layout_mode = 0
+offset_top = 4.0
+offset_right = 1156.0
+offset_bottom = 156.0
+theme_override_font_sizes/normal_font_size = 25
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Panel" unique_id=1566963019]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0

@@ -8,7 +8,7 @@ extends Control
 @onready var margin_container: MarginContainer = $MarginContainer
 
 
-@onready var start_level = preload("res://proje.tscn") as PackedScene
+@onready var start_level = preload("res://cutscene/proje.tscn") as PackedScene
 
 func _ready():
 	handle_signals()
