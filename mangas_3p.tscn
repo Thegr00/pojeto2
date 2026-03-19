@@ -45,9 +45,12 @@ transform = Transform3D(1, 0, 0, 0, 0.8782252, 0.4782474, 0, -0.4782474, 0.87822
 fov = 82.3
 
 [node name="Particulas" type="GPUParticles3D" parent="cam origin" unique_id=1533343449]
+visible = false
+emitting = false
 process_material = SubResource("ParticleProcessMaterial_yn4l2")
 draw_pass_1 = SubResource("QuadMesh_5k7j1")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="cam origin/Particulas" unique_id=1738539474]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.7281227, 0)
+visible = false
 mesh = SubResource("QuadMesh_o2qoc")

@@ -6,219 +6,153 @@ const VOXEL_SIZE = 2.0
 const ISO_LEVEL = 0.0
 
 var chunk_pos: Vector3i
-var flight_path
+var flight_path: FlightPath
 var noise_data: TerrainNoise
 
-var generated_mesh: ArrayMesh
-var generated_shape: ConcavePolygonShape3D
 var is_empty := true
 var out_vertices: PackedVector3Array
 var out_normals: PackedVector3Array
 var out_indices: PackedInt32Array
+var out_colors: PackedColorArray
+var out_collision_faces: PackedVector3Array
 
 func execute_job() -> void:
 	var chunk_center_world = (Vector3(chunk_pos) * CHUNK_SIZE * VOXEL_SIZE) + (Vector3.ONE * CHUNK_SIZE * VOXEL_SIZE * 0.5)
 	var search_radius = (CHUNK_SIZE * VOXEL_SIZE) * 2.0
 	
-	# Optimized path fetching
 	var local_segments = flight_path.get_local_segments(chunk_center_world, search_radius)
-	
 	var density_map = _generate_density_field(local_segments)
 	
 	if not is_empty:
 		_build_mesh_and_collision(density_map)
 
 func _generate_density_field(local_segments: Array) -> PackedFloat32Array:
-	var total = (CHUNK_SIZE + 1) * (CHUNK_SIZE + 1) * (CHUNK_SIZE + 1)
+	# FIX: We calculate 1 extra block on all sides (-1 to 32) so chunk borders match perfectly!
+	var size = CHUNK_SIZE + 2 
 	var map = PackedFloat32Array()
-	map.resize(total)
+	map.resize(size * size * size)
 	
 	var idx = 0
-	for z in range(CHUNK_SIZE + 1):
-		for y in range(CHUNK_SIZE + 1):
-			for x in range(CHUNK_SIZE + 1):
+	for z in range(-1, CHUNK_SIZE + 1):
+		for y in range(-1, CHUNK_SIZE + 1):
+			for x in range(-1, CHUNK_SIZE + 1):
 				var world_pos = (Vector3(x, y, z) + Vector3(chunk_pos * CHUNK_SIZE)) * VOXEL_SIZE
 				var d = calculate_sdf(world_pos, local_segments)
 				map[idx] = d
 				
-				if d > ISO_LEVEL:
-					is_empty = false
+				# Only check emptiness for the actual chunk core (0 to 31)
+				if x >= 0 and x < CHUNK_SIZE and y >= 0 and y < CHUNK_SIZE and z >= 0 and z < CHUNK_SIZE:
+					if d < ISO_LEVEL:
+						is_empty = false
 				idx += 1
 	return map
 
 func calculate_sdf(pos: Vector3, local_segments: Array) -> float:
-	# 1. The Floating Islands
-	# We multiply the Y position by 0.3 when sampling the noise. 
-	# This "squashes" the noise space, which stretches the physical rock vertically!
-	var noise_val = noise_data.float_noise.get_noise_3d(pos.x, pos.y * 0.3, pos.z)
+	var warp = noise_data.warp_noise.get_noise_3d(pos.x * 0.5, 0.0, pos.z * 0.5) * 40.0
+	var pillar_noise = noise_data.height_noise.get_noise_3d(pos.x + warp, pos.y * 0.1, pos.z + warp)
+	var base_density = -pillar_noise * 50.0 
 	
-	# In SDF, Negative = Rock, Positive = Air.
-	# We invert the noise and add an offset. 
-	# (Increase the 0.15 to make thicker islands, decrease to make them thinner)
-	var base_terrain = -noise_val + 0.15 
+	var terracing = sin(pos.y * 0.08) * 15.0
+	base_density += terracing
 	
-	# Multiply by 80.0 to scale the "hardness" of the SDF gradient
-	base_terrain *= 80.0 
+	var cave_noise = noise_data.detail_noise.get_noise_3d(pos.x * 0.8, pos.y * 1.5, pos.z * 0.8)
+	var cave_carver = abs(cave_noise) * 90.0
 	
-	# 2. The Dive Canyons
-	# Find how close we are to the generated flight path
-	var dist = flight_path.get_distance_to_segments(pos, local_segments)
+	var dist_to_path = flight_path.get_distance_to_segments(pos, local_segments)
+	var safety_tube = 35.0 - dist_to_path
 	
-	# Create a massive tube of air (radius 65.0) around the path so you don't spawn in a wall
-	var canyon_air = 65.0 - dist
-	
-	# 3. Combine!
-	# The max() function takes whichever is higher. 
-	# If we are inside the canyon, canyon_air is positive, which overwrites the negative rock!
-	var final_d = max(base_terrain, canyon_air)
-	
+	var final_d = max(base_density, 25.0 - cave_carver)
+	final_d = max(final_d, safety_tube)
 	return final_d
-# Helper to get the index for the (CHUNK_SIZE + 1) density array
-func _get_idx(x: int, y: int, z: int) -> int:
-	return x + (CHUNK_SIZE + 1) * (y + (CHUNK_SIZE + 1) * z)
 
-# Helper to get the index for the (CHUNK_SIZE) voxel cell array
-func _get_cell_idx(x: int, y: int, z: int) -> int:
-	return x + CHUNK_SIZE * (y + CHUNK_SIZE * z)
+func _get_density(map: PackedFloat32Array, x: int, y: int, z: int) -> float:
+	var mx = x + 1
+	var my = y + 1
+	var mz = z + 1
+	var size = CHUNK_SIZE + 2
+	return map[mx + size * (my + size * mz)]
 
-func arch_density(pos: Vector3) -> float:
-	var arch_center := Vector3(round(pos.x / 120.0) * 120.0, 40.0, round(pos.z / 120.0) * 120.0)
-	var ring : float = abs(pos.distance_to(arch_center) - 30.0)
-	return 8.0 - ring
-
-func smin(a: float, b: float, k: float) -> float:
-	var h = clamp(0.5 + 0.5 * (b - a) / k, 0.0, 1.0)
-	return lerp(b, a, h) - k * h * (1.0 - h)
+# FIX: This adds "fake lighting" and a checkerboard pattern to make it look like actual 3D blocks!
+func get_voxel_color(world_x: float, world_y: float, world_z: float, normal: Vector3) -> Color:
+	var base_color: Color
+	if world_y > 80.0: 
+		base_color = Color(0.9, 0.9, 0.95) # Snow
+	elif world_y > -40.0: 
+		base_color = Color(0.3, 0.6, 0.25) # Grass/Dirt
+	else: 
+		base_color = Color(0.4, 0.4, 0.45) # Rock
+		
+	# Checkerboard pattern
+	var checker = int(floor(world_x/2.0) + floor(world_y/2.0) + floor(world_z/2.0)) % 2
+	var brightness = 1.0 if checker == 0 else 0.92
+	
+	# Darken faces pointing sideways or down
+	if normal.y == 0:
+		brightness *= 0.85 # Sides get slightly darker
+	elif normal.y < 0:
+		brightness *= 0.65 # Bottom is darkest
+		
+	return base_color * brightness
 
 func _build_mesh_and_collision(density_map: PackedFloat32Array) -> void:
 	var vertices := PackedVector3Array()
 	var normals := PackedVector3Array()
 	var indices := PackedInt32Array()
-
-	# Map to remember which vertex ID belongs to which voxel cell
-	var cell_vertex_indices = PackedInt32Array()
-	cell_vertex_indices.resize(CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE)
-	cell_vertex_indices.fill(-1)
-
-	var corner_offsets = [
-		Vector3i(0, 0, 0), Vector3i(1, 0, 0), Vector3i(1, 1, 0), Vector3i(0, 1, 0),
-		Vector3i(0, 0, 1), Vector3i(1, 0, 1), Vector3i(1, 1, 1), Vector3i(0, 1, 1)
-	]
-	var edge_pairs = [
-		[0,1], [1,2], [2,3], [3,0], # Bottom edges
-		[4,5], [5,6], [6,7], [7,4], # Top edges
-		[0,4], [1,5], [2,6], [3,7]  # Vertical edges
+	var colors := PackedColorArray()
+	
+	var dirs = [Vector3i.RIGHT, Vector3i.LEFT, Vector3i.UP, Vector3i.DOWN, Vector3i.BACK, Vector3i.FORWARD]
+	var face_verts = [
+		[Vector3(1,0,1), Vector3(1,0,0), Vector3(1,1,0), Vector3(1,1,1)],
+		[Vector3(0,0,0), Vector3(0,0,1), Vector3(0,1,1), Vector3(0,1,0)],
+		[Vector3(0,1,1), Vector3(1,1,1), Vector3(1,1,0), Vector3(0,1,0)],
+		[Vector3(0,0,0), Vector3(1,0,0), Vector3(1,0,1), Vector3(0,0,1)],
+		[Vector3(1,0,1), Vector3(0,0,1), Vector3(0,1,1), Vector3(1,1,1)],
+		[Vector3(0,0,0), Vector3(1,0,0), Vector3(1,1,0), Vector3(0,1,0)]
 	]
 
-	# ==========================================
-	# PASS 1: Find surface cells and place vertices
-	# ==========================================
-	var current_vertex_idx = 0
+	var index_offset = 0
+	
 	for z in range(CHUNK_SIZE):
 		for y in range(CHUNK_SIZE):
 			for x in range(CHUNK_SIZE):
-				var corners = []
-				var mask = 0
-
-				# Check the 8 corners of the current cell
-				for i in range(8):
-					var offset = corner_offsets[i]
-					var d = density_map[_get_idx(x + offset.x, y + offset.y, z + offset.z)]
-					corners.append(d)
-					if d < ISO_LEVEL:
-						mask |= (1 << i)
-
-				# If cell is entirely air (255) or entirely solid rock (0), skip it!
-				if mask == 0 or mask == 255:
-					continue
-
-				# Find where the terrain cuts through the edges
-				var edge_count = 0
-				var vertex_pos = Vector3.ZERO
-
-				for edge in edge_pairs:
-					var d1 = corners[edge[0]]
-					var d2 = corners[edge[1]]
-
-					# If the edge crosses the ISO_LEVEL (surface)
-					if (d1 < ISO_LEVEL) != (d2 < ISO_LEVEL):
-						var t = (ISO_LEVEL - d1) / (d2 - d1)
-						var p1 = Vector3(corner_offsets[edge[0]])
-						var p2 = Vector3(corner_offsets[edge[1]])
-						vertex_pos += p1.lerp(p2, t)
-						edge_count += 1
-
-				if edge_count > 0:
-					vertex_pos /= float(edge_count) # Average the crossing points
-					vertices.append((Vector3(x, y, z) + vertex_pos) * VOXEL_SIZE)
-					normals.append(Vector3.ZERO) # Placeholder for Pass 3
-					
-					cell_vertex_indices[_get_cell_idx(x, y, z)] = current_vertex_idx
-					current_vertex_idx += 1
-
-	# ==========================================
-	# PASS 2: Connect vertices into faces (Quads)
-	# ==========================================
-	for z in range(1, CHUNK_SIZE):
-		for y in range(1, CHUNK_SIZE):
-			for x in range(1, CHUNK_SIZE):
-				var is_inside = density_map[_get_idx(x, y, z)] < ISO_LEVEL
-
-				# Check X edge
-				if is_inside != (density_map[_get_idx(x+1, y, z)] < ISO_LEVEL) and x < CHUNK_SIZE - 1:
-					var v1 = cell_vertex_indices[_get_cell_idx(x, y, z)]
-					var v2 = cell_vertex_indices[_get_cell_idx(x, y-1, z)]
-					var v3 = cell_vertex_indices[_get_cell_idx(x, y-1, z-1)]
-					var v4 = cell_vertex_indices[_get_cell_idx(x, y, z-1)]
-					
-					if v1 != -1 and v2 != -1 and v3 != -1 and v4 != -1:
-						if is_inside: indices.append_array([v1, v2, v3, v1, v3, v4])
-						else:         indices.append_array([v1, v4, v3, v1, v3, v2])
 				
-				# Check Y edge
-				if is_inside != (density_map[_get_idx(x, y+1, z)] < ISO_LEVEL) and y < CHUNK_SIZE - 1:
-					var v1 = cell_vertex_indices[_get_cell_idx(x, y, z)]
-					var v2 = cell_vertex_indices[_get_cell_idx(x, y, z-1)]
-					var v3 = cell_vertex_indices[_get_cell_idx(x-1, y, z-1)]
-					var v4 = cell_vertex_indices[_get_cell_idx(x-1, y, z)]
+				var d = _get_density(density_map, x, y, z)
+				if d >= ISO_LEVEL: continue 
 					
-					if v1 != -1 and v2 != -1 and v3 != -1 and v4 != -1:
-						if is_inside: indices.append_array([v1, v2, v3, v1, v3, v4])
-						else:         indices.append_array([v1, v4, v3, v1, v3, v2])
-
-				# Check Z edge
-				if is_inside != (density_map[_get_idx(x, y, z+1)] < ISO_LEVEL) and z < CHUNK_SIZE - 1:
-					var v1 = cell_vertex_indices[_get_cell_idx(x, y, z)]
-					var v2 = cell_vertex_indices[_get_cell_idx(x-1, y, z)]
-					var v3 = cell_vertex_indices[_get_cell_idx(x-1, y-1, z)]
-					var v4 = cell_vertex_indices[_get_cell_idx(x, y-1, z)]
+				var world_pos = (Vector3(x, y, z) - Vector3.ONE * 0.5) * VOXEL_SIZE
+				
+				var wx = (x + chunk_pos.x * CHUNK_SIZE) * VOXEL_SIZE
+				var wy = (y + chunk_pos.y * CHUNK_SIZE) * VOXEL_SIZE
+				var wz = (z + chunk_pos.z * CHUNK_SIZE) * VOXEL_SIZE
+				
+				for i in range(6):
+					var nx = x + dirs[i].x
+					var ny = y + dirs[i].y
+					var nz = z + dirs[i].z
 					
-					if v1 != -1 and v2 != -1 and v3 != -1 and v4 != -1:
-						if is_inside: indices.append_array([v1, v2, v3, v1, v3, v4])
-						else:         indices.append_array([v1, v4, v3, v1, v3, v2])
+					# If neighbor is Air, draw this face
+					if _get_density(density_map, nx, ny, nz) >= ISO_LEVEL:
+						var normal = Vector3(dirs[i])
+						var face_color = get_voxel_color(wx, wy, wz, normal)
+						
+						for v in range(4):
+							vertices.append(world_pos + (face_verts[i][v] * VOXEL_SIZE))
+							normals.append(normal)
+							colors.append(face_color) 
+							
+						indices.append_array([
+							index_offset, index_offset + 1, index_offset + 2,
+							index_offset, index_offset + 2, index_offset + 3
+						])
+						index_offset += 4
 
-	# ==========================================
-	# PASS 3: Calculate Smooth Normals
-	# ==========================================
-	for i in range(0, indices.size(), 3):
-		var i1 = indices[i]; var i2 = indices[i+1]; var i3 = indices[i+2]
-		var v1 = vertices[i1]; var v2 = vertices[i2]; var v3 = vertices[i3]
-		
-		# Cross product calculates the perpendicular direction the face is pointing
-		var normal = (v2 - v1).cross(v3 - v1).normalized()
-		
-		# Add face normal to all three vertices
-		normals[i1] += normal
-		normals[i2] += normal
-		normals[i3] += normal
-		
-	# Normalize final vertex normals
-	for i in range(normals.size()):
-		normals[i] = normals[i].normalized()
-
-	# ------------------------------------------
-	# FINALIZE: Just save the arrays! Don't build the mesh here!sdsadwa
-	# ------------------------------------------
 	out_vertices = vertices
 	out_normals = normals
 	out_indices = indices
+	out_colors = colors
+
+	var faces = PackedVector3Array()
+	faces.resize(indices.size())
+	for i in range(indices.size()):
+		faces[i] = vertices[indices[i]]
+	out_collision_faces = faces

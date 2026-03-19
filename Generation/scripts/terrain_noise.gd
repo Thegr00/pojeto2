@@ -1,5 +1,5 @@
 class_name TerrainNoise
-extends RefCounted
+extends Resource
 
 var height_noise : FastNoiseLite
 var detail_noise : FastNoiseLite
