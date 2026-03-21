@@ -30,13 +30,20 @@ func begin_generation(pos: Vector3i, flight_path: FlightPath, shared_noise: Terr
 	is_waiting_to_mesh = false
 	is_waiting_to_collide = false
 	
-	# Since C# handles the constants, we just hardcode the chunk size (32 * 2.0) here for position
-	position = Vector3(pos) * (64.0)
+	position = Vector3(pos) * (32.0) # UPDATED: Changed from 64.0 to 32.0
 	
 	builder = preload("res://Generation/scripts/ChunkBuilder.cs").new()
 	builder.chunk_pos = pos
-	builder.flight_path = flight_path
 	builder.noise_data = shared_noise 
+	
+	# === THE FIX: Fetch segments safely on the Main Thread! ===
+	var chunk_center_world = position + (Vector3.ONE * 16.0) # UPDATED: Changed from 32.0 to 16.0
+	var search_radius = 32.0 * 2.0 # UPDATED: Changed from 64.0 to 32.0
+	var segments = flight_path.get_local_segments(chunk_center_world, search_radius)
+	
+	# Hand the segments directly to C#
+	builder.local_segments_gd = segments 
+	# ==========================================================
 	
 	task_id = WorkerThreadPool.add_task(builder.execute_job, true)
 	set_process(true)

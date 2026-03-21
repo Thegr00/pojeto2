@@ -2,7 +2,7 @@ class_name WorldManager
 extends Node3D
 
 @export var player: Node3D
-const VIEW_DISTANCE = 4
+const VIEW_DISTANCE = 8 # UPDATED: Changed from 4 to 8 to keep horizon same distance
 const CHUNKS_PER_FRAME = 3 
 
 var world_seed = randi()
@@ -41,8 +41,8 @@ func _process(_delta: float) -> void:
 	_dispatch_queued_chunks()
 
 func world_to_chunk(pos: Vector3) -> Vector3i:
-	# Actual size is Chunk Size (32) * Voxel Size (2.0)
-	var actual_size = 64.0 
+	# Actual size is Chunk Size (16) * Voxel Size (2.0)
+	var actual_size = 32.0 # UPDATED: Changed from 64.0 to 32.0
 	return Vector3i(
 		floor(pos.x / actual_size),
 		floor(pos.y / actual_size),

@@ -5,14 +5,16 @@ using System.Collections.Generic;
 [GlobalClass]
 public partial class ChunkBuilder : RefCounted
 {
-	public const int ChunkSize = 32;
+	public const int ChunkSize = 16; // UPDATED: Changed from 32 to 16
 	public const float VoxelSize = 2.0f;
 	public const float IsoLevel = 0.0f;
 
 	// Standard fields
 	public Vector3I chunk_pos;
-	public GodotObject flight_path;
 	public GodotObject noise_data;
+	
+	// NEW: We receive the pre-calculated array from GDScript here!
+	public Godot.Collections.Array local_segments_gd { get; set; }
 
 	public bool is_empty = true;
 	public Vector3[] out_vertices;
@@ -38,17 +40,11 @@ public partial class ChunkBuilder : RefCounted
 		_heightNoise = (FastNoiseLite)noise_data.Get("height_noise");
 		_detailNoise = (FastNoiseLite)noise_data.Get("detail_noise");
 
-		Vector3 chunkCenterWorld = (new Vector3(chunk_pos.X, chunk_pos.Y, chunk_pos.Z) * ChunkSize * VoxelSize) + (Vector3.One * ChunkSize * VoxelSize * 0.5f);
-		float searchRadius = (ChunkSize * VoxelSize) * 2.0f;
-
-		// 1. Call GDScript ONCE per chunk to get the local segments
-		Godot.Collections.Array gdSegments = (Godot.Collections.Array)flight_path.Call("get_local_segments", chunkCenterWorld, searchRadius);
-		
-		// 2. Translate them into a hyper-fast C# array
-		Segment[] localSegments = new Segment[gdSegments.Count];
-		for (int i = 0; i < gdSegments.Count; i++)
+		// 1. Translate the data GDScript handed us into a hyper-fast C# array
+		Segment[] localSegments = new Segment[local_segments_gd.Count];
+		for (int i = 0; i < local_segments_gd.Count; i++)
 		{
-			Godot.Collections.Dictionary dict = (Godot.Collections.Dictionary)gdSegments[i];
+			Godot.Collections.Dictionary dict = (Godot.Collections.Dictionary)local_segments_gd[i];
 			localSegments[i] = new Segment
 			{
 				Start = (Vector3)dict["start"],
@@ -56,7 +52,7 @@ public partial class ChunkBuilder : RefCounted
 			};
 		}
 
-		// Pass our pure C# array into the density field generator
+		// 2. Pass our pure C# array into the density field generator
 		float[] densityMap = GenerateDensityField(localSegments);
 
 		if (!is_empty)
@@ -145,7 +141,7 @@ public partial class ChunkBuilder : RefCounted
 		float caveNoise = _detailNoise.GetNoise3D(pos.X * 0.8f, pos.Y * 1.5f, pos.Z * 0.8f);
 		float caveCarver = Mathf.Abs(caveNoise) * 90.0f;
 
-		// Call our new pure C# method!
+		// Call our pure C# method!
 		float distToPath = GetDistanceToSegments(pos, localSegments);
 		float safetyTube = 10.0f - distToPath;
 

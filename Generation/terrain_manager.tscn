@@ -6,7 +6,7 @@
 
 [sub_resource type="Environment" id="Environment_atpbs"]
 fog_enabled = true
-fog_light_color = Color(0.7359404, 0.47677833, 0.36234355, 1)
+fog_light_color = Color(0.30913824, 0.2756382, 0.55516624, 1)
 fog_density = 0.015
 
 [node name="TerrainManager" type="Node3D" unique_id=1387819765 node_paths=PackedStringArray("player")]
@@ -14,6 +14,7 @@ script = ExtResource("1_icbd1")
 player = NodePath("mangas3p")
 
 [node name="mangas3p" parent="." unique_id=1479076587 instance=ExtResource("2_atpbs")]
+transform = Transform3D(1, 0, 0, 0, 0.37784076, 0.92587066, 0, -0.92587066, 0.37784076, 0, 0, 0)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=579636448]
 transform = Transform3D(1, 0, 0, 0, 0.2268383, 0.97393245, 0, -0.97393245, 0.2268383, 0, 38.279755, 0)
