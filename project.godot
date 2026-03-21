@@ -17,6 +17,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
+ScoreManager="*uid://dsif6if7fpevs"
 DialogueUI="*uid://bi1qmqu7iej7v"
 GameManager="*uid://drd7u5l2l5ss8"
 

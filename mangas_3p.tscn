@@ -21,12 +21,20 @@ material = SubResource("StandardMaterial3D_qay7o")
 [sub_resource type="QuadMesh" id="QuadMesh_o2qoc"]
 size = Vector2(0, 0)
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_qay7o"]
+radius = 15.0
+
 [node name="mangas3p" type="CharacterBody3D" unique_id=1479076587]
 script = ExtResource("1_yn4l2")
 max_speed = 50.0
 min_speed = 10.0
 dive_acceleration = 25.0
+up_deceleration = null
+rotation_speed = null
 slerp_speed = 10.0
+sens = null
+cam_offset_amount = null
+cam_offset_speed = null
 
 [node name="mannequiny-0_3_0" parent="." unique_id=684319160 instance=ExtResource("2_qay7o")]
 transform = Transform3D(-0.99980956, -0.00068503316, 0.019499535, -0.019510375, 0.023814822, -0.9995261, 0.00022032877, -0.9997163, -0.023823652, 0, 0.5465071, 0.27740788)
@@ -54,3 +62,7 @@ draw_pass_1 = SubResource("QuadMesh_5k7j1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.7281227, 0)
 visible = false
 mesh = SubResource("QuadMesh_o2qoc")
+
+[node name="ShapeCast3D" type="ShapeCast3D" parent="." unique_id=816150755]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.47473526, -0.83687884)
+shape = SubResource("SphereShape3D_qay7o")
