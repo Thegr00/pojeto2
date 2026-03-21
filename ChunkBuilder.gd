@@ -1,162 +1,207 @@
-class_name ChunkBuilder
-extends RefCounted
+using Godot;
+using System;
+using System.Collections.Generic;
 
-const CHUNK_SIZE = 32
-const VOXEL_SIZE = 2.0
-const ISO_LEVEL = 0.0
+[GlobalClass]
+public partial class ChunkBuilder : RefCounted
+{
+	public const int ChunkSize = 32;
+	public const float VoxelSize = 2.0f;
+	public const float IsoLevel = 0.0f;
 
-var chunk_pos: Vector3i
-var flight_path: FlightPath
-var noise_data: TerrainNoise
+	// Using exact GDScript variable names so your TerrainChunk.gd doesn't break!
+    public Vector3I chunk_pos { get; set; }
+    public GodotObject flight_path { get; set; }
+    public GodotObject noise_data { get; set; }
 
-var is_empty := true
-var out_vertices: PackedVector3Array
-var out_normals: PackedVector3Array
-var out_indices: PackedInt32Array
-var out_colors: PackedColorArray
-var out_collision_faces: PackedVector3Array
+    public bool is_empty { get; set; } = true;
+    public Vector3[] out_vertices { get; set; }
+    public Vector3[] out_normals { get; set; }
+    public int[] out_indices { get; set; }
+    public Color[] out_colors { get; set; }
+    public Vector3[] out_collision_faces { get; set; }
 
-func execute_job() -> void:
-	var chunk_center_world = (Vector3(chunk_pos) * CHUNK_SIZE * VOXEL_SIZE) + (Vector3.ONE * CHUNK_SIZE * VOXEL_SIZE * 0.5)
-	var search_radius = (CHUNK_SIZE * VOXEL_SIZE) * 2.0
-	
-	var local_segments = flight_path.get_local_segments(chunk_center_world, search_radius)
-	var density_map = _generate_density_field(local_segments)
-	
-	if not is_empty:
-		_build_mesh_and_collision(density_map)
+    // Cached noise references to keep things fast
+    private FastNoiseLite _warpNoise;
+    private FastNoiseLite _heightNoise;
+    private FastNoiseLite _detailNoise;
 
-func _generate_density_field(local_segments: Array) -> PackedFloat32Array:
-	# FIX: We calculate 1 extra block on all sides (-1 to 32) so chunk borders match perfectly!
-	var size = CHUNK_SIZE + 2 
-	var map = PackedFloat32Array()
-	map.resize(size * size * size)
-	
-	var idx = 0
-	for z in range(-1, CHUNK_SIZE + 1):
-		for y in range(-1, CHUNK_SIZE + 1):
-			for x in range(-1, CHUNK_SIZE + 1):
-				var world_pos = (Vector3(x, y, z) + Vector3(chunk_pos * CHUNK_SIZE)) * VOXEL_SIZE
-				var d = calculate_sdf(world_pos, local_segments)
-				map[idx] = d
-				
-				# Only check emptiness for the actual chunk core (0 to 31)
-				if x >= 0 and x < CHUNK_SIZE and y >= 0 and y < CHUNK_SIZE and z >= 0 and z < CHUNK_SIZE:
-					if d < ISO_LEVEL:
-						is_empty = false
-				idx += 1
-	return map
+    public void execute_job()
+    {
+        // Grab the noise generators from your GDScript object
+        _warpNoise = (FastNoiseLite)noise_data.Get("warp_noise");
+        _heightNoise = (FastNoiseLite)noise_data.Get("height_noise");
+        _detailNoise = (FastNoiseLite)noise_data.Get("detail_noise");
 
-func calculate_sdf(pos: Vector3, local_segments: Array) -> float:
-	var warp = noise_data.warp_noise.get_noise_3d(pos.x * 0.5, 0.0, pos.z * 0.5) * 40.0
-	var pillar_noise = noise_data.height_noise.get_noise_3d(pos.x + warp, pos.y * 0.1, pos.z + warp)
-	var base_density = -pillar_noise * 50.0 
-	
-	var terracing = sin(pos.y * 0.08) * 15.0
-	base_density += terracing
-	
-	var cave_noise = noise_data.detail_noise.get_noise_3d(pos.x * 0.8, pos.y * 1.5, pos.z * 0.8)
-	var cave_carver = abs(cave_noise) * 90.0
-	
-	var dist_to_path = flight_path.get_distance_to_segments(pos, local_segments)
-	var safety_tube = 35.0 - dist_to_path
-	
-	var final_d = max(base_density, 25.0 - cave_carver)
-	final_d = max(final_d, safety_tube)
-	return final_d
+        Vector3 chunkCenterWorld = (new Vector3(chunk_pos.X, chunk_pos.Y, chunk_pos.Z) * ChunkSize * VoxelSize) + (Vector3.One * ChunkSize * VoxelSize * 0.5f);
+        float searchRadius = (ChunkSize * VoxelSize) * 2.0f;
 
-func _get_density(map: PackedFloat32Array, x: int, y: int, z: int) -> float:
-	var mx = x + 1
-	var my = y + 1
-	var mz = z + 1
-	var size = CHUNK_SIZE + 2
-	return map[mx + size * (my + size * mz)]
+        Godot.Collections.Array localSegments = (Godot.Collections.Array)flight_path.Call("get_local_segments", chunkCenterWorld, searchRadius);
+        float[] densityMap = GenerateDensityField(localSegments);
 
-# FIX: This adds "fake lighting" and a checkerboard pattern to make it look like actual 3D blocks!
-func get_voxel_color(world_x: float, world_y: float, world_z: float, normal: Vector3) -> Color:
-	var base_color: Color
-	if world_y > 80.0: 
-		base_color = Color(0.9, 0.9, 0.95) # Snow
-	elif world_y > -40.0: 
-		base_color = Color(0.3, 0.6, 0.25) # Grass/Dirt
-	else: 
-		base_color = Color(0.4, 0.4, 0.45) # Rock
-		
-	# Checkerboard pattern
-	var checker = int(floor(world_x/2.0) + floor(world_y/2.0) + floor(world_z/2.0)) % 2
-	var brightness = 1.0 if checker == 0 else 0.92
-	
-	# Darken faces pointing sideways or down
-	if normal.y == 0:
-		brightness *= 0.85 # Sides get slightly darker
-	elif normal.y < 0:
-		brightness *= 0.65 # Bottom is darkest
-		
-	return base_color * brightness
+        if (!is_empty)
+        {
+            BuildMeshAndCollision(densityMap);
+        }
+    }
 
-func _build_mesh_and_collision(density_map: PackedFloat32Array) -> void:
-	var vertices := PackedVector3Array()
-	var normals := PackedVector3Array()
-	var indices := PackedInt32Array()
-	var colors := PackedColorArray()
-	
-	var dirs = [Vector3i.RIGHT, Vector3i.LEFT, Vector3i.UP, Vector3i.DOWN, Vector3i.BACK, Vector3i.FORWARD]
-	var face_verts = [
-		[Vector3(1,0,1), Vector3(1,0,0), Vector3(1,1,0), Vector3(1,1,1)],
-		[Vector3(0,0,0), Vector3(0,0,1), Vector3(0,1,1), Vector3(0,1,0)],
-		[Vector3(0,1,1), Vector3(1,1,1), Vector3(1,1,0), Vector3(0,1,0)],
-		[Vector3(0,0,0), Vector3(1,0,0), Vector3(1,0,1), Vector3(0,0,1)],
-		[Vector3(1,0,1), Vector3(0,0,1), Vector3(0,1,1), Vector3(1,1,1)],
-		[Vector3(0,0,0), Vector3(1,0,0), Vector3(1,1,0), Vector3(0,1,0)]
-	]
+    private float[] GenerateDensityField(Godot.Collections.Array localSegments)
+    {
+        int size = ChunkSize + 2;
+        float[] map = new float[size * size * size];
 
-	var index_offset = 0
-	
-	for z in range(CHUNK_SIZE):
-		for y in range(CHUNK_SIZE):
-			for x in range(CHUNK_SIZE):
-				
-				var d = _get_density(density_map, x, y, z)
-				if d >= ISO_LEVEL: continue 
-					
-				var world_pos = (Vector3(x, y, z) - Vector3.ONE * 0.5) * VOXEL_SIZE
-				
-				var wx = (x + chunk_pos.x * CHUNK_SIZE) * VOXEL_SIZE
-				var wy = (y + chunk_pos.y * CHUNK_SIZE) * VOXEL_SIZE
-				var wz = (z + chunk_pos.z * CHUNK_SIZE) * VOXEL_SIZE
-				
-				for i in range(6):
-					var nx = x + dirs[i].x
-					var ny = y + dirs[i].y
-					var nz = z + dirs[i].z
-					
-					# If neighbor is Air, draw this face
-					if _get_density(density_map, nx, ny, nz) >= ISO_LEVEL:
-						var normal = Vector3(dirs[i])
-						var face_color = get_voxel_color(wx, wy, wz, normal)
-						
-						for v in range(4):
-							vertices.append(world_pos + (face_verts[i][v] * VOXEL_SIZE))
-							normals.append(normal)
-							colors.append(face_color) 
-							
-						indices.append_array([
-							index_offset, index_offset + 1, index_offset + 2,
-							index_offset, index_offset + 2, index_offset + 3
-						])
-						index_offset += 4
+        int idx = 0;
+        for (int z = -1; z < ChunkSize + 1; z++)
+        {
+            for (int y = -1; y < ChunkSize + 1; y++)
+            {
+                for (int x = -1; x < ChunkSize + 1; x++)
+                {
+                    Vector3 worldPos = (new Vector3(x, y, z) + new Vector3(chunk_pos.X * ChunkSize, chunk_pos.Y * ChunkSize, chunk_pos.Z * ChunkSize)) * VoxelSize;
+                    float d = CalculateSdf(worldPos, localSegments);
+                    map[idx] = d;
 
-	out_vertices = vertices
-	out_normals = normals
-	out_indices = indices
-	out_colors = colors
+                    if (x >= 0 && x < ChunkSize && y >= 0 && y < ChunkSize && z >= 0 && z < ChunkSize)
+                    {
+                        if (d < IsoLevel)
+                        {
+                            is_empty = false;
+                        }
+                    }
+                    idx++;
+                }
+            }
+        }
+        return map;
+    }
 
-	# FIX: Build the collision faces more explicitly for thread safety
-	var faces = PackedVector3Array()
-	var num_triangles = indices.size() / 3
-	faces.resize(indices.size())
-	
-	for i in range(indices.size()):
-		faces[i] = vertices[indices[i]]
-		
-	out_collision_faces = faces
+    private float CalculateSdf(Vector3 pos, Godot.Collections.Array localSegments)
+    {
+        float warp = _warpNoise.GetNoise3D(pos.X * 0.5f, 0.0f, pos.Z * 0.5f) * 40.0f;
+        float pillarNoise = _heightNoise.GetNoise3D(pos.X + warp, pos.Y * 0.1f, pos.Z + warp);
+        float baseDensity = -pillarNoise * 50.0f;
+
+        float terracing = Mathf.Sin(pos.Y * 0.08f) * 15.0f;
+        baseDensity += terracing;
+
+        float caveNoise = _detailNoise.GetNoise3D(pos.X * 0.8f, pos.Y * 1.5f, pos.Z * 0.8f);
+        float caveCarver = Mathf.Abs(caveNoise) * 90.0f;
+
+        // Calling back to GDScript for distance
+        float distToPath = (float)flight_path.Call("get_distance_to_segments", pos, localSegments);
+        float safetyTube = 35.0f - distToPath;
+
+        float finalD = Mathf.Max(baseDensity, 25.0f - caveCarver);
+        finalD = Mathf.Max(finalD, safetyTube);
+        return finalD;
+    }
+
+    private float GetDensity(float[] map, int x, int y, int z)
+    {
+        int mx = x + 1;
+        int my = y + 1;
+        int mz = z + 1;
+        int size = ChunkSize + 2;
+        return map[mx + size * (my + size * mz)];
+    }
+
+    private Color GetVoxelColor(float worldX, float worldY, float worldZ, Vector3 normal)
+    {
+        Color baseColor;
+        if (worldY > 80.0f)
+            baseColor = new Color(0.9f, 0.9f, 0.95f);
+        else if (worldY > -40.0f)
+            baseColor = new Color(0.3f, 0.6f, 0.25f);
+        else
+            baseColor = new Color(0.4f, 0.4f, 0.45f);
+
+        int checker = Mathf.FloorToInt(Mathf.Floor(worldX / 2.0f) + Mathf.Floor(worldY / 2.0f) + Mathf.Floor(worldZ / 2.0f)) % 2;
+        float brightness = (checker == 0) ? 1.0f : 0.92f;
+
+        if (normal.Y == 0.0f)
+            brightness *= 0.85f;
+        else if (normal.Y < 0.0f)
+            brightness *= 0.65f;
+
+        return baseColor * brightness;
+    }
+
+    private void BuildMeshAndCollision(float[] densityMap)
+    {
+        List<Vector3> vertices = new List<Vector3>();
+        List<Vector3> normals = new List<Vector3>();
+        List<int> indices = new List<int>();
+        List<Color> colors = new List<Color>();
+
+        Vector3I[] dirs = new Vector3I[]
+        {
+            Vector3I.Right, Vector3I.Left, Vector3I.Up, Vector3I.Down, Vector3I.Back, Vector3I.Forward
+        };
+
+        Vector3[][] faceVerts = new Vector3[][]
+        {
+            new Vector3[] { new Vector3(1,0,1), new Vector3(1,0,0), new Vector3(1,1,0), new Vector3(1,1,1) },
+            new Vector3[] { new Vector3(0,0,0), new Vector3(0,0,1), new Vector3(0,1,1), new Vector3(0,1,0) },
+            new Vector3[] { new Vector3(0,1,1), new Vector3(1,1,1), new Vector3(1,1,0), new Vector3(0,1,0) },
+            new Vector3[] { new Vector3(0,0,0), new Vector3(1,0,0), new Vector3(1,0,1), new Vector3(0,0,1) },
+            new Vector3[] { new Vector3(1,0,1), new Vector3(0,0,1), new Vector3(0,1,1), new Vector3(1,1,1) },
+            new Vector3[] { new Vector3(0,0,0), new Vector3(1,0,0), new Vector3(1,1,0), new Vector3(0,1,0) }
+        };
+
+        int indexOffset = 0;
+
+        for (int z = 0; z < ChunkSize; z++)
+        {
+            for (int y = 0; y < ChunkSize; y++)
+            {
+                for (int x = 0; x < ChunkSize; x++)
+                {
+                    float d = GetDensity(densityMap, x, y, z);
+                    if (d >= IsoLevel) continue;
+
+                    Vector3 worldPos = (new Vector3(x, y, z) - (Vector3.One * 0.5f)) * VoxelSize;
+                    float wx = (x + chunk_pos.X * ChunkSize) * VoxelSize;
+                    float wy = (y + chunk_pos.Y * ChunkSize) * VoxelSize;
+                    float wz = (z + chunk_pos.Z * ChunkSize) * VoxelSize;
+
+                    for (int i = 0; i < 6; i++)
+                    {
+                        int nx = x + dirs[i].X;
+                        int ny = y + dirs[i].Y;
+                        int nz = z + dirs[i].Z;
+
+                        if (GetDensity(densityMap, nx, ny, nz) >= IsoLevel)
+                        {
+                            Vector3 normal = new Vector3(dirs[i].X, dirs[i].Y, dirs[i].Z);
+                            Color faceColor = GetVoxelColor(wx, wy, wz, normal);
+
+                            for (int v = 0; v < 4; v++)
+                            {
+                                vertices.Add(worldPos + (faceVerts[i][v] * VoxelSize));
+                                normals.Add(normal);
+                                colors.Add(faceColor);
+                            }
+
+                            indices.AddRange(new int[] {
+                                indexOffset, indexOffset + 1, indexOffset + 2,
+                                indexOffset, indexOffset + 2, indexOffset + 3
+                            });
+                            indexOffset += 4;
+                        }
+                    }
+                }
+            }
+        }
+
+        out_vertices = vertices.ToArray();
+        out_normals = normals.ToArray();
+        out_indices = indices.ToArray();
+        out_colors = colors.ToArray();
+
+        out_collision_faces = new Vector3[indices.Count];
+        for (int i = 0; i < indices.Count; i++)
+        {
+            out_collision_faces[i] = vertices[indices[i]];
+        }
+    }
+}
