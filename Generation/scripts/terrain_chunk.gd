@@ -20,7 +20,6 @@ func _enter_tree() -> void:
 	add_child(static_body)
 	static_body.add_child(collision_shape)
 
-# NO LONGER creates noise locally. It accepts the shared noise instance.
 func begin_generation(pos: Vector3i, flight_path: FlightPath, shared_noise: TerrainNoise) -> void:
 	is_in_use = true
 	pending_recycle = false
@@ -32,6 +31,7 @@ func begin_generation(pos: Vector3i, flight_path: FlightPath, shared_noise: Terr
 	builder.noise_data = shared_noise 
 	
 	task_id = WorkerThreadPool.add_task(builder.execute_job, true)
+	# IMPORTANT: We only check once per frame to avoid choking the main thread
 	set_process(true)
 
 func _process(_delta: float) -> void:
@@ -42,7 +42,8 @@ func _process(_delta: float) -> void:
 		if pending_recycle:
 			_finish_recycle()
 		else:
-			_apply_generated_data()
+			# FIX: Defer the application to the end of the frame so it doesn't interrupt rendering
+			call_deferred("_apply_generated_data")
 			set_process(false)
 
 func _apply_generated_data() -> void:
@@ -55,15 +56,17 @@ func _apply_generated_data() -> void:
 	arrays[Mesh.ARRAY_VERTEX] = builder.out_vertices
 	arrays[Mesh.ARRAY_NORMAL] = builder.out_normals
 	arrays[Mesh.ARRAY_INDEX] = builder.out_indices
+	# Added colors back in so your checkerboard works!
+	arrays[Mesh.ARRAY_COLOR] = builder.out_colors 
 	
 	var new_mesh = ArrayMesh.new()
 	new_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
 	mesh_instance.mesh = new_mesh
 	
-	# FAST APPLY COLLISION (Calculated on background thread)
-	var new_shape = ConcavePolygonShape3D.new()
-	new_shape.set_faces(builder.out_collision_faces)
-	collision_shape.shape = new_shape
+	if builder.out_collision_faces.size() > 0:
+		var new_shape = ConcavePolygonShape3D.new()
+		new_shape.set_faces(builder.out_collision_faces)
+		collision_shape.shape = new_shape
 	
 	show()
 

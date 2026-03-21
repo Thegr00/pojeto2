@@ -151,8 +151,12 @@ func _build_mesh_and_collision(density_map: PackedFloat32Array) -> void:
 	out_indices = indices
 	out_colors = colors
 
+	# FIX: Build the collision faces more explicitly for thread safety
 	var faces = PackedVector3Array()
+	var num_triangles = indices.size() / 3
 	faces.resize(indices.size())
+	
 	for i in range(indices.size()):
 		faces[i] = vertices[indices[i]]
+		
 	out_collision_faces = faces
