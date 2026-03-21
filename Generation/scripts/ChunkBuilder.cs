@@ -147,7 +147,7 @@ public partial class ChunkBuilder : RefCounted
 
 		// Call our new pure C# method!
 		float distToPath = GetDistanceToSegments(pos, localSegments);
-		float safetyTube = 5.0f - distToPath;
+		float safetyTube = 10.0f - distToPath;
 
 		float finalD = Mathf.Max(baseDensity, 25.0f - caveCarver);
 		finalD = Mathf.Max(finalD, safetyTube);

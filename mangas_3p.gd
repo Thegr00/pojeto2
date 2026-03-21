@@ -27,6 +27,7 @@ var current_speed = 10.0
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	spring_arm.set_as_top_level(true) #assim a camera nao ta presa ao gajo 
+	GameManager.start_flying()
 func _input(_event):
 	pass
 func toggle_pause():
@@ -42,6 +43,10 @@ func _physics_process(delta: float) -> void:
 	handle_flight_rotation(delta)
 	calculate_flight_speed(delta)
 	move_and_slide()
+	if get_slide_collision_count() > 0:
+		GameManager.stop_flying()
+		print("BOOM! Crashed! Final Score: ", GameManager.current_score)
+		# We can add your death/restart logic here later!
 	update_camera_effects(delta)
 	update_camera_soft_follow(delta) 
 	var forward_dir = -global_transform.basis.z
