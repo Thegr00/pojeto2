@@ -15,11 +15,7 @@ player = NodePath("mangas3p")
 
 [node name="mangas3p" parent="." unique_id=1479076587 instance=ExtResource("2_atpbs")]
 transform = Transform3D(1, 0, 0, 0, 0.99663603, -0.08195585, 0, 0.08195585, 0.99663603, 0, 0, 0)
-up_deceleration = 15.0
-rotation_speed = 3
-sens = 0.5
-cam_offset_amount = 0.5
-cam_offset_speed = 3.0
+up_deceleration = 45.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=579636448]
 transform = Transform3D(1, 0, 0, 0, 0.2268383, 0.97393245, 0, -0.97393245, 0.2268383, 0, 38.279755, 0)

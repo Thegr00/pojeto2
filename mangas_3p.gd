@@ -1,53 +1,62 @@
 extends CharacterBody3D
 
-const SPEED = 5.0
-const JUMP_VELOCITY = 4.5
-
 const GAME_OVER_SCREEN = preload("res://game_over_screen.tscn") 
 
-@export_group("Flight Constants")
+@export_group("Flight Speed")
 @export var max_speed = 60.0
-@export var min_speed = 15.0
+@export var min_speed = 15.0 # This is your "Cruising Speed"
 @export var dive_acceleration = 30.0  
-@export var up_deceleration = 15.0 
-@export var rotation_speed = 3
-@export var slerp_speed = 3.0
+@export var up_deceleration = 45.0 # Lose speed much faster when climbing
+@export var max_stall_gravity = 20.0 # Gravity is now much less strong/punishing
+@export var stall_nose_down_speed = 1.0 # Smoother nose drop to match the lower gravity
+
+@export_group("Mouse Aim Settings")
+@export var mouse_sensitivity: float = 0.003
+@export var body_turn_speed: float = 15.0 
+
+@export_group("WASD Banking Settings")
+@export var max_roll_angle: float = 1.0 # ~55 degrees max tilt for ROLL (A/D)
+@export var max_pitch_angle: float = 0.52 # ~30 degrees max tilt for PITCH (W/S)
+@export var roll_tilt_speed: float = 3.0 # Smoother speed for roll banks
+@export var pitch_tilt_speed: float = 2 # Slower speed for pitch tilts
+@export var bank_turn_speed: float = 1.8 # How fast A/D actively turns the camera
 
 @export_group("Camera")
 @onready var pivot = $"cam origin"
 @onready var camera = $"cam origin/SpringArm3D/CABECA"
 @onready var spring_arm = $"cam origin"/SpringArm3D
-@export var sens = 0.5
-
 @export var cam_offset_amount: float = 0.5  
 @export var cam_offset_speed: float = 3.0
 
 @onready var wind_particles = $"cam origin/Particulas"
 @export var mesh_container: Node3D
-
 @onready var proximity_cast: ShapeCast3D = $ShapeCast3D
-const MAX_PROXIMITY_DISTANCE = 15.0 
 
 var current_speed = 10.0
+var cam_yaw: float = 0.0
+var cam_pitch: float = 0.0
+var current_roll_angle: float = 0.0
+var current_pitch_angle: float = 0.0
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	pivot.set_as_top_level(true) 
 	spring_arm.set_as_top_level(true) 
 	
-	# Force a reset on spawn just in case
+	cam_yaw = global_rotation.y
+	cam_pitch = global_rotation.x
+	
 	ScoreManager.total_score = 0
 	ScoreManager.unbanked_score = 0.0
 	ScoreManager.current_multiplier = 1.0
-	
 	GameManager.start_flying()
 
-func _input(_event):
-	pass
-
-func toggle_pause():
-	var new_pause_state = not get_tree().paused
-	get_tree().paused = new_pause_state
-	visible = new_pause_state
+func _input(event):
+	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+		if event is InputEventMouseMotion:
+			cam_yaw -= event.relative.x * mouse_sensitivity
+			cam_pitch -= event.relative.y * mouse_sensitivity
+			# Clamp removed here to allow 360-degree vertical loops
 
 func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("pause"):
@@ -55,104 +64,147 @@ func _physics_process(delta: float) -> void:
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 		return
 
+	# --- Camera Turning & Stall Pitch ---
+	
+	# 1. SMOOTH CAMERA TURN: Uses the plane's actual tilt angle instead of raw button presses!
+	var turn_ratio = current_roll_angle / max_roll_angle
+	cam_yaw += turn_ratio * bank_turn_speed * delta 
+	
+	# 2. Force the nose down into a dive if stalled
+	if current_speed < min_speed:
+		var stall_ratio = 1.0 - (current_speed / min_speed)
+		cam_pitch -= stall_ratio * stall_nose_down_speed * delta
+	# -----------------------------------------
+
+	pivot.global_position = global_position
+	pivot.rotation = Vector3(cam_pitch, cam_yaw, 0)
+
 	handle_flight_rotation(delta)
 	calculate_flight_speed(delta)
 	
 	move_and_slide()
 	
+	if get_slide_collision_count() > 0:
+		crash_sequence()
+		return 
+
 	if proximity_cast:
 		proximity_cast.force_shapecast_update()
-		
 		if proximity_cast.is_colliding():
-			var fraction = proximity_cast.get_closest_collision_safe_fraction()
-			var closeness = 1.0 - fraction 
+			var closeness = 1.0 - proximity_cast.get_closest_collision_safe_fraction()
 			ScoreManager.add_proximity_points(delta, closeness)
 		else:
 			ScoreManager.stop_scoring()
-	
-	if get_slide_collision_count() > 0:
-		GameManager.stop_flying()
-		ScoreManager.crash() 
-		
-		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-		
-		var game_over_menu = GAME_OVER_SCREEN.instantiate()
-		get_tree().current_scene.add_child(game_over_menu)
-		game_over_menu.set_final_score(ScoreManager.total_score)
-		
-		get_tree().paused = true
-		set_physics_process(false)
-		return 
 
 	update_camera_effects(delta)
 	update_camera_soft_follow(delta) 
 	
+	# --- VELOCITY & GRAVITY LOGIC ---
 	var forward_dir = -global_transform.basis.z
-	var target_velocity = forward_dir * current_speed
-	velocity = velocity.lerp(target_velocity, slerp_speed * delta) 
+	var engine_velocity = forward_dir * current_speed
 	
-	if current_speed < min_speed + 2: 
-		velocity += get_gravity() * delta
+	# Calculate Gravity (kicks in when dropping below cruising speed)
+	var stall_gravity = 0.0
+	if current_speed < min_speed:
+		var stall_ratio = 1.0 - (current_speed / min_speed)
+		stall_gravity = max_stall_gravity * stall_ratio
+		
+	var target_velocity = engine_velocity + (Vector3.DOWN * stall_gravity)
+	
+	# Safely calculate grip
+	var speed_ratio = clamp((current_speed - min_speed) / (max_speed - min_speed), 0.0, 1.0)
+	var current_grip = lerp(8.0, 4.0, speed_ratio)
+	
+	velocity = velocity.lerp(target_velocity, current_grip * delta) 
 
 func handle_flight_rotation(delta):
-	var pitch = Input.get_axis("back", "forward")  
-	var roll = Input.get_axis("left", "right")     
-	if pitch != 0:
-		transform.basis = transform.basis.rotated(transform.basis.x, pitch * rotation_speed * delta)
-	if roll != 0:
-		transform.basis = transform.basis.rotated(transform.basis.z, roll * rotation_speed * delta)
-	var bank_amount = transform.basis.x.y 
-	transform.basis = transform.basis.rotated(Vector3.UP, -bank_amount * delta * 3.0)
-	if roll == 0:
-		var target_up = Vector3.UP
-		var look_dir = -transform.basis.z
-		var right_dir = look_dir.cross(target_up).normalized()
-		var actual_up = right_dir.cross(look_dir).normalized()
-		var target_basis = Basis(right_dir, actual_up, -look_dir)
-		transform.basis = transform.basis.slerp(target_basis, delta * 1.5)
-		transform.basis = transform.basis.orthonormalized()
+	var roll_input = Input.get_axis("left", "right")      
+	# INVERTED: W points nose down and S points nose up
+	var pitch_input = -Input.get_axis("forward", "back") 
+	
+	# Banking logic (WASD) - FULLY SEPARATED!
+	current_roll_angle = lerp_angle(current_roll_angle, roll_input * max_roll_angle, roll_tilt_speed * delta)
+	current_pitch_angle = lerp_angle(current_pitch_angle, pitch_input * max_pitch_angle, pitch_tilt_speed * delta)
+		
+	var target_z = -pivot.global_transform.basis.z
+	
+	# Dynamic Up Vector to support loops/inversion
+	var reference_up = pivot.global_transform.basis.y 
+	
+	var right = target_z.cross(reference_up).normalized()
+	var up = right.cross(target_z).normalized()
+	
+	var target_basis = Basis(right, up, -target_z).orthonormalized()
+	
+	# Apply local WASD tilts to the target direction
+	target_basis = target_basis.rotated(target_basis.x, current_pitch_angle)
+	target_basis = target_basis.rotated(target_basis.z, -current_roll_angle)
+	
+	# Clean basis and slerp using Quaternions
+	global_transform.basis = global_transform.basis.orthonormalized()
+	var current_quat = global_transform.basis.get_rotation_quaternion()
+	var target_quat = target_basis.get_rotation_quaternion()
+	
+	global_transform.basis = Basis(current_quat.slerp(target_quat, body_turn_speed * delta))
+		
 	if mesh_container:
-		var target_tilt = -roll * deg_to_rad(20)
-		mesh_container.rotation.z = lerp_angle(mesh_container.rotation.z, target_tilt, delta * 5.0)	
+		var visual_tilt = -roll_input * deg_to_rad(30)
+		mesh_container.rotation.z = lerp_angle(mesh_container.rotation.z, visual_tilt, delta * 5.0) 
 
 func calculate_flight_speed(delta):
-	var look_dir_y = -transform.basis.z.y 
+	var look_dir_y = -global_transform.basis.z.y 
+	
+	# Pitch-based acceleration/deceleration
 	if look_dir_y < 0: 
-		current_speed += abs(look_dir_y)* dive_acceleration * delta
+		current_speed += abs(look_dir_y) * dive_acceleration * delta
 	else: 
 		current_speed -= look_dir_y * up_deceleration * delta
-	current_speed -= 1.0 * delta
-	current_speed = clamp(current_speed, min_speed, max_speed)
+	
+	# Natural engine thrust & drag
+	if current_speed < min_speed:
+		# If stalled, the engine slowly fights to get back to cruising speed
+		current_speed += 8.0 * delta 
+	elif current_speed > min_speed and look_dir_y >= 0:
+		# If flying level, drag naturally slows you down
+		current_speed -= 2.0 * delta 
+		
+	# Allow speed to drop to 0 (stall) instead of artificially limiting it
+	current_speed = clamp(current_speed, 0.0, max_speed)
 
 func update_camera_soft_follow(delta: float):
-	var _offset = (-global_transform.basis.z * -4.0) + (global_transform.basis.y * 1.0)
-	var back_dir = global_transform.basis.z
-	var up_dir = global_transform.basis.y
+	var back_dir = pivot.global_transform.basis.z
+	var up_dir = pivot.global_transform.basis.y
 	var target_pos = global_position + (back_dir * 1.0) + (up_dir * 1.0)
-	spring_arm.global_position = spring_arm.global_position.lerp(target_pos, delta * 8.0)
-	var target_quat = global_transform.basis.get_rotation_quaternion()
+	
+	spring_arm.global_position = spring_arm.global_position.lerp(target_pos, delta * 15.0)
+	
+	var target_quat = pivot.global_transform.basis.get_rotation_quaternion()
 	var current_quat = spring_arm.global_transform.basis.get_rotation_quaternion()
-	spring_arm.global_transform.basis = Basis(current_quat.slerp(target_quat, delta * 6.0))
-	var input_dir = Vector2(
-		Input.get_axis("left", "right"), 
-		Input.get_axis("forward", "back")
-	)
-	var target_cam_pos = Vector3(
-		-input_dir.x * cam_offset_amount, 
-		-input_dir.y * (cam_offset_amount * 0.5), 0
-	)
+	spring_arm.global_transform.basis = Basis(current_quat.slerp(target_quat, delta * 15.0))
+	
+	var roll_input = Input.get_axis("left", "right")
+	var target_cam_pos = Vector3(-roll_input * cam_offset_amount, 0, 0)
 	camera.transform.origin = camera.transform.origin.lerp(target_cam_pos, delta * cam_offset_speed)
-	var target_margin = 0.2 + (current_speed * 0.00005) 
-	spring_arm.spring_length = lerp(spring_arm.spring_length, target_margin, delta * 2.0)
 
 func update_camera_effects(delta): 
 	var target_fov = 75.0 + (current_speed * 0.7) 
 	camera.fov = lerp(camera.fov, target_fov, delta * 2.0)  
-	var subtle_tilt = -rotation.z * 0.2 
-	camera.rotation.z = lerp_angle(camera.rotation.z, subtle_tilt, delta * 5.0)
-	var _speed_ratio = (current_speed - min_speed) / (max_speed - min_speed) 
-	if _speed_ratio > 0.8:
-		wind_particles.emitting = true
-		wind_particles.amount_ratio = clamp(_speed_ratio, 0.0, 1.0)
-	else:
-		wind_particles.emitting = false
+	
+	var roll_input = Input.get_axis("left", "right")
+	var target_tilt = roll_input * deg_to_rad(15.0) 
+	camera.rotation.z = lerp_angle(camera.rotation.z, target_tilt, delta * 5.0)
+	
+	var _speed_ratio = clamp((current_speed - min_speed) / (max_speed - min_speed), 0.0, 1.0)
+	wind_particles.emitting = _speed_ratio > 0.8
+	if wind_particles.emitting:
+		wind_particles.amount_ratio = _speed_ratio
+
+func crash_sequence():
+	GameManager.stop_flying()
+	ScoreManager.crash() 
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	var game_over_menu = GAME_OVER_SCREEN.instantiate()
+	get_tree().current_scene.add_child(game_over_menu)
+	game_over_menu.set_final_score(ScoreManager.total_score)
+	get_tree().paused = true
+	set_physics_process(false)

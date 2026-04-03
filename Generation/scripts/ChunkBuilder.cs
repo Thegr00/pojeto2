@@ -78,7 +78,6 @@ public partial class ChunkBuilder : RefCounted
 
 			float lineLenSq = lineVec.LengthSquared();
 			float t = 0.0f;
-			
 			// Avoid division by zero
 			if (lineLenSq > 0.00001f) 
 			{
@@ -86,7 +85,6 @@ public partial class ChunkBuilder : RefCounted
 			}
 
 			Vector3 projection = p1 + lineVec * t;
-			
 			// Use distance SQUARED for the loop to avoid slow square roots!
 			float dSq = pos.DistanceSquaredTo(projection);
 			if (dSq < minDistSq)
@@ -104,6 +102,11 @@ public partial class ChunkBuilder : RefCounted
 		int size = ChunkSize + 2;
 		float[] map = new float[size * size * size];
 
+		int solidCount = 0;
+		int totalInnerVoxels = ChunkSize * ChunkSize * ChunkSize;
+		is_empty = true;
+
+		// PASS 1: Generate normal map and count solid blocks
 		int idx = 0;
 		for (int z = -1; z < ChunkSize + 1; z++)
 		{
@@ -119,6 +122,33 @@ public partial class ChunkBuilder : RefCounted
 					{
 						if (d < IsoLevel)
 						{
+							solidCount++;
+						}
+					}
+					idx++;
+				}
+			}
+		}
+
+		// PASS 2: If the chunk is less than 4% solid, inject islands!
+		float fillRatio = (float)solidCount / totalInnerVoxels;
+		if (fillRatio < 0.04f)
+		{
+			InjectIslands(map, localSegments);
+		}
+
+		// Final check to see if the chunk actually contains any meshable data
+		idx = 0;
+		for (int z = -1; z < ChunkSize + 1; z++)
+		{
+			for (int y = -1; y < ChunkSize + 1; y++)
+			{
+				for (int x = -1; x < ChunkSize + 1; x++)
+				{
+					if (x >= 0 && x < ChunkSize && y >= 0 && y < ChunkSize && z >= 0 && z < ChunkSize)
+					{
+						if (map[idx] < IsoLevel)
+						{
 							is_empty = false;
 						}
 					}
@@ -126,7 +156,58 @@ public partial class ChunkBuilder : RefCounted
 				}
 			}
 		}
+
 		return map;
+	}
+
+	private void InjectIslands(float[] map, Segment[] localSegments)
+	{
+		// Seed deterministically using chunk position so islands don't flicker
+		int seed = (chunk_pos.X * 73856 ^ chunk_pos.Y * 1919 ^ chunk_pos.Z * 83492791).GetHashCode();
+		Random rng = new Random(seed);
+
+		int numIslands = rng.Next(1, 4); // Inject 1 to 3 islands
+
+		for (int i = 0; i < numIslands; i++)
+		{
+			// Pick a local center between 3 and ChunkSize-3 to avoid touching chunk borders
+			Vector3 center = new Vector3(
+				rng.Next(3, ChunkSize - 2),
+				rng.Next(3, ChunkSize - 2),
+				rng.Next(3, ChunkSize - 2)
+			);
+			
+			float radius = (float)(rng.NextDouble() * 3.0 + 1.5); // Radius 1.5 to 4.5 voxels
+
+			int idx = 0;
+			for (int z = -1; z < ChunkSize + 1; z++)
+			{
+				for (int y = -1; y < ChunkSize + 1; y++)
+				{
+					for (int x = -1; x < ChunkSize + 1; x++)
+					{
+						Vector3 localPos = new Vector3(x, y, z);
+						float dist = localPos.DistanceTo(center);
+						
+						// Sphere SDF: distance - radius (negative is inside)
+						float islandSdf = (dist - radius) * 10.0f; // Scale to match density map ranges
+						
+						// If this voxel is closer to the island core, we inject it
+						if (islandSdf < map[idx])
+						{
+							Vector3 worldPos = (localPos + new Vector3(chunk_pos.X * ChunkSize, chunk_pos.Y * ChunkSize, chunk_pos.Z * ChunkSize)) * VoxelSize;
+							float distToPath = GetDistanceToSegments(worldPos, localSegments);
+							float safetyTube = 10.0f - distToPath;
+							
+							// Ensure the safety tube still cuts a hole through the island
+							float finalD = Mathf.Max(islandSdf, safetyTube);
+							map[idx] = Mathf.Min(map[idx], finalD);
+						}
+						idx++;
+					}
+				}
+			}
+		}
 	}
 
 	private float CalculateSdf(Vector3 pos, Segment[] localSegments)
