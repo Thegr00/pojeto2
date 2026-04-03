@@ -89,6 +89,11 @@ func _apply_mesh_only() -> void:
 	
 	var new_mesh = ArrayMesh.new()
 	new_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+	
+	# Apply our new double-sided, vertex-colored material!
+	if ResourceLoader.exists("res://VoxelMaterial.tres"):
+		mesh_instance.material_override = preload("res://VoxelMaterial.tres")
+	
 	mesh_instance.mesh = new_mesh
 	show()
 
