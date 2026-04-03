@@ -5,9 +5,19 @@
 [ext_resource type="Script" uid="uid://c8t821521tdq" path="res://Generation/scripts/ui.gd" id="3_w5nei"]
 
 [sub_resource type="Environment" id="Environment_atpbs"]
+background_mode = 1
+background_color = Color(0.07123137, 0.07123139, 0.07123137, 1)
+tonemap_mode = 3
+glow_enabled = true
+glow_intensity = 1.0
 fog_enabled = true
-fog_light_color = Color(0.30913824, 0.2756382, 0.55516624, 1)
+fog_light_color = Color(0.10940816, 0.09038266, 0.3860155, 1)
 fog_density = 0.015
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.02
+volumetric_fog_albedo = Color(0.17211533, 0.1721153, 0.1721153, 1)
+adjustment_enabled = true
+adjustment_saturation = 0.4
 
 [node name="TerrainManager" type="Node3D" unique_id=1387819765 node_paths=PackedStringArray("player")]
 script = ExtResource("1_icbd1")
@@ -19,6 +29,8 @@ up_deceleration = 45.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=579636448]
 transform = Transform3D(1, 0, 0, 0, 0.2268383, 0.97393245, 0, -0.97393245, 0.2268383, 0, 38.279755, 0)
+light_color = Color(0.76862746, 0.8392157, 1, 1)
+light_energy = 0.8
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1763960021]
 environment = SubResource("Environment_atpbs")

@@ -43,6 +43,7 @@ texture = ExtResource("2_4ogua")
 transform = Transform3D(0.04838573, -0.99840117, 0.02922595, 0.028883105, 0.030646624, 0.99911284, -0.99841076, -0.047498662, 0.030319784, 6.8473883, 93.93289, -2.2547288)
 max_speed = 40.0
 dive_acceleration = 22.0
+up_deceleration = 45.0
 
 [node name="Chao" parent="." unique_id=1843973378 instance=ExtResource("4_2ahxy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -227.82504, 0, 0)

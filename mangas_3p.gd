@@ -7,8 +7,8 @@ const GAME_OVER_SCREEN = preload("res://game_over_screen.tscn")
 @export var min_speed = 15.0 # This is your "Cruising Speed"
 @export var dive_acceleration = 30.0  
 @export var up_deceleration = 45.0 # Lose speed much faster when climbing
-@export var max_stall_gravity = 20.0 # Gravity is now much less strong/punishing
-@export var stall_nose_down_speed = 1.0 # Smoother nose drop to match the lower gravity
+@export var max_stall_gravity = 5.0 # Gravity is now much less strong/punishing
+@export var stall_nose_down_speed = 1.5 # Smoother nose drop to match the lower gravity
 
 @export_group("Mouse Aim Settings")
 @export var mouse_sensitivity: float = 0.003
@@ -28,7 +28,7 @@ const GAME_OVER_SCREEN = preload("res://game_over_screen.tscn")
 @export var cam_offset_amount: float = 0.5  
 @export var cam_offset_speed: float = 3.0
 
-@onready var wind_particles = $"cam origin/Particulas"
+@onready var wind_particles = $"cam origin/AshSnowFall"
 @export var mesh_container: Node3D
 @onready var proximity_cast: ShapeCast3D = $ShapeCast3D
 
@@ -46,10 +46,11 @@ func _ready():
 	cam_yaw = global_rotation.y
 	cam_pitch = global_rotation.x
 	
-	ScoreManager.total_score = 0
-	ScoreManager.unbanked_score = 0.0
-	ScoreManager.current_multiplier = 1.0
-	GameManager.start_flying()
+	# CHANGED: We use our single, unified wipe command now!
+	ScoreManager.prepare_for_restart()
+	
+	# CHANGED: GameManager is gone. ScoreManager handles the passive score now!
+	ScoreManager.start_flying()
 
 func _input(event):
 	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
@@ -63,9 +64,6 @@ func _physics_process(delta: float) -> void:
 		get_tree().change_scene_to_file("res://pause_menu.tscn")
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 		return
-
-	# --- Camera Turning & Stall Pitch ---
-	
 	# 1. SMOOTH CAMERA TURN: Uses the plane's actual tilt angle instead of raw button presses!
 	var turn_ratio = current_roll_angle / max_roll_angle
 	cam_yaw += turn_ratio * bank_turn_speed * delta 
@@ -118,7 +116,7 @@ func _physics_process(delta: float) -> void:
 	velocity = velocity.lerp(target_velocity, current_grip * delta) 
 
 func handle_flight_rotation(delta):
-	var roll_input = Input.get_axis("left", "right")      
+	var roll_input = Input.get_axis("right", "left")      
 	# INVERTED: W points nose down and S points nose up
 	var pitch_input = -Input.get_axis("forward", "back") 
 	
@@ -182,7 +180,7 @@ func update_camera_soft_follow(delta: float):
 	var current_quat = spring_arm.global_transform.basis.get_rotation_quaternion()
 	spring_arm.global_transform.basis = Basis(current_quat.slerp(target_quat, delta * 15.0))
 	
-	var roll_input = Input.get_axis("left", "right")
+	var roll_input = Input.get_axis("right", "left")
 	var target_cam_pos = Vector3(-roll_input * cam_offset_amount, 0, 0)
 	camera.transform.origin = camera.transform.origin.lerp(target_cam_pos, delta * cam_offset_speed)
 
@@ -190,18 +188,25 @@ func update_camera_effects(delta):
 	var target_fov = 75.0 + (current_speed * 0.7) 
 	camera.fov = lerp(camera.fov, target_fov, delta * 2.0)  
 	
-	var roll_input = Input.get_axis("left", "right")
+	var roll_input = Input.get_axis("right", "left")
 	var target_tilt = roll_input * deg_to_rad(15.0) 
 	camera.rotation.z = lerp_angle(camera.rotation.z, target_tilt, delta * 5.0)
 	
-	var _speed_ratio = clamp((current_speed - min_speed) / (max_speed - min_speed), 0.0, 1.0)
-	wind_particles.emitting = _speed_ratio > 0.8
-	if wind_particles.emitting:
+	# ALWAYS EMIT
+	if not wind_particles.emitting:
+		wind_particles.emitting = true
+	
+	# Only update the amount if the speed has actually changed significantly
+	# This prevents the "stuttering" effect
+	var _speed_ratio = clamp((current_speed - min_speed) / (max_speed - min_speed), 0.1, 1.0)
+	if abs(wind_particles.amount_ratio - _speed_ratio) > 0.05:
 		wind_particles.amount_ratio = _speed_ratio
 
 func crash_sequence():
-	GameManager.stop_flying()
+	# CHANGED: GameManager is gone, use ScoreManager!
+	ScoreManager.stop_flying()
 	ScoreManager.crash() 
+	
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	var game_over_menu = GAME_OVER_SCREEN.instantiate()
 	get_tree().current_scene.add_child(game_over_menu)

@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://xyw0fj5xlm2h" path="res://Settings_Menu/settings_menu.tscn" id="3_6qckm"]
 
 [sub_resource type="SystemFont" id="SystemFont_6qckm"]
+subpixel_positioning = 0
 
 [sub_resource type="SystemFont" id="SystemFont_2jvup"]
 subpixel_positioning = 0

@@ -27,10 +27,6 @@ alignment = 1
 layout_mode = 2
 text = "CRASHED"
 
-[node name="ScoreLabel" type="Label" parent="Label/VBoxContainer" unique_id=333101894]
-layout_mode = 2
-text = "Final Score: 0"
-
 [node name="RestartButton" type="Button" parent="Label/VBoxContainer" unique_id=282876490]
 layout_mode = 2
 text = "Restart"

@@ -243,16 +243,28 @@ public partial class ChunkBuilder : RefCounted
 	private Color GetVoxelColor(float worldX, float worldY, float worldZ, Vector3 normal)
 	{
 		Color baseColor;
-		if (worldY > 80.0f)
-			baseColor = new Color(0.9f, 0.9f, 0.95f);
-		else if (worldY > -40.0f)
-			baseColor = new Color(0.3f, 0.6f, 0.25f);
+		
+		// Peak heights: Pale, petrified ash/bone white
+		if (worldY > 60.0f)
+			baseColor = new Color(0.85f, 0.85f, 0.88f);
+			
+		// Mid levels: Cold, stark charcoal/gray
+		else if (worldY > -20.0f)
+			baseColor = new Color(0.25f, 0.25f, 0.28f);
+			
+		// Deep trenches: Obsidian black
+		else if (worldY > -60.0f)
+			baseColor = new Color(0.08f, 0.08f, 0.09f);
+			
+		// The very bottom: Dull, glowing hellfire embers
 		else
-			baseColor = new Color(0.4f, 0.4f, 0.45f);
+			baseColor = new Color(0.6f, 0.1f, 0.05f);
 
+		// Checkerboard pattern for texture
 		int checker = Mathf.FloorToInt(Mathf.Floor(worldX / 2.0f) + Mathf.Floor(worldY / 2.0f) + Mathf.Floor(worldZ / 2.0f)) % 2;
 		float brightness = (checker == 0) ? 1.0f : 0.92f;
 
+		// Fake lighting/shading based on face direction
 		if (normal.Y == 0.0f)
 			brightness *= 0.85f;
 		else if (normal.Y < 0.0f)
