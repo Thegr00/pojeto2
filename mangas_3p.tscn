@@ -59,7 +59,7 @@ fov = 82.3
 
 [node name="AshSnowFall" type="GPUParticles3D" parent="cam origin" unique_id=1533343449]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15.8918915)
-amount = 3000
+amount = 4000
 lifetime = 5.0
 preprocess = 5.0
 visibility_aabb = AABB(-53.79075, -61.24496, -55.874348, 113.10655, 108.74605, 109.39966)
