@@ -37,6 +37,7 @@ var cam_yaw: float = 0.0
 var cam_pitch: float = 0.0
 var current_roll_angle: float = 0.0
 var current_pitch_angle: float = 0.0
+var is_doing_trick: bool = false # Tracks if we are rolling/flipping
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -46,33 +47,40 @@ func _ready():
 	cam_yaw = global_rotation.y
 	cam_pitch = global_rotation.x
 	
-	# CHANGED: We use our single, unified wipe command now!
 	ScoreManager.prepare_for_restart()
-	
-	# CHANGED: GameManager is gone. ScoreManager handles the passive score now!
 	ScoreManager.start_flying()
 
 func _input(event):
-	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+	# Locked mouse input while a trick is happening!
+	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED and not is_doing_trick:
 		if event is InputEventMouseMotion:
 			cam_yaw -= event.relative.x * mouse_sensitivity
 			cam_pitch -= event.relative.y * mouse_sensitivity
-			# Clamp removed here to allow 360-degree vertical loops
 
 func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("pause"):
 		get_tree().change_scene_to_file("res://pause_menu.tscn")
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 		return
-	# 1. SMOOTH CAMERA TURN: Uses the plane's actual tilt angle instead of raw button presses!
-	var turn_ratio = current_roll_angle / max_roll_angle
-	cam_yaw += turn_ratio * bank_turn_speed * delta 
+		
+	# Check for the Barrel Roll!
+	if Input.is_physical_key_pressed(KEY_E) and not is_doing_trick:
+		do_barrel_roll()
+		
+	# Check for the U-Turn!
+	if Input.is_physical_key_pressed(KEY_Q) and not is_doing_trick:
+		do_u_turn()
+
+	# 1. SMOOTH CAMERA TURN: Uses the plane's actual tilt angle
+	# Locked out while a trick is happening!
+	if not is_doing_trick:
+		var turn_ratio = current_roll_angle / max_roll_angle
+		cam_yaw += turn_ratio * bank_turn_speed * delta 
 	
 	# 2. Force the nose down into a dive if stalled
 	if current_speed < min_speed:
 		var stall_ratio = 1.0 - (current_speed / min_speed)
 		cam_pitch -= stall_ratio * stall_nose_down_speed * delta
-	# -----------------------------------------
 
 	pivot.global_position = global_position
 	pivot.rotation = Vector3(cam_pitch, cam_yaw, 0)
@@ -101,7 +109,6 @@ func _physics_process(delta: float) -> void:
 	var forward_dir = -global_transform.basis.z
 	var engine_velocity = forward_dir * current_speed
 	
-	# Calculate Gravity (kicks in when dropping below cruising speed)
 	var stall_gravity = 0.0
 	if current_speed < min_speed:
 		var stall_ratio = 1.0 - (current_speed / min_speed)
@@ -109,24 +116,20 @@ func _physics_process(delta: float) -> void:
 		
 	var target_velocity = engine_velocity + (Vector3.DOWN * stall_gravity)
 	
-	# Safely calculate grip
 	var speed_ratio = clamp((current_speed - min_speed) / (max_speed - min_speed), 0.0, 1.0)
 	var current_grip = lerp(8.0, 4.0, speed_ratio)
 	
 	velocity = velocity.lerp(target_velocity, current_grip * delta) 
 
 func handle_flight_rotation(delta):
-	var roll_input = Input.get_axis("right", "left")      
-	# INVERTED: W points nose down and S points nose up
+	var roll_input = Input.get_axis("right", "left")       
 	var pitch_input = -Input.get_axis("forward", "back") 
 	
-	# Banking logic (WASD) - FULLY SEPARATED!
+	# Banking logic (WASD)
 	current_roll_angle = lerp_angle(current_roll_angle, roll_input * max_roll_angle, roll_tilt_speed * delta)
 	current_pitch_angle = lerp_angle(current_pitch_angle, pitch_input * max_pitch_angle, pitch_tilt_speed * delta)
 		
 	var target_z = -pivot.global_transform.basis.z
-	
-	# Dynamic Up Vector to support loops/inversion
 	var reference_up = pivot.global_transform.basis.y 
 	
 	var right = target_z.cross(reference_up).normalized()
@@ -134,11 +137,9 @@ func handle_flight_rotation(delta):
 	
 	var target_basis = Basis(right, up, -target_z).orthonormalized()
 	
-	# Apply local WASD tilts to the target direction
 	target_basis = target_basis.rotated(target_basis.x, current_pitch_angle)
 	target_basis = target_basis.rotated(target_basis.z, -current_roll_angle)
 	
-	# Clean basis and slerp using Quaternions
 	global_transform.basis = global_transform.basis.orthonormalized()
 	var current_quat = global_transform.basis.get_rotation_quaternion()
 	var target_quat = target_basis.get_rotation_quaternion()
@@ -146,27 +147,23 @@ func handle_flight_rotation(delta):
 	global_transform.basis = Basis(current_quat.slerp(target_quat, body_turn_speed * delta))
 		
 	if mesh_container:
-		var visual_tilt = -roll_input * deg_to_rad(30)
-		mesh_container.rotation.z = lerp_angle(mesh_container.rotation.z, visual_tilt, delta * 5.0) 
+		if not is_doing_trick:
+			var visual_tilt = -roll_input * deg_to_rad(30)
+			mesh_container.rotation.z = lerp_angle(mesh_container.rotation.z, visual_tilt, delta * 5.0) 
 
 func calculate_flight_speed(delta):
 	var look_dir_y = -global_transform.basis.z.y 
 	
-	# Pitch-based acceleration/deceleration
 	if look_dir_y < 0: 
 		current_speed += abs(look_dir_y) * dive_acceleration * delta
 	else: 
 		current_speed -= look_dir_y * up_deceleration * delta
 	
-	# Natural engine thrust & drag
 	if current_speed < min_speed:
-		# If stalled, the engine slowly fights to get back to cruising speed
 		current_speed += 8.0 * delta 
 	elif current_speed > min_speed and look_dir_y >= 0:
-		# If flying level, drag naturally slows you down
 		current_speed -= 2.0 * delta 
 		
-	# Allow speed to drop to 0 (stall) instead of artificially limiting it
 	current_speed = clamp(current_speed, 0.0, max_speed)
 
 func update_camera_soft_follow(delta: float):
@@ -192,18 +189,14 @@ func update_camera_effects(delta):
 	var target_tilt = roll_input * deg_to_rad(15.0) 
 	camera.rotation.z = lerp_angle(camera.rotation.z, target_tilt, delta * 5.0)
 	
-	# ALWAYS EMIT
 	if not wind_particles.emitting:
 		wind_particles.emitting = true
 	
-	# Only update the amount if the speed has actually changed significantly
-	# This prevents the "stuttering" effect
 	var _speed_ratio = clamp((current_speed - min_speed) / (max_speed - min_speed), 0.1, 1.0)
 	if abs(wind_particles.amount_ratio - _speed_ratio) > 0.05:
 		wind_particles.amount_ratio = _speed_ratio
 
 func crash_sequence():
-	# CHANGED: GameManager is gone, use ScoreManager!
 	ScoreManager.stop_flying()
 	ScoreManager.crash() 
 	
@@ -213,3 +206,34 @@ func crash_sequence():
 	game_over_menu.set_final_score(ScoreManager.total_score)
 	get_tree().paused = true
 	set_physics_process(false)
+
+func do_barrel_roll():
+	if not mesh_container: return
+	is_doing_trick = true
+	
+	# Give 50 points and +0.5 to multiplier!
+	ScoreManager.add_trick_points("BARREL ROLL", 50, 0.5) 
+	
+	var tween = create_tween()
+	var start_rot = mesh_container.rotation.z
+	tween.tween_property(mesh_container, "rotation:z", start_rot + TAU, 0.6).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	await tween.finished
+	if mesh_container: mesh_container.rotation.z = wrapf(mesh_container.rotation.z, -PI, PI)
+	is_doing_trick = false
+
+func do_u_turn():
+	if not mesh_container: return
+	is_doing_trick = true
+	
+	# Give 100 points and +1.0 to multiplier!
+	ScoreManager.add_trick_points("U-TURN", 100, 1.0) 
+	
+	var tween = create_tween().set_parallel(true)
+	tween.tween_property(self, "cam_yaw", cam_yaw + PI, 0.6).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	if mesh_container:
+		var start_rot = mesh_container.rotation.z
+		tween.tween_property(mesh_container, "rotation:z", start_rot + TAU, 0.6).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	await tween.finished
+	if mesh_container: mesh_container.rotation.z = wrapf(mesh_container.rotation.z, -PI, PI)
+	cam_yaw = wrapf(cam_yaw, -PI, PI)
+	is_doing_trick = false

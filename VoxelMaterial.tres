@@ -1,5 +1,12 @@
-[gd_resource type="StandardMaterial3D" format=3 uid="uid://b1x13n502xosd"]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://cbu11jdlipwfd"]
+
+[ext_resource type="Texture2D" uid="uid://rvffjubcmkc5" path="res://vecteezy_close-up-of-a-black-rock-with-many-pieces-the-rock-is-rough_53856547.jpg" id="1_mxuea"]
 
 [resource]
 cull_mode = 2
 vertex_color_use_as_albedo = true
+albedo_color = Color(0.06026368, 0.08338085, 0.378125, 1)
+albedo_texture = ExtResource("1_mxuea")
+uv1_scale = Vector3(0.2, 0.2, 0.2)
+uv1_triplanar = true
+uv1_world_triplanar = true
