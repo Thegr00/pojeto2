@@ -31,6 +31,7 @@ const GAME_OVER_SCREEN = preload("res://game_over_screen.tscn")
 @onready var wind_particles = $"cam origin/AshSnowFall"
 @export var mesh_container: Node3D
 @onready var proximity_cast: ShapeCast3D = $ShapeCast3D
+@onready var crash_sound: AudioStreamPlayer = $CrashSound
 
 var current_speed = 10.0
 var cam_yaw: float = 0.0
@@ -38,6 +39,7 @@ var cam_pitch: float = 0.0
 var current_roll_angle: float = 0.0
 var current_pitch_angle: float = 0.0
 var is_doing_trick: bool = false # Tracks if we are rolling/flipping
+var is_dead: bool = false # NEW: Tracks if we crashed!
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -122,7 +124,7 @@ func _physics_process(delta: float) -> void:
 	velocity = velocity.lerp(target_velocity, current_grip * delta) 
 
 func handle_flight_rotation(delta):
-	var roll_input = Input.get_axis("right", "left")       
+	var roll_input = Input.get_axis("right", "left")        
 	var pitch_input = -Input.get_axis("forward", "back") 
 	
 	# Banking logic (WASD)
@@ -196,16 +198,38 @@ func update_camera_effects(delta):
 	if abs(wind_particles.amount_ratio - _speed_ratio) > 0.05:
 		wind_particles.amount_ratio = _speed_ratio
 
+# --- NEW UPDATED CRASH SEQUENCE ---
 func crash_sequence():
+	if is_dead: return
+	is_dead = true
+	
+	# 1. Stop processing movement and camera updates
+	set_physics_process(false)
+	set_process(false)
+	
+	# 2. Stop scoring
 	ScoreManager.stop_flying()
 	ScoreManager.crash() 
 	
+	# 3. Hide the player model and disable wind particles
+	if mesh_container:
+		mesh_container.hide()
+	if wind_particles:
+		wind_particles.emitting = false
+		
+	# === PLAY THE SOUND ===
+	if crash_sound:
+		crash_sound.play()
+	# ======================
+		
+	# Wait for 2 seconds while the camera stays locked
+	await get_tree().create_timer(2.0).timeout
+	
+	# 4. Bring up the UI!
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	var game_over_menu = GAME_OVER_SCREEN.instantiate()
 	get_tree().current_scene.add_child(game_over_menu)
 	game_over_menu.set_final_score(ScoreManager.total_score)
-	get_tree().paused = true
-	set_physics_process(false)
 
 func do_barrel_roll():
 	if not mesh_container: return

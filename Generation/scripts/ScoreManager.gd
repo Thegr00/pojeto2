@@ -51,7 +51,7 @@ func add_proximity_points(delta: float, closeness_factor: float) -> void:
 	# THE FIX: Only refill the combo meter if they are DANGEROUSLY close.
 	# closeness_factor is usually between 0.0 (far) and 1.0 (touching).
 	# Change '0.5' to make it more or less strict!
-	if closeness_factor > 0.7: 
+	if closeness_factor > 0.9: 
 		combo_meter = 1.0 
 		_combo_pause_timer = 0.1 
 	
