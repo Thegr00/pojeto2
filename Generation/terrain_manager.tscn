@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://1nloobvtrtnk" path="res://Generation/scripts/terrain_manager.gd" id="1_icbd1"]
 [ext_resource type="PackedScene" uid="uid://co5w5k0vu1wm5" path="res://mangas_3p.tscn" id="2_atpbs"]
 [ext_resource type="Script" uid="uid://c8t821521tdq" path="res://Generation/scripts/ui.gd" id="3_w5nei"]
+[ext_resource type="FontFile" uid="uid://dr67jb4p840gj" path="res://SuperMario256.ttf" id="4_7ivtl"]
 [ext_resource type="PackedScene" uid="uid://cjr74ks3pchc6" path="res://loading_screen.tscn" id="4_dq43s"]
 
 [sub_resource type="Environment" id="Environment_atpbs"]
@@ -36,26 +37,35 @@ light_energy = 13.19
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1763960021]
 environment = SubResource("Environment_atpbs")
 
-[node name="UI" type="CanvasLayer" parent="." unique_id=227240343]
-script = ExtResource("3_w5nei")
-
-[node name="ScoreLabel" type="Label" parent="UI" unique_id=309974217]
-offset_right = 40.0
-offset_bottom = 23.0
-
-[node name="CloseCallLabel" type="Label" parent="UI" unique_id=1253807450]
-offset_left = -1.0
-offset_top = 36.0
-offset_right = 39.0
-offset_bottom = 59.0
-
-[node name="ComboBar" type="ProgressBar" parent="UI" unique_id=1131738405]
-offset_left = 1.0
-offset_top = 128.0
-offset_right = 105.0
-offset_bottom = 155.0
-max_value = 1.0
-show_percentage = false
-
 [node name="LoadingScreen" parent="." unique_id=387819251 node_paths=PackedStringArray("world_manager") instance=ExtResource("4_dq43s")]
 world_manager = NodePath("..")
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=481358530]
+script = ExtResource("3_w5nei")
+
+[node name="ScoreLabel" type="Label" parent="UI" unique_id=1994489266]
+anchors_preset = -1
+anchor_top = -0.009259259
+offset_top = 98.0
+offset_right = 40.0
+offset_bottom = 121.0
+theme_override_colors/font_shadow_color = Color(0.040624976, 0.028437482, 0.028437482, 0)
+theme_override_fonts/font = ExtResource("4_7ivtl")
+theme_override_font_sizes/font_size = 25
+metadata/_edit_use_anchors_ = true
+
+[node name="CloseCallLabel" type="Label" parent="UI" unique_id=2037535459]
+offset_left = -1.0
+offset_top = 120.0
+offset_right = 39.0
+offset_bottom = 143.0
+theme_override_fonts/font = ExtResource("4_7ivtl")
+theme_override_font_sizes/font_size = 20
+
+[node name="ComboBar" type="ProgressBar" parent="UI" unique_id=501992353]
+offset_left = 1.0
+offset_top = 170.0
+offset_right = 134.0
+offset_bottom = 186.0
+max_value = 1.0
+show_percentage = false
