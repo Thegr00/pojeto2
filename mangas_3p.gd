@@ -1,6 +1,6 @@
 extends CharacterBody3D
 
-const GAME_OVER_SCREEN = preload("res://game_over_screen.tscn") 
+const GAME_OVER_SCREEN = preload("res://game_over_screen.tscn")
 
 @export_group("Flight Speed")
 @export var max_speed = 60.0
@@ -45,6 +45,14 @@ func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	pivot.set_as_top_level(true) 
 	spring_arm.set_as_top_level(true) 
+	
+	# === NEW: Teleport to the Gate ===
+	# This searches the whole level for your gate's anchor point!
+	var spawn_point = get_tree().current_scene.find_child("Spawn", true, false)
+	if spawn_point:
+		global_position = spawn_point.global_position
+		global_rotation = spawn_point.global_rotation
+	# =================================
 	
 	cam_yaw = global_rotation.y
 	cam_pitch = global_rotation.x
