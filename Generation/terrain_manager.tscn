@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://c8t821521tdq" path="res://Generation/scripts/ui.gd" id="3_w5nei"]
 [ext_resource type="FontFile" uid="uid://dr67jb4p840gj" path="res://SuperMario256.ttf" id="4_7ivtl"]
 [ext_resource type="PackedScene" uid="uid://cjr74ks3pchc6" path="res://loading_screen.tscn" id="4_dq43s"]
+[ext_resource type="PackedScene" uid="uid://davyxw8uya2ns" path="res://pause_menu.tscn" id="5_7ivtl"]
 
 [sub_resource type="Environment" id="Environment_atpbs"]
 background_mode = 1
@@ -28,6 +29,10 @@ player = NodePath("mangas3p")
 [node name="mangas3p" parent="." unique_id=1479076587 instance=ExtResource("2_atpbs")]
 transform = Transform3D(1, 0, 0, 0, 0.99663603, -0.08195585, 0, 0.08195585, 0.99663603, 0, 0, 0)
 up_deceleration = 45.0
+
+[node name="CanvasLayer" type="CanvasLayer" parent="mangas3p" unique_id=1635896534]
+
+[node name="pause menu" parent="mangas3p/CanvasLayer" unique_id=1405658965 instance=ExtResource("5_7ivtl")]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=579636448]
 transform = Transform3D(1, 0, 0, 0, 0.2268383, 0.97393245, 0, -0.97393245, 0.2268383, 0, 11.045761, 0)

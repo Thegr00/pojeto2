@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://c4hx8ibmetgrf" path="res://Settings_Menu/settings_tab.tscn" id="2_le4lq"]
 
 [sub_resource type="SystemFont" id="SystemFont_rnrih"]
+subpixel_positioning = 0
 
 [node name="Settings_menu" type="Control" unique_id=1906715036]
 layout_mode = 3

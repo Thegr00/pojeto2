@@ -22,6 +22,8 @@ corner_radius_bottom_left = 10
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2nc7s"]
 
 [node name="pause menu" type="Control" unique_id=1405658965]
+process_mode = 3
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -56,7 +58,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 13
 
-[node name="Resume" type="Button" parent="VBoxContainer" unique_id=117552664]
+[node name="Resume" type="Button" parent="VBoxContainer" unique_id=1401156994]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/font_color = Color(0, 0, 0, 1)
@@ -68,6 +70,19 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_05uyy")
 theme_override_styles/hover = SubResource("StyleBoxFlat_p81d2")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_2nc7s")
 text = "Resume"
+
+[node name="Restart" type="Button" parent="VBoxContainer" unique_id=117552664]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 25
+theme_override_styles/normal = SubResource("StyleBoxFlat_nwcfo")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_05uyy")
+theme_override_styles/hover = SubResource("StyleBoxFlat_p81d2")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_2nc7s")
+text = "Restart"
 
 [node name="Options" type="Button" parent="VBoxContainer" unique_id=1332502606]
 layout_mode = 2
@@ -96,5 +111,7 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_2nc7s")
 text = "Exit to menu"
 
 [connection signal="pressed" from="VBoxContainer/Resume" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="VBoxContainer/Restart" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="VBoxContainer/Restart" to="." method="_on_restart_pressed"]
 [connection signal="pressed" from="VBoxContainer/Options" to="." method="_on_options_pressed"]
 [connection signal="pressed" from="VBoxContainer/Exit to menu" to="." method="_on_exit_to_menu_pressed"]

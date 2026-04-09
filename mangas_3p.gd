@@ -44,7 +44,8 @@ var is_dead: bool = false # NEW: Tracks if we crashed!
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	pivot.set_as_top_level(true) 
-	spring_arm.set_as_top_level(true) 
+	spring_arm.set_as_top_level(true)
+	
 	
 	# === NEW: Teleport to the Gate ===
 	# This searches the whole level for your gate's anchor point!
