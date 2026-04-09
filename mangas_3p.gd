@@ -1,6 +1,6 @@
 extends CharacterBody3D
 
-const GAME_OVER_SCREEN = preload("res://game_over_screen.tscn") 
+const GAME_OVER_SCREEN = preload("res://game_over_screen.tscn")
 
 @export_group("Flight Speed")
 @export var max_speed = 60.0
@@ -31,6 +31,7 @@ const GAME_OVER_SCREEN = preload("res://game_over_screen.tscn")
 @onready var wind_particles = $"cam origin/AshSnowFall"
 @export var mesh_container: Node3D
 @onready var proximity_cast: ShapeCast3D = $ShapeCast3D
+@onready var crash_sound: AudioStreamPlayer = $CrashSound
 
 var current_speed = 10.0
 var cam_yaw: float = 0.0
@@ -38,20 +39,22 @@ var cam_pitch: float = 0.0
 var current_roll_angle: float = 0.0
 var current_pitch_angle: float = 0.0
 var is_doing_trick: bool = false # Tracks if we are rolling/flipping
+var is_dead: bool = false # Tracks if we crashed
+var is_spawning: bool = false # NEW: Tracks if we are in the intro cinematic!
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	pivot.set_as_top_level(true) 
 	spring_arm.set_as_top_level(true)
 	
-	
-	cam_yaw = global_rotation.y
-	cam_pitch = global_rotation.x
-	
 	ScoreManager.prepare_for_restart()
-	ScoreManager.start_flying()
+	
+	# Start the intro sequence!
+	play_portal_intro()
 
 func _input(event):
+	if is_spawning: return # LOCK INPUT DURING SPAWN
+	
 	# Locked mouse input while a trick is happening!
 	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED and not is_doing_trick:
 		if event is InputEventMouseMotion:
@@ -59,6 +62,8 @@ func _input(event):
 			cam_pitch -= event.relative.y * mouse_sensitivity
 
 func _physics_process(delta: float) -> void:
+	if is_spawning: return # LOCK MOVEMENT DURING SPAWN
+	
 	if Input.is_action_just_pressed("pause"):
 		get_tree().change_scene_to_file("res://pause_menu.tscn")
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -122,8 +127,79 @@ func _physics_process(delta: float) -> void:
 	
 	velocity = velocity.lerp(target_velocity, current_grip * delta) 
 
+# === NEW: THE INTRO SEQUENCE ===
+func play_portal_intro():
+	is_spawning = true
+	set_physics_process(false) # FREEZE the player during loading and intro
+	if mesh_container: mesh_container.hide()
+	
+	print("Waiting for loading screen to finish...")
+	var root = get_tree().root
+	
+	# === DYNAMIC LOADING WAIT ===
+	var loading_screen = root.find_child("LoadingScreen", true, false)
+	if loading_screen:
+		while is_instance_valid(loading_screen) and loading_screen.visible:
+			await get_tree().process_frame
+	
+	print("--- SEARCHING FOR PORTAL NODES ---")
+	var portal_node = root.find_child("SpawnPortal", true, false)
+	var portal_graphic = root.find_child("PortalGraphic", true, false)
+	var cinematic_cam = root.find_child("CinematicCam", true, false)
+	
+	if portal_node and portal_graphic and cinematic_cam:
+		print("SUCCESS! Starting slash animation.")
+		cinematic_cam.make_current()
+		
+		# 1. Start the portal completely invisible (Scale 0)
+		portal_graphic.scale = Vector3(0.01, 0.0, 1.0)
+		
+		# Wait a tiny bit for the scene to settle
+		await get_tree().create_timer(0.2).timeout
+		
+		# 2. DRAW THE SLASH (Animate Y scale from 0 to 4)
+		var slice_tween = create_tween()
+		slice_tween.tween_property(portal_graphic, "scale", Vector3(0.01, 4.0, 1.0), 0.3).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+		await slice_tween.finished
+		
+		# Pause for effect so the player sees the thin line
+		await get_tree().create_timer(0.2).timeout
+		
+		# 3. POP IT OPEN (Animate X scale to 4)
+		var open_tween = create_tween()
+		open_tween.tween_property(portal_graphic, "scale", Vector3(4.0, 4.0, 1.0), 0.8).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
+		await open_tween.finished
+		
+		# 4. Teleport player to it and show them
+		global_position = portal_node.global_position
+		global_rotation = portal_node.global_rotation
+		if mesh_container: mesh_container.show()
+		
+		# 5. SPEW THE PLAYER OUT
+		current_speed = max_speed * 1.5 
+		await get_tree().create_timer(0.2).timeout
+		
+		# 6. Shrink the portal away
+		var close_tween = create_tween()
+		close_tween.tween_property(portal_graphic, "scale", Vector3(0.0, 0.0, 1.0), 0.5).set_trans(Tween.TRANS_SINE)
+	else:
+		print("WARNING: Could not find portal nodes! Using fallback spawn.")
+		var spawn_point = root.find_child("Spawn", true, false)
+		if spawn_point:
+			global_position = spawn_point.global_position
+			global_rotation = spawn_point.global_rotation
+		if mesh_container: mesh_container.show()
+		
+	# 7. Give control back to the player!
+	print("Switching back to player camera.")
+	cam_yaw = global_rotation.y
+	cam_pitch = global_rotation.x
+	camera.make_current() # Switch back to player camera
+	is_spawning = false
+	set_physics_process(true) # UNFREEZE the player so they can fly
+	ScoreManager.start_flying()
 func handle_flight_rotation(delta):
-	var roll_input = Input.get_axis("right", "left")       
+	var roll_input = Input.get_axis("right", "left")        
 	var pitch_input = -Input.get_axis("forward", "back") 
 	
 	# Banking logic (WASD)
@@ -198,15 +274,36 @@ func update_camera_effects(delta):
 		wind_particles.amount_ratio = _speed_ratio
 
 func crash_sequence():
+	if is_dead: return
+	is_dead = true
+	
+	# 1. Stop processing movement and camera updates
+	set_physics_process(false)
+	set_process(false)
+	
+	# 2. Stop scoring
 	ScoreManager.stop_flying()
 	ScoreManager.crash() 
 	
+	# 3. Hide the player model and disable wind particles
+	if mesh_container:
+		mesh_container.hide()
+	if wind_particles:
+		wind_particles.emitting = false
+		
+	# === PLAY THE SOUND ===
+	if crash_sound:
+		crash_sound.play()
+	# ======================
+		
+	# Wait for 2 seconds while the camera stays locked
+	await get_tree().create_timer(2.0).timeout
+	
+	# 4. Bring up the UI!
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	var game_over_menu = GAME_OVER_SCREEN.instantiate()
 	get_tree().current_scene.add_child(game_over_menu)
 	game_over_menu.set_final_score(ScoreManager.total_score)
-	get_tree().paused = true
-	set_physics_process(false)
 
 func do_barrel_roll():
 	if not mesh_container: return

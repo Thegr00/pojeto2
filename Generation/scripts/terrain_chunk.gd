@@ -69,7 +69,7 @@ func _process(_delta: float) -> void:
 		is_waiting_to_collide = true # Move it to the collision waiting line
 		
 	# 3. Build physics slow (STRICT LIMIT: Only 1 heavy collision builds per frame)
-	if is_waiting_to_collide and wm.collisions_built_this_frame < 1:
+	if is_waiting_to_collide and wm.collisions_built_this_frame < 2:
 		wm.collisions_built_this_frame += 1
 		_apply_collision_only()
 		is_waiting_to_collide = false

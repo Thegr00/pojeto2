@@ -222,12 +222,35 @@ public partial class ChunkBuilder : RefCounted
 		float caveNoise = _detailNoise.GetNoise3D(pos.X * 0.8f, pos.Y * 1.5f, pos.Z * 0.8f);
 		float caveCarver = Mathf.Abs(caveNoise) * 90.0f;
 
-		// Call our pure C# method!
+		// The normal procedural flight path tube
 		float distToPath = GetDistanceToSegments(pos, localSegments);
 		float safetyTube = 10.0f - distToPath;
 
 		float finalD = Mathf.Max(baseDensity, 25.0f - caveCarver);
 		finalD = Mathf.Max(finalD, safetyTube);
+
+		// === 🚨 NEW: THE SUMMONING GATE RUNWAY 🚨 ===
+		// This carves a perfectly straight, empty corridor at spawn (0,0,0).
+		// We assume your player launches forward down the negative Z-axis.
+		if (pos.Z < 20.0f && pos.Z > -80.0f)
+		{
+			// Get distance from the dead center of the runway (X=0, Y=0)
+			float distFromCenter = Mathf.Sqrt(pos.X * pos.X + pos.Y * pos.Y);
+			
+			// Calculate how far along the runway we are (0.0 at start, 1.0 at end)
+			// This allows us to taper the runway so it smoothly merges into the normal level!
+			float progress = Mathf.Clamp((pos.Z - 20.0f) / (-80.0f - 20.0f), 0.0f, 1.0f);
+			
+			// The runway starts massive (30m radius) and shrinks down to the normal tube size (10m)
+			float currentRadius = Mathf.Lerp(30.0f, 10.0f, progress);
+			
+			float runwayCarver = currentRadius - distFromCenter;
+			
+			// Force this space to be empty air (positive density)
+			finalD = Mathf.Max(finalD, runwayCarver);
+		}
+		// ============================================
+
 		return finalD;
 	}
 

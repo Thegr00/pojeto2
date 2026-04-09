@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://du2kqcpk57x4h" path="res://mangas_3p.gd" id="1_yn4l2"]
 [ext_resource type="PackedScene" uid="uid://bp46c0ohrfxlq" path="res://mannequiny-0.3.0.glb" id="2_qay7o"]
+[ext_resource type="AudioStream" uid="uid://u62h3bhcwonx" path="res://freesound_crunchpixstudio-rpg-sword-attack-combo-10-388930.mp3" id="3_5k7j1"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qay7o"]
 radius = 0.6803436
@@ -70,3 +71,7 @@ draw_pass_1 = SubResource("QuadMesh_odn01")
 [node name="ShapeCast3D" type="ShapeCast3D" parent="." unique_id=816150755]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.47473526, -0.83687884)
 shape = SubResource("SphereShape3D_qay7o")
+
+[node name="CrashSound" type="AudioStreamPlayer" parent="." unique_id=1214093750]
+stream = ExtResource("3_5k7j1")
+volume_db = -17.463
