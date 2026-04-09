@@ -6,6 +6,7 @@
 [ext_resource type="FontFile" uid="uid://dr67jb4p840gj" path="res://SuperMario256.ttf" id="4_7ivtl"]
 [ext_resource type="PackedScene" uid="uid://cjr74ks3pchc6" path="res://loading_screen.tscn" id="4_dq43s"]
 [ext_resource type="PackedScene" uid="uid://davyxw8uya2ns" path="res://pause_menu.tscn" id="5_7ivtl"]
+[ext_resource type="PackedScene" uid="uid://ci1lpreneiqdd" path="res://StartGate.tscn" id="7_1sf0h"]
 
 [sub_resource type="Environment" id="Environment_atpbs"]
 background_mode = 1
@@ -74,3 +75,11 @@ offset_right = 134.0
 offset_bottom = 186.0
 max_value = 1.0
 show_percentage = false
+
+[node name="SpawnPortal" parent="." unique_id=370306921 instance=ExtResource("7_1sf0h")]
+
+[node name="PortalGraphic" parent="SpawnPortal" index="0" unique_id=2046987146 groups=["PortalGraphic"]]
+
+[node name="CinematicCam" parent="SpawnPortal" index="1" unique_id=1371905340 groups=["CinematicCam"]]
+
+[editable path="SpawnPortal"]

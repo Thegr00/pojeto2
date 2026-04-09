@@ -1,15 +1,21 @@
 [gd_scene format=3 uid="uid://ci1lpreneiqdd"]
 
-[node name="StartGate" type="Node3D" unique_id=836389737]
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_8cfg3"]
+load_path = "res://.godot/imported/pla.jpg-3849f0a3c495bab4027dea5a2d0d2401.s3tc.ctex"
 
-[node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=423877568]
-transform = Transform3D(1.9377494, 0, 0, 0, 0.12861991, 0, 0, 0, 7.020831, 0, 0, 0)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8cfg3"]
+albedo_texture = SubResource("CompressedTexture2D_8cfg3")
+emission_enabled = true
+emission = Color(1, 0.76874995, 0, 1)
+emission_energy_multiplier = 3.0
 
-[node name="CSGCylinder3D" type="CSGCylinder3D" parent="." unique_id=236920446]
-transform = Transform3D(1, 0, 0, 0, 1.5, 0, 0, 0, 1, -1.2299325, 1.6185724, 3.223789)
+[sub_resource type="QuadMesh" id="QuadMesh_qu3c7"]
 
-[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="." unique_id=1430776976]
-transform = Transform3D(1, 0, 0, 0, 1.5, 0, 0, 0, 1, 1.055587, 1.6185724, 3.4396966)
+[node name="SpawnPortal" type="Node3D" unique_id=370306921]
 
-[node name="Spawn" type="Node3D" parent="." unique_id=1396229184]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.33504534, -3.1711218)
+[node name="PortalGraphic" type="MeshInstance3D" parent="." unique_id=2046987146]
+material_override = SubResource("StandardMaterial3D_8cfg3")
+mesh = SubResource("QuadMesh_qu3c7")
+
+[node name="CinematicCam" type="Camera3D" parent="." unique_id=1371905340]
+transform = Transform3D(0.7217965, 0, 0.6921054, 0, 1, 0, -0.6921054, 0, 0.7217965, 3.3216376, 0, 3.957839)
