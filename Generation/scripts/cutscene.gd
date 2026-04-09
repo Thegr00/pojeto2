@@ -12,9 +12,12 @@ var dialogue_data = []
 var current_line_index = 0
 var is_active = false
 
+
+
 func _ready():
 	# Hide the UI by default when the game starts
 	hide()
+
 
 # Call this function from your 3D world
 func start_dialogue(new_dialogue_data):
@@ -43,10 +46,17 @@ func end_dialogue():
 	dialogue_finished.emit()
 
 func _input(event):
-	# If dialogue is active and the player presses "Accept" (usually Enter, Space, or A button)
-	if is_active and event.is_action_pressed("ui_accept"):
-		current_line_index += 1
-		show_current_line()
+	if is_active:
+		# Advance dialogue on Accept
+		if event.is_action_pressed("ui_accept"):
+			current_line_index += 1
+			show_current_line()
+		
+		# Safely close dialogue on Esc, AND block the Pause Menu
+		elif event.is_action_pressed("ui_cancel"):
+			end_dialogue()
+			# This line tells Godot: "I used the Esc key. Don't let anything else use it!"
+			get_viewport().set_input_as_handled()
 
 # FIXED: Now using 'fade_screen' instead of 'black_screen'
 func cut_to_black():

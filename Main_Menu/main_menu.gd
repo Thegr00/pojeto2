@@ -10,6 +10,7 @@ extends Control
 
 @onready var start_level = preload("res://Generation/terrain_manager.tscn") as PackedScene
 
+
 func _ready():
 	handle_signals()
 

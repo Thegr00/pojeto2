@@ -42,7 +42,8 @@ var is_doing_trick: bool = false # Tracks if we are rolling/flipping
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	pivot.set_as_top_level(true) 
-	spring_arm.set_as_top_level(true) 
+	spring_arm.set_as_top_level(true)
+	
 	
 	cam_yaw = global_rotation.y
 	cam_pitch = global_rotation.x

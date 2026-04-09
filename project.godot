@@ -29,6 +29,12 @@ window/stretch/mode="canvas_items"
 
 project/assembly_name="API"
 
+[importer_defaults]
+
+animation_library={
+&"import_script/path": "uid://bi88f050hy1da"
+}
+
 [input]
 
 pause={
