@@ -31,10 +31,6 @@ player = NodePath("mangas3p")
 transform = Transform3D(1, 0, 0, 0, 0.99663603, -0.08195585, 0, 0.08195585, 0.99663603, 0, 0, 0)
 up_deceleration = 45.0
 
-[node name="CanvasLayer" type="CanvasLayer" parent="mangas3p" unique_id=1635896534]
-
-[node name="pause menu" parent="mangas3p/CanvasLayer" unique_id=1405658965 instance=ExtResource("5_7ivtl")]
-
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=579636448]
 transform = Transform3D(1, 0, 0, 0, 0.2268383, 0.97393245, 0, -0.97393245, 0.2268383, 0, 11.045761, 0)
 light_color = Color(0.76862746, 0.8392157, 1, 1)
@@ -76,10 +72,10 @@ offset_bottom = 186.0
 max_value = 1.0
 show_percentage = false
 
-[node name="SpawnPortal" parent="." unique_id=370306921 instance=ExtResource("7_1sf0h")]
+[node name="LoadingScreen" parent="." unique_id=387819251 node_paths=PackedStringArray("world_manager") instance=ExtResource("4_dq43s")]
+process_mode = 0
+world_manager = NodePath("..")
 
-[node name="PortalGraphic" parent="SpawnPortal" index="0" unique_id=2046987146 groups=["PortalGraphic"]]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1635896534]
 
-[node name="CinematicCam" parent="SpawnPortal" index="1" unique_id=1371905340 groups=["CinematicCam"]]
-
-[editable path="SpawnPortal"]
+[node name="pause menu" parent="CanvasLayer" unique_id=1405658965 instance=ExtResource("5_7ivtl")]

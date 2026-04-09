@@ -21,7 +21,11 @@ const SPEED := 400.0
 const BOUNCE_SPEED := 10.0 
 const BOUNCE_HEIGHT := 3.0 
 
+
 func _ready() -> void:
+	
+	self.layer = 128
+	
 	if world_manager != null and world_manager.player != null:
 		world_manager.player.process_mode = Node.PROCESS_MODE_DISABLED
 		
@@ -35,6 +39,14 @@ func _ready() -> void:
 	
 	if sprites.size() > 0:
 		_setup_pattern()
+
+
+func _input(event: InputEvent) -> void:
+	if is_loading:
+		get_viewport().set_input_as_handled()
+
+
+
 
 func _find_all_sprites(node: Node) -> void:
 	for child in node.get_children():

@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://davyxw8uya2ns"]
 
 [ext_resource type="Script" uid="uid://nhb83kh7mprm" path="res://pause_menu.gd" id="1_hdmo1"]
+[ext_resource type="PackedScene" uid="uid://xyw0fj5xlm2h" path="res://Settings_Menu/settings_menu.tscn" id="2_nwcfo"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nwcfo"]
 bg_color = Color(1, 1, 1, 1)
@@ -109,6 +110,10 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_05uyy")
 theme_override_styles/hover = SubResource("StyleBoxFlat_p81d2")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_2nc7s")
 text = "Exit to menu"
+
+[node name="Settings_menu" parent="." unique_id=1906715036 instance=ExtResource("2_nwcfo")]
+visible = false
+layout_mode = 1
 
 [connection signal="pressed" from="VBoxContainer/Resume" to="." method="_on_resume_pressed"]
 [connection signal="pressed" from="VBoxContainer/Restart" to="." method="_on_resume_pressed"]
