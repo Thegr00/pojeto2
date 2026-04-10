@@ -20,7 +20,11 @@ func _ready() -> void:
 var _is_paused:bool = false:
 	set(value):
 		_is_paused = value
-		get_tree().paused = _is_paused
+		
+		var tree = get_tree()
+		if tree:
+			tree.paused = _is_paused
+		
 		visible = _is_paused
 		
 		if _is_paused:
@@ -34,7 +38,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		if get_tree().root.find_child("LoadingScreen", true, false):
 			return 
 			
-		_is_paused = true
+		if _is_paused:
+			get_viewport().set_input_as_handled()
+			return
+			
+		_is_paused = !_is_paused
 		get_viewport().set_input_as_handled()
 
 func _on_resume_pressed() -> void:
