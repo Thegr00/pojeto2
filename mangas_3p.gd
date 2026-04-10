@@ -127,32 +127,35 @@ func _physics_process(delta: float) -> void:
 	
 	velocity = velocity.lerp(target_velocity, current_grip * delta) 
 
-# === NEW: THE INTRO SEQUENCE ===
 func play_portal_intro():
 	is_spawning = true
 	set_physics_process(false) # FREEZE the player during loading and intro
 	if mesh_container: mesh_container.hide()
 	
-	print("Waiting for loading screen to finish...")
 	var root = get_tree().root
+	var cinematic_cam = root.find_child("CinematicCam", true, false)
+	if cinematic_cam:
+		cinematic_cam.make_current()
+		
+	# === THE FIX: FIND PORTAL AND HIDE IT IMMEDIATELY ===
+	print("--- SEARCHING FOR PORTAL NODES ---")
+	var portal_node = root.find_child("SpawnPortal", true, false)
+	var portal_graphic = root.find_child("PortalGraphic", true, false)
 	
+	if portal_graphic:
+		# Crush it down so it's invisible WHILE the loading screen is still up
+		portal_graphic.scale = Vector3(0.01, 0.0, 1.0) 
+		
+	print("Waiting for loading screen to finish...")
 	# === DYNAMIC LOADING WAIT ===
 	var loading_screen = root.find_child("LoadingScreen", true, false)
 	if loading_screen:
 		while is_instance_valid(loading_screen) and loading_screen.visible:
 			await get_tree().process_frame
 	
-	print("--- SEARCHING FOR PORTAL NODES ---")
-	var portal_node = root.find_child("SpawnPortal", true, false)
-	var portal_graphic = root.find_child("PortalGraphic", true, false)
-	var cinematic_cam = root.find_child("CinematicCam", true, false)
-	
 	if portal_node and portal_graphic and cinematic_cam:
 		print("SUCCESS! Starting slash animation.")
 		cinematic_cam.make_current()
-		
-		# 1. Start the portal completely invisible (Scale 0)
-		portal_graphic.scale = Vector3(0.01, 0.0, 1.0)
 		
 		# Wait a tiny bit for the scene to settle
 		await get_tree().create_timer(0.2).timeout
@@ -167,7 +170,7 @@ func play_portal_intro():
 		
 		# 3. POP IT OPEN (Animate X scale to 4)
 		var open_tween = create_tween()
-		open_tween.tween_property(portal_graphic, "scale", Vector3(4.0, 4.0, 1.0), 0.8).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
+		open_tween.tween_property(portal_graphic, "scale", Vector3(3.0, 4.0, 4.0), 0.8).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 		await open_tween.finished
 		
 		# 4. Teleport player to it and show them
@@ -176,7 +179,7 @@ func play_portal_intro():
 		if mesh_container: mesh_container.show()
 		
 		# 5. SPEW THE PLAYER OUT
-		current_speed = max_speed * 1.5 
+		current_speed = max_speed 
 		await get_tree().create_timer(0.2).timeout
 		
 		# 6. Shrink the portal away
