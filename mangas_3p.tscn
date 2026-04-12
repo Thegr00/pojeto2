@@ -75,3 +75,4 @@ shape = SubResource("SphereShape3D_qay7o")
 [node name="CrashSound" type="AudioStreamPlayer" parent="." unique_id=1214093750]
 stream = ExtResource("3_5k7j1")
 volume_db = -17.463
+bus = &"Sfx"

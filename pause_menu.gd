@@ -63,7 +63,6 @@ func _on_options_pressed() -> void:
 	settings_menu.show()
 
 func _on_settings_exit() -> void:
-	
 	settings_menu.hide()
 	v_box_container.show()
 
