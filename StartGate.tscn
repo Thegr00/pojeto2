@@ -2,7 +2,7 @@
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8cfg3"]
 emission_enabled = true
-emission = Color(1, 0.76874995, 0, 1)
+emission = Color(1, 0.89299023, 0.5375, 1)
 emission_energy_multiplier = 3.0
 
 [sub_resource type="QuadMesh" id="QuadMesh_qu3c7"]
