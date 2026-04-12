@@ -28,6 +28,7 @@ const GAME_OVER_SCREEN = preload("res://game_over_screen.tscn")
 @export var cam_offset_amount: float = 0.5  
 @export var cam_offset_speed: float = 3.0
 
+@onready var anim_player: AnimationPlayer = $Gajo/AnimationPlayer
 @onready var wind_particles = $"cam origin/AshSnowFall"
 @export var mesh_container: Node3D
 @onready var proximity_cast: ShapeCast3D = $ShapeCast3D
@@ -93,7 +94,7 @@ func _physics_process(delta: float) -> void:
 
 	handle_flight_rotation(delta)
 	calculate_flight_speed(delta)
-	
+	update_flight_animations()
 	move_and_slide()
 	
 	if get_slide_collision_count() > 0:
@@ -127,32 +128,36 @@ func _physics_process(delta: float) -> void:
 	
 	velocity = velocity.lerp(target_velocity, current_grip * delta) 
 
-# === NEW: THE INTRO SEQUENCE ===
 func play_portal_intro():
 	is_spawning = true
 	set_physics_process(false) # FREEZE the player during loading and intro
 	if mesh_container: mesh_container.hide()
-	
-	print("Waiting for loading screen to finish...")
+	if anim_player:
+		anim_player.play("idle fly")
 	var root = get_tree().root
+	var cinematic_cam = root.find_child("CinematicCam", true, false)
+	if cinematic_cam:
+		cinematic_cam.make_current()
+		
+	# === THE FIX: FIND PORTAL AND HIDE IT IMMEDIATELY ===
+	print("--- SEARCHING FOR PORTAL NODES ---")
+	var portal_node = root.find_child("SpawnPortal", true, false)
+	var portal_graphic = root.find_child("PortalGraphic", true, false)
 	
+	if portal_graphic:
+		# Crush it down so it's invisible WHILE the loading screen is still up
+		portal_graphic.scale = Vector3(0.01, 0.0, 1.0) 
+		
+	print("Waiting for loading screen to finish...")
 	# === DYNAMIC LOADING WAIT ===
 	var loading_screen = root.find_child("LoadingScreen", true, false)
 	if loading_screen:
 		while is_instance_valid(loading_screen) and loading_screen.visible:
 			await get_tree().process_frame
 	
-	print("--- SEARCHING FOR PORTAL NODES ---")
-	var portal_node = root.find_child("SpawnPortal", true, false)
-	var portal_graphic = root.find_child("PortalGraphic", true, false)
-	var cinematic_cam = root.find_child("CinematicCam", true, false)
-	
 	if portal_node and portal_graphic and cinematic_cam:
 		print("SUCCESS! Starting slash animation.")
 		cinematic_cam.make_current()
-		
-		# 1. Start the portal completely invisible (Scale 0)
-		portal_graphic.scale = Vector3(0.01, 0.0, 1.0)
 		
 		# Wait a tiny bit for the scene to settle
 		await get_tree().create_timer(0.2).timeout
@@ -167,7 +172,7 @@ func play_portal_intro():
 		
 		# 3. POP IT OPEN (Animate X scale to 4)
 		var open_tween = create_tween()
-		open_tween.tween_property(portal_graphic, "scale", Vector3(4.0, 4.0, 1.0), 0.8).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
+		open_tween.tween_property(portal_graphic, "scale", Vector3(3.0, 4.0, 4.0), 0.8).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 		await open_tween.finished
 		
 		# 4. Teleport player to it and show them
@@ -176,7 +181,7 @@ func play_portal_intro():
 		if mesh_container: mesh_container.show()
 		
 		# 5. SPEW THE PLAYER OUT
-		current_speed = max_speed * 1.5 
+		current_speed = max_speed 
 		await get_tree().create_timer(0.2).timeout
 		
 		# 6. Shrink the portal away
@@ -254,16 +259,20 @@ func update_camera_soft_follow(delta: float):
 	var current_quat = spring_arm.global_transform.basis.get_rotation_quaternion()
 	spring_arm.global_transform.basis = Basis(current_quat.slerp(target_quat, delta * 15.0))
 	
-	var roll_input = Input.get_axis("right", "left")
-	var target_cam_pos = Vector3(-roll_input * cam_offset_amount, 0, 0)
+	# === THE FIX ===
+	# Use the smoothed roll angle instead of raw keyboard input!
+	var smoothed_roll_ratio = current_roll_angle / max_roll_angle
+	var target_cam_pos = Vector3(-smoothed_roll_ratio * cam_offset_amount, 0, 0)
 	camera.transform.origin = camera.transform.origin.lerp(target_cam_pos, delta * cam_offset_speed)
 
 func update_camera_effects(delta): 
 	var target_fov = 75.0 + (current_speed * 0.7) 
 	camera.fov = lerp(camera.fov, target_fov, delta * 2.0)  
 	
-	var roll_input = Input.get_axis("right", "left")
-	var target_tilt = roll_input * deg_to_rad(15.0) 
+	# === THE FIX ===
+	# Use the smoothed roll angle here as well!
+	var smoothed_roll_ratio = current_roll_angle / max_roll_angle
+	var target_tilt = smoothed_roll_ratio * deg_to_rad(15.0) 
 	camera.rotation.z = lerp_angle(camera.rotation.z, target_tilt, delta * 5.0)
 	
 	if not wind_particles.emitting:
@@ -306,19 +315,26 @@ func crash_sequence():
 	game_over_menu.set_final_score(ScoreManager.total_score)
 
 func do_barrel_roll():
-	if not mesh_container: return
 	is_doing_trick = true
 	
 	# Give 50 points and +0.5 to multiplier!
 	ScoreManager.add_trick_points("BARREL ROLL", 50, 0.5) 
 	
-	var tween = create_tween()
-	var start_rot = mesh_container.rotation.z
-	tween.tween_property(mesh_container, "rotation:z", start_rot + TAU, 0.6).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	await tween.finished
-	if mesh_container: mesh_container.rotation.z = wrapf(mesh_container.rotation.z, -PI, PI)
+	if anim_player:
+		# I see you have a left and right roll! You can change this to "barrel roll right" if you prefer
+		anim_player.play("barrel roll left") 
+		
+		# Wait for the animation to finish playing completely
+		await anim_player.animation_finished
+	else:
+		# Fallback just in case the animation player is missing
+		await get_tree().create_timer(0.6).timeout
+		
 	is_doing_trick = false
-
+	
+	if anim_player:
+		# Go back to flying smoothly!
+		anim_player.play("idle fly", 0.3)
 func do_u_turn():
 	if not mesh_container: return
 	is_doing_trick = true
@@ -335,3 +351,20 @@ func do_u_turn():
 	if mesh_container: mesh_container.rotation.z = wrapf(mesh_container.rotation.z, -PI, PI)
 	cam_yaw = wrapf(cam_yaw, -PI, PI)
 	is_doing_trick = false
+
+func update_flight_animations():
+	# Don't interrupt if we are dead, spawning, or in the middle of a barrel roll!
+	if is_spawning or is_doing_trick or is_dead: 
+		return
+		
+	var target_anim = "idle fly" # <-- DEFAULT FLYING ANIMATION (Update if needed!)
+	
+	if Input.is_physical_key_pressed(KEY_A) and not Input.is_physical_key_pressed(KEY_D):
+		target_anim = "lean left" # <-- REPLACE WITH YOUR LEAN LEFT ANIMATION!
+	elif Input.is_physical_key_pressed(KEY_D) and not Input.is_physical_key_pressed(KEY_A):
+		target_anim = "lean right" # <-- REPLACE WITH YOUR LEAN RIGHT ANIMATION!
+		
+	# Only tell it to play if it's not ALREADY playing that exact animation
+	# (This prevents the animation from restarting on frame 0 every single millisecond)
+	if anim_player and anim_player.current_animation != target_anim:
+		anim_player.play(target_anim, 0.6)

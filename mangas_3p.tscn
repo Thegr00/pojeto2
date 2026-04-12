@@ -1,12 +1,11 @@
 [gd_scene format=3 uid="uid://co5w5k0vu1wm5"]
 
 [ext_resource type="Script" uid="uid://du2kqcpk57x4h" path="res://mangas_3p.gd" id="1_yn4l2"]
-[ext_resource type="PackedScene" uid="uid://bp46c0ohrfxlq" path="res://mannequiny-0.3.0.glb" id="2_qay7o"]
+[ext_resource type="PackedScene" uid="uid://hj7if4ky8vf0" path="res://tentariva n1.blend" id="2_5k7j1"]
 [ext_resource type="AudioStream" uid="uid://u62h3bhcwonx" path="res://freesound_crunchpixstudio-rpg-sword-attack-combo-10-388930.mp3" id="3_5k7j1"]
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qay7o"]
-radius = 0.6803436
-height = 1.4806366
+[sub_resource type="BoxShape3D" id="BoxShape3D_5k7j1"]
+size = Vector3(1, 2.3358154, 0.57321167)
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qay7o"]
 emission_shape = 3
@@ -41,14 +40,44 @@ script = ExtResource("1_yn4l2")
 max_speed = 50.0
 dive_acceleration = 20.0
 up_deceleration = 30.0
-mesh_container = NodePath(".")
+mesh_container = NodePath("Gajo")
 
-[node name="mannequiny-0_3_0" parent="." unique_id=684319160 instance=ExtResource("2_qay7o")]
-transform = Transform3D(-0.99980956, -0.00068503316, 0.019499535, -0.019510375, 0.023814822, -0.9995261, 0.00022032877, -0.9997163, -0.023823652, 0, 0.5465071, 0.36002827)
+[node name="Gajo" parent="." unique_id=58197955 instance=ExtResource("2_5k7j1")]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 1.0454769, -0.9126512)
+
+[node name="Skeleton3D" parent="Gajo/Armature" parent_id_path=PackedInt32Array(58197955, 1001771232) index="0" unique_id=496705073]
+bones/0/position = Vector3(-0.07729682, 0.6244323, 0.5389972)
+bones/0/rotation = Quaternion(-0.705445, 0.0049461215, 0.006471237, 0.7087179)
+bones/1/rotation = Quaternion(-0.20622179, 0.0011712682, -0.005787666, 0.97848743)
+bones/3/rotation = Quaternion(-7.433159e-06, -1.865865e-08, -0.008143449, 0.99996686)
+bones/5/rotation = Quaternion(-0.04544699, 0.0021009909, -0.07352229, 0.9962554)
+bones/6/rotation = Quaternion(0.008130737, 0.0030746185, -0.02069108, 0.9997481)
+bones/8/rotation = Quaternion(-0.04325701, -0.002807927, 0.05877465, 0.9973297)
+bones/9/rotation = Quaternion(0.020123225, -0.002437259, 0.055940308, 0.9982283)
+bones/11/rotation = Quaternion(-0.23432234, 0.0400411, 0.7161021, 0.6562678)
+bones/12/rotation = Quaternion(0.1683861, -0.796604, 0.089413196, 0.5736492)
+bones/13/rotation = Quaternion(0.81125915, 0.38462594, -0.38942724, 0.20559156)
+bones/14/rotation = Quaternion(-0.015930789, 0.9669069, 0.034422126, 0.25229415)
+bones/15/rotation = Quaternion(0.9478457, 0.19466425, -0.250601, 0.029895063)
+bones/17/rotation = Quaternion(-0.35000825, -0.11735975, 0.8817255, -0.2937364)
+bones/21/rotation = Quaternion(-0.26349732, -0.049389094, -0.7108349, 0.65026426)
+bones/22/rotation = Quaternion(0.14845936, 0.7940534, -0.044138227, 0.5877847)
+bones/23/rotation = Quaternion(0.787668, -0.37454873, 0.44621247, 0.20046705)
+bones/24/rotation = Quaternion(0.029302247, 0.1988725, -0.035405364, 0.97894716)
+bones/25/rotation = Quaternion(0.9206318, -0.18611853, 0.34202558, 0.028560685)
+bones/27/rotation = Quaternion(0.29893783, -0.11384431, 0.9041244, 0.28325742)
+bones/30/position = Vector3(-0.07729685, 0.6244323, 0.5389971)
+bones/30/rotation = Quaternion(0.6961871, 0.6908997, -0.13592146, -0.13966571)
+bones/31/rotation = Quaternion(-0.6831404, -0.049485225, 0.063085124, 0.72587234)
+bones/32/rotation = Quaternion(-0.3833008, 0.16132776, 0.02104046, 0.9091817)
+bones/34/position = Vector3(-0.082397245, 0.6244211, 0.5390717)
+bones/34/rotation = Quaternion(0.6996008, -0.69134575, 0.12544091, -0.12986279)
+bones/35/rotation = Quaternion(-0.68314034, 0.04948538, -0.06308502, 0.72587234)
+bones/36/rotation = Quaternion(-0.38330063, -0.16132745, -0.021040339, 0.9091818)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1325422564]
-transform = Transform3D(1, 0, 0, 0, 0.11724274, 0.99310327, 0, -0.99310327, 0.11724274, 0, 0.5331297, -0.84351504)
-shape = SubResource("CapsuleShape3D_qay7o")
+transform = Transform3D(1, 0, 0, 0, 0.11724274, 0.99310327, 0, -0.99310327, 0.11724274, 1.1920929e-07, 0.5457036, -0.40280038)
+shape = SubResource("BoxShape3D_5k7j1")
 
 [node name="cam origin" type="Node3D" parent="." unique_id=1068079872]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5927516, 0)
