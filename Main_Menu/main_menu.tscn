@@ -99,6 +99,6 @@ layout_mode = 1
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1837058363]
 stream = ExtResource("4_2jvup")
-volume_db = -14.0
+volume_db = -3.0
 autoplay = true
 bus = &"Music"

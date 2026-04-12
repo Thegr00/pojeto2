@@ -1,26 +1,18 @@
 [gd_scene format=3 uid="uid://davyxw8uya2ns"]
 
 [ext_resource type="Script" uid="uid://nhb83kh7mprm" path="res://pause_menu.gd" id="1_hdmo1"]
+[ext_resource type="FontFile" uid="uid://dvg04ca78f7vu" path="res://montreal/Montreal-Regular.ttf" id="2_05uyy"]
 [ext_resource type="PackedScene" uid="uid://xyw0fj5xlm2h" path="res://Settings_Menu/settings_menu.tscn" id="2_nwcfo"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nwcfo"]
-bg_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-shadow_size = 3
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_p81d2"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_05uyy"]
-bg_color = Color(0.20942885, 0.2094289, 0.20942876, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2nc7s"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p81d2"]
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d3xb4"]
+bg_color = Color(0, 0, 0, 1)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2nc7s"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mxa3g"]
+bg_color = Color(0, 0, 0, 1)
 
 [node name="pause menu" type="Control" unique_id=1405658965]
 process_mode = 3
@@ -51,7 +43,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(1, 1, 1, 0.21568628)
+color = Color(0, 0, 0, 0.43137255)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1130327593]
 process_mode = 3
@@ -68,57 +60,74 @@ offset_bottom = 99.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 13
+alignment = 1
 
 [node name="Resume" type="Button" parent="VBoxContainer" unique_id=1401156994]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
-theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 25
-theme_override_styles/normal = SubResource("StyleBoxFlat_nwcfo")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_05uyy")
-theme_override_styles/hover = SubResource("StyleBoxFlat_p81d2")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_2nc7s")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_colors/icon_focus_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_05uyy")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxEmpty_p81d2")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_2nc7s")
+theme_override_styles/hover = SubResource("StyleBoxFlat_d3xb4")
+theme_override_styles/focus = SubResource("StyleBoxFlat_mxa3g")
 text = "Resume"
 
 [node name="Restart" type="Button" parent="VBoxContainer" unique_id=117552664]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
-theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 25
-theme_override_styles/normal = SubResource("StyleBoxFlat_nwcfo")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_05uyy")
-theme_override_styles/hover = SubResource("StyleBoxFlat_p81d2")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_2nc7s")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_colors/icon_focus_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_05uyy")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxEmpty_p81d2")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_2nc7s")
+theme_override_styles/hover = SubResource("StyleBoxFlat_d3xb4")
+theme_override_styles/focus = SubResource("StyleBoxFlat_mxa3g")
 text = "Restart"
 
 [node name="Options" type="Button" parent="VBoxContainer" unique_id=1332502606]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
-theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 25
-theme_override_styles/normal = SubResource("StyleBoxFlat_nwcfo")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_05uyy")
-theme_override_styles/hover = SubResource("StyleBoxFlat_p81d2")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_2nc7s")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_colors/icon_focus_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_05uyy")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxEmpty_p81d2")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_2nc7s")
+theme_override_styles/hover = SubResource("StyleBoxFlat_d3xb4")
+theme_override_styles/focus = SubResource("StyleBoxFlat_mxa3g")
 text = "Settings"
 
 [node name="Exit to menu" type="Button" parent="VBoxContainer" unique_id=861567255]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
-theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 25
-theme_override_styles/normal = SubResource("StyleBoxFlat_nwcfo")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_05uyy")
-theme_override_styles/hover = SubResource("StyleBoxFlat_p81d2")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_2nc7s")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_colors/icon_focus_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("2_05uyy")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxEmpty_p81d2")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_2nc7s")
+theme_override_styles/hover = SubResource("StyleBoxFlat_d3xb4")
+theme_override_styles/focus = SubResource("StyleBoxFlat_mxa3g")
 text = "Exit to menu"
 
 [node name="Settings_menu" parent="." unique_id=1906715036 instance=ExtResource("2_nwcfo")]
