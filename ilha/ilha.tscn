@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://lexmpiouj6gn"]
+
+[ext_resource type="PackedScene" uid="uid://o4vfkxugv5w3" path="res://ilha/source/Casa.blend" id="1_c6vge"]
+
+[node name="Ilha" type="Node3D" unique_id=776540140]
+
+[node name="Kame" parent="." unique_id=85848792 instance=ExtResource("1_c6vge")]

@@ -32,9 +32,9 @@ transform = Transform3D(1, 0, 0, 0, 0.99663603, -0.08195585, 0, 0.08195585, 0.99
 up_deceleration = 45.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=579636448]
-transform = Transform3D(1, 0, 0, 0, 0.2268383, 0.97393245, 0, -0.97393245, 0.2268383, 0, 11.045761, 0)
+transform = Transform3D(1, 0, 0, 0, 0.2268383, 0.97393245, 0, -0.97393245, 0.2268383, 0, 56.015327, 0)
 light_color = Color(0.76862746, 0.8392157, 1, 1)
-light_energy = 8.032
+light_energy = 3.397
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1763960021]
 environment = SubResource("Environment_atpbs")

@@ -1,0 +1,193 @@
+[gd_scene format=3 uid="uid://7022l3qyojl5"]
+
+[ext_resource type="PackedScene" uid="uid://co5w5k0vu1wm5" path="res://mangas_3p.tscn" id="2_ehuit"]
+[ext_resource type="Script" uid="uid://doihugrvasv50" path="res://start_gate.gd" id="3_5mrt3"]
+[ext_resource type="Texture2D" uid="uid://bvt86xg6l4kqo" path="res://mangas ara.png" id="3_ehuit"]
+[ext_resource type="PackedScene" uid="uid://lexmpiouj6gn" path="res://ilha/ilha.tscn" id="4_rwowx"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_yb1ct"]
+sky_top_color = Color(0.48225588, 0.6492355, 0.871875, 1)
+sky_horizon_color = Color(0.99375, 0.66361934, 0.27017578, 1)
+
+[sub_resource type="Sky" id="Sky_ehuit"]
+sky_material = SubResource("ProceduralSkyMaterial_yb1ct")
+
+[sub_resource type="Environment" id="Environment_5mrt3"]
+background_mode = 2
+sky = SubResource("Sky_ehuit")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_yb1ct"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ehuit"]
+noise = SubResource("FastNoiseLite_yb1ct")
+as_normal_map = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yb1ct"]
+albedo_color = Color(0.540625, 0.9475881, 1, 1)
+roughness_texture = SubResource("NoiseTexture2D_ehuit")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ehuit"]
+size = Vector2(1000, 1000)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_yb1ct"]
+data = PackedVector3Array(500, 0, 500, -500, 0, 500, 500, 0, -500, -500, 0, 500, -500, 0, -500, 500, 0, -500)
+
+[sub_resource type="Animation" id="Animation_yb1ct"]
+length = 4.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-3.4948788, 3.2888799, -0.28797483)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Camera1:current")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Camera1:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-3.3714828, 2.6868725, 7.8241267)]
+}
+
+[sub_resource type="Animation" id="Animation_ehuit"]
+resource_name = "intro"
+length = 6.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(1.9666667, 3.4666667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(-2.6788397, 3.2888799, -2.26285), Vector3(-2.6788397, 3.2888799, -0.44788885)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Camera1:current")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 5.27),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, true]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SpawnPortal")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(1.9),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"play_portal_intro"
+}]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Camera1:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 1.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(-3.3714828, 2.6868725, 7.8241267), Vector3(-3.3714828, 1.1433694, 7.8241267)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_5mrt3"]
+_data = {
+&"RESET": SubResource("Animation_yb1ct"),
+&"intro": SubResource("Animation_ehuit")
+}
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8cfg3"]
+emission_enabled = true
+emission = Color(1, 0.89299023, 0.5375, 1)
+emission_energy_multiplier = 3.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_qu3c7"]
+
+[node name="Tutorial" type="Node3D" unique_id=990774563]
+
+[node name="mangas3p" parent="." unique_id=1479076587 instance=ExtResource("2_ehuit")]
+process_mode = 4
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 52, 0)
+visible = false
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1461237606]
+transform = Transform3D(1, 0, 0, 0, -0.06402715, 0.99794817, 0, -0.99794817, -0.06402715, 0, 844.9772, 0)
+light_color = Color(1, 0.9725, 0.725, 1)
+light_energy = 0.1
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=767390829]
+environment = SubResource("Environment_5mrt3")
+
+[node name="Ocean" type="MeshInstance3D" parent="." unique_id=1382553810]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.09197903, -0.21178293, -0.35864687)
+material_override = SubResource("StandardMaterial3D_yb1ct")
+mesh = SubResource("PlaneMesh_ehuit")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Ocean" unique_id=1007351285]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ocean/StaticBody3D" unique_id=2103683815]
+shape = SubResource("ConcavePolygonShape3D_yb1ct")
+
+[node name="Camera1" type="Camera3D" parent="." unique_id=432048617]
+process_priority = 10
+transform = Transform3D(0.88142717, 0, -0.47232002, 0, 1, 0, 0.47232002, 0, 0.88142717, -3.3714828, 2.6868725, 7.8241267)
+current = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=548177513]
+libraries/ = SubResource("AnimationLibrary_5mrt3")
+autoplay = &"intro"
+
+[node name="Sprite3D" type="Sprite3D" parent="." unique_id=60162906]
+transform = Transform3D(0.26698563, 0, 0, 0, 0.21813874, 0, 0, 0, 0.796158, -3.4948788, 3.2888799, -0.28797483)
+texture = ExtResource("3_ehuit")
+
+[node name="SpawnPortal" type="Node3D" parent="." unique_id=370306921]
+transform = Transform3D(-1, 0, 8.940697e-08, 0, 1, 0, -8.940697e-08, 0, -1, -1.4522419, 0.70333195, 4.8039436)
+script = ExtResource("3_5mrt3")
+
+[node name="PortalGraphic" type="MeshInstance3D" parent="SpawnPortal" unique_id=2046987146]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_8cfg3")
+mesh = SubResource("QuadMesh_qu3c7")
+
+[node name="CinematicCam" type="Camera3D" parent="SpawnPortal" unique_id=1371905340]
+process_priority = 8
+transform = Transform3D(-0.54073954, 0, -0.84119016, 0, 1, 0, 0.84119016, 0, -0.54073954, -5.1962023, 0.05939126, -10.7799835)
+
+[node name="Ilha" parent="." unique_id=776540140 instance=ExtResource("4_rwowx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.09197903, 0.24831629, -0.35864687)
