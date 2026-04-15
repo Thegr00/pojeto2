@@ -7,10 +7,10 @@ extends Node3D
 @onready var portal_graphic = $PortalGraphic
 
 func _ready():
-	# Only play automatically if we are in a normal level!
+	#Only play automatically if we are in a normal level!
 	if not is_cutscene:
 		play_portal_intro()
-	
+
 
 func play_portal_intro():
 	# 1. FOOLPROOF TARGET DETECTION

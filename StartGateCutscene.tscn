@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://dgyvpfkijvp5w"]
+
+[sub_resource type="GDScript" id="GDScript_7iwhu"]
+script/source = "extends Node3D
+
+@export var target_entity: Node3D 
+@export var is_cutscene: bool = false # Add a toggle for the inspector!
+
+@onready var portal_graphic = $PortalGraphic
+
+func _ready():
+	#Only play automatically if we are in a normal level!
+	if not is_cutscene:
+		play_portal_intro_cutscene()
+	
+func play_portal_intro_cutscene():
+	if portal_graphic:
+		portal_graphic.scale = Vector3(0.01, 0.1, 1.0) 
+	if not portal_graphic: return
+	
+	# 5. DRAW THE SLASH
+	var slice_tween = create_tween()
+	slice_tween.tween_property(portal_graphic, \"scale\", Vector3(0.01, 3.5, 1.0), 0.3).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	await slice_tween.finished
+	await get_tree().create_timer(0.5).timeout
+	
+	# 6. POP IT OPEN
+	var open_tween = create_tween()
+	open_tween.tween_property(portal_graphic, \"scale\", Vector3(2.5, 3.5, 4.0), 0.8).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	await get_tree().create_timer(0.5).timeout
+	await open_tween.finished
+	
+	
+	await get_tree().create_timer(1).timeout
+	
+	# 8. SHRINK THE PORTAL
+	var close_tween = create_tween()
+	close_tween.tween_property(portal_graphic, \"scale\", Vector3(0.01, 0.001, 1.0), 0.5).set_trans(Tween.TRANS_SINE)
+	
+	# 9. GIVE CONTROL BACK
+"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lfy8j"]
+emission_enabled = true
+emission = Color(1, 0.89299023, 0.5375, 1)
+emission_energy_multiplier = 3.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_st5ac"]
+
+[node name="PortalCutscene" type="Node3D" unique_id=150254991]
+script = SubResource("GDScript_7iwhu")
+is_cutscene = true
+
+[node name="PortalGraphic" type="MeshInstance3D" parent="." unique_id=958982460]
+material_override = SubResource("StandardMaterial3D_lfy8j")
+mesh = SubResource("QuadMesh_st5ac")
