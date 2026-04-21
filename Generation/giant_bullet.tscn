@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://crnu38swia2mg"]
+
+[ext_resource type="Script" uid="uid://dycgnfkeuolto" path="res://Generation/Laser.cs" id="1_x8g3t"]
+
+[node name="GiantBullet" type="Node3D" unique_id=1932632776]
+script = ExtResource("1_x8g3t")

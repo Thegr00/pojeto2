@@ -1,13 +1,15 @@
 [gd_scene format=3 uid="uid://7022l3qyojl5"]
 
 [ext_resource type="PackedScene" uid="uid://co5w5k0vu1wm5" path="res://mangas_3p.tscn" id="2_ehuit"]
+[ext_resource type="Shader" uid="uid://dhf2ipjvhd0i8" path="res://oceano.gdshader" id="2_rwowx"]
 [ext_resource type="PackedScene" uid="uid://dgyvpfkijvp5w" path="res://StartGate/StartGateCutscene.tscn" id="4_5mrt3"]
 [ext_resource type="PackedScene" uid="uid://ciddfljsbbphs" path="res://humano/gajo.tscn" id="4_hu44a"]
 [ext_resource type="PackedScene" uid="uid://dxr7x0oenk7po" path="res://ilha/ilha.tscn" id="4_rwowx"]
+[ext_resource type="AudioStream" uid="uid://bbhvqwel57bha" path="res://ondas.mp3" id="6_hu44a"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_yb1ct"]
 sky_top_color = Color(0.48225588, 0.6492355, 0.871875, 1)
-sky_horizon_color = Color(0.99607843, 0.76669115, 0.24705882, 1)
+sky_horizon_color = Color(0.99607843, 0.66838235, 0.24705882, 1)
 use_debanding = false
 
 [sub_resource type="Sky" id="Sky_ehuit"]
@@ -23,18 +25,14 @@ fog_light_color = Color(0.48235294, 0.6509804, 0.87058824, 1)
 fog_density = 0.003
 fog_sky_affect = 0.2
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_yb1ct"]
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ehuit"]
-noise = SubResource("FastNoiseLite_yb1ct")
-as_normal_map = true
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yb1ct"]
-albedo_color = Color(0.540625, 0.9475881, 1, 1)
-roughness_texture = SubResource("NoiseTexture2D_ehuit")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0cr88"]
+render_priority = 0
+shader = ExtResource("2_rwowx")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_ehuit"]
 size = Vector2(1000, 1000)
+subdivide_width = 50
+subdivide_depth = 50
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_yb1ct"]
 data = PackedVector3Array(500, 0, 500, -500, 0, 500, 500, 0, -500, -500, 0, 500, -500, 0, -500, 500, 0, -500)
@@ -44,7 +42,7 @@ length = 8.6
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Node3D/Camera1:current")
+tracks/0/path = NodePath("cameras/Camera1:current")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -56,7 +54,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Node3D/Camera1:position")
+tracks/1/path = NodePath("cameras/Camera1:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -104,7 +102,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("Node3D/Camera2:position")
+tracks/5/path = NodePath("cameras/Camera2:position")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -116,7 +114,7 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("Node3D/Camera2:current")
+tracks/6/path = NodePath("cameras/Camera2:current")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -140,7 +138,7 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("Node3D/Camera3:position")
+tracks/8/path = NodePath("cameras/Camera3:position")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -152,7 +150,7 @@ tracks/8/keys = {
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("Node3D/Camera3:rotation")
+tracks/9/path = NodePath("cameras/Camera3:rotation")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
@@ -164,7 +162,7 @@ tracks/9/keys = {
 tracks/10/type = "value"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("Node3D/Camera3:current")
+tracks/10/path = NodePath("cameras/Camera3:current")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
@@ -188,7 +186,7 @@ tracks/11/keys = {
 tracks/12/type = "value"
 tracks/12/imported = false
 tracks/12/enabled = true
-tracks/12/path = NodePath("Node3D/Camera4:current")
+tracks/12/path = NodePath("cameras/Camera4:current")
 tracks/12/interp = 1
 tracks/12/loop_wrap = true
 tracks/12/keys = {
@@ -200,7 +198,7 @@ tracks/12/keys = {
 tracks/13/type = "value"
 tracks/13/imported = false
 tracks/13/enabled = true
-tracks/13/path = NodePath("Node3D/Camera4:position")
+tracks/13/path = NodePath("cameras/Camera4:position")
 tracks/13/interp = 1
 tracks/13/loop_wrap = true
 tracks/13/keys = {
@@ -245,6 +243,42 @@ tracks/16/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/17/type = "value"
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/path = NodePath("Ocean:material_override:shader")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("2_rwowx")]
+}
+tracks/18/type = "value"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath("Audio player casa:playing")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/19/type = "value"
+tracks/19/imported = false
+tracks/19/enabled = true
+tracks/19/path = NodePath("Audio player casa:volume_db")
+tracks/19/interp = 1
+tracks/19/loop_wrap = true
+tracks/19/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [-12.807]
+}
 
 [sub_resource type="Animation" id="Animation_ehuit"]
 resource_name = "intro"
@@ -252,7 +286,7 @@ length = 30.0
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Node3D/Camera1:current")
+tracks/0/path = NodePath("cameras/Camera1:current")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -264,7 +298,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Node3D/Camera1:position")
+tracks/1/path = NodePath("cameras/Camera1:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -326,7 +360,7 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("Node3D/Camera2:current")
+tracks/6/path = NodePath("cameras/Camera2:current")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
@@ -338,7 +372,7 @@ tracks/6/keys = {
 tracks/7/type = "value"
 tracks/7/imported = false
 tracks/7/enabled = true
-tracks/7/path = NodePath("Node3D/Camera2:position")
+tracks/7/path = NodePath("cameras/Camera2:position")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
@@ -362,7 +396,7 @@ tracks/8/keys = {
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("Node3D/Camera3:position")
+tracks/9/path = NodePath("cameras/Camera3:position")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
@@ -374,7 +408,7 @@ tracks/9/keys = {
 tracks/10/type = "value"
 tracks/10/imported = false
 tracks/10/enabled = true
-tracks/10/path = NodePath("Node3D/Camera3:rotation")
+tracks/10/path = NodePath("cameras/Camera3:rotation")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
@@ -386,7 +420,7 @@ tracks/10/keys = {
 tracks/11/type = "value"
 tracks/11/imported = false
 tracks/11/enabled = true
-tracks/11/path = NodePath("Node3D/Camera3:current")
+tracks/11/path = NodePath("cameras/Camera3:current")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/keys = {
@@ -410,7 +444,7 @@ tracks/12/keys = {
 tracks/13/type = "value"
 tracks/13/imported = false
 tracks/13/enabled = true
-tracks/13/path = NodePath("Node3D/Camera4:current")
+tracks/13/path = NodePath("cameras/Camera4:current")
 tracks/13/interp = 1
 tracks/13/loop_wrap = true
 tracks/13/keys = {
@@ -422,7 +456,7 @@ tracks/13/keys = {
 tracks/14/type = "value"
 tracks/14/imported = false
 tracks/14/enabled = true
-tracks/14/path = NodePath("Node3D/Camera4:position")
+tracks/14/path = NodePath("cameras/Camera4:position")
 tracks/14/interp = 1
 tracks/14/loop_wrap = true
 tracks/14/keys = {
@@ -452,7 +486,7 @@ tracks/16/path = NodePath("Portal2Cutscene2:visible")
 tracks/16/interp = 1
 tracks/16/loop_wrap = true
 tracks/16/keys = {
-"times": PackedFloat32Array(6.366667, 15.633333),
+"times": PackedFloat32Array(0.4666667, 15.633333),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
@@ -481,6 +515,42 @@ tracks/18/keys = {
 "update": 1,
 "values": [false, true]
 }
+tracks/19/type = "value"
+tracks/19/imported = false
+tracks/19/enabled = true
+tracks/19/path = NodePath("Ocean:material_override:shader")
+tracks/19/interp = 1
+tracks/19/loop_wrap = true
+tracks/19/keys = {
+"times": PackedFloat32Array(6.8662),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("2_rwowx")]
+}
+tracks/20/type = "value"
+tracks/20/imported = false
+tracks/20/enabled = true
+tracks/20/path = NodePath("Audio player casa:playing")
+tracks/20/interp = 1
+tracks/20/loop_wrap = true
+tracks/20/keys = {
+"times": PackedFloat32Array(0, 0.033333335),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/21/type = "value"
+tracks/21/imported = false
+tracks/21/enabled = true
+tracks/21/path = NodePath("Audio player casa:volume_db")
+tracks/21/interp = 1
+tracks/21/loop_wrap = true
+tracks/21/keys = {
+"times": PackedFloat32Array(-0.20000005, 3.6666667, 3.7666667),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [-80.0, -80.0, -12.807]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_5mrt3"]
 _data = {
@@ -504,8 +574,8 @@ light_energy = 3.136
 environment = SubResource("Environment_5mrt3")
 
 [node name="Ocean" type="MeshInstance3D" parent="." unique_id=1382553810]
-transform = Transform3D(54.866215, 0, 0, 0, 1.0042658, 0, 0, 0, 1997.8712, 556.689, -0.3, -509.165)
-material_override = SubResource("StandardMaterial3D_yb1ct")
+transform = Transform3D(54.866215, 0, 0, 0, 1.0042658, 0, 0, 0, 1997.8712, 556.689, -0.1, -509.165)
+material_override = SubResource("ShaderMaterial_0cr88")
 mesh = SubResource("PlaneMesh_ehuit")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Ocean" unique_id=1007351285]
@@ -539,25 +609,31 @@ visible = false
 libraries/ = SubResource("AnimationLibrary_5mrt3")
 autoplay = &"intro"
 
-[node name="Node3D" type="Node3D" parent="." unique_id=1313107064]
+[node name="cameras" type="Node3D" parent="." unique_id=1313107064]
 transform = Transform3D(0.88142717, 0, -0.47232002, 0, 1, 0, 0.47232002, 0, 0.88142717, -3.3714828, 2.6868725, 7.8241267)
 
-[node name="Camera1" type="Camera3D" parent="Node3D" unique_id=432048617]
+[node name="Camera1" type="Camera3D" parent="cameras" unique_id=432048617]
 process_priority = 10
 transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, -3.3714828, 2.6868725, 7.8241267)
 
-[node name="Camera2" type="Camera3D" parent="Node3D" unique_id=1901217518]
+[node name="Camera2" type="Camera3D" parent="cameras" unique_id=1901217518]
 process_priority = 10
 transform = Transform3D(-0.8514183, 0.44804487, -0.27265772, -0.018443445, 0.49395832, 0.86928993, 0.52416235, 0.74515826, -0.4123018, -96.11222, 124.19833, -66.70801)
 current = true
 
-[node name="Camera3" type="Camera3D" parent="Node3D" unique_id=1307961383]
+[node name="Camera3" type="Camera3D" parent="cameras" unique_id=1307961383]
 transform = Transform3D(0.8924091, 0.2585543, 0.369805, 0.28397876, 0.31507647, -0.9055843, -0.35065955, 0.91316843, 0.20775317, 50.18736, 1848.473, -847.75397)
 current = true
 
-[node name="Camera4" type="Camera3D" parent="Node3D" unique_id=1619681698]
+[node name="Camera4" type="Camera3D" parent="cameras" unique_id=1619681698]
 transform = Transform3D(-0.4594711, 0, 0.8881926, 0, 1, 0, -0.8881926, 0, -0.4594711, 3.3120902, -1.7189739, -2.8715)
 current = true
+
+[node name="Audio player casa" type="AudioStreamPlayer3D" parent="." unique_id=699385043]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20.635288, 0)
+stream = ExtResource("6_hu44a")
+volume_db = -12.807
+max_distance = 4096.0
 
 [editable path="Portal1Cutscene"]
 [editable path="Portal2Cutscene2"]

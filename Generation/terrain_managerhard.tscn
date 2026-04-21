@@ -1,0 +1,79 @@
+[gd_scene format=3 uid="uid://d1wkfewqef0ns"]
+
+[ext_resource type="Script" uid="uid://1nloobvtrtnk" path="res://Generation/scripts/terrain_manager.gd" id="1_2lejl"]
+[ext_resource type="PackedScene" uid="uid://co5w5k0vu1wm5" path="res://mangas_3p.tscn" id="2_w6tjg"]
+[ext_resource type="PackedScene" uid="uid://cjr74ks3pchc6" path="res://loading_screen.tscn" id="3_2x6rg"]
+[ext_resource type="Script" uid="uid://c8t821521tdq" path="res://Generation/scripts/ui.gd" id="4_fv0n1"]
+[ext_resource type="FontFile" uid="uid://dr67jb4p840gj" path="res://SuperMario256.ttf" id="5_ph3n1"]
+[ext_resource type="PackedScene" uid="uid://davyxw8uya2ns" path="res://pause_menu.tscn" id="6_jdy47"]
+[ext_resource type="PackedScene" uid="uid://ci1lpreneiqdd" path="res://StartGate/StartGate.tscn" id="7_ednoa"]
+
+[sub_resource type="Environment" id="Environment_atpbs"]
+background_mode = 1
+background_color = Color(0.07123137, 0.07123139, 0.07123137, 1)
+tonemap_mode = 3
+glow_enabled = true
+glow_intensity = 1.0
+fog_enabled = true
+fog_light_color = Color(0.38125002, 0.14587283, 0.03574219, 1)
+fog_density = 0.015
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.02
+volumetric_fog_albedo = Color(0.17211533, 0.1721153, 0.1721153, 1)
+adjustment_enabled = true
+adjustment_saturation = 0.4
+
+[node name="TerrainManagerhard" type="Node3D" unique_id=1387819765 node_paths=PackedStringArray("player")]
+script = ExtResource("1_2lejl")
+player = NodePath("mangas3p")
+
+[node name="mangas3p" parent="." unique_id=1479076587 instance=ExtResource("2_w6tjg")]
+transform = Transform3D(1, 0, 0, 0, 0.99663603, -0.08195585, 0, 0.08195585, 0.99663603, 0, 0, 0)
+up_deceleration = 45.0
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=579636448]
+transform = Transform3D(1, 0, 0, 0, 0.2268383, 0.97393245, 0, -0.97393245, 0.2268383, 0, 56.015327, 0)
+light_color = Color(0.98125, 0.47720948, 0.17478518, 1)
+light_energy = 11.476
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1763960021]
+environment = SubResource("Environment_atpbs")
+
+[node name="LoadingScreen" parent="." unique_id=387819251 node_paths=PackedStringArray("world_manager") instance=ExtResource("3_2x6rg")]
+world_manager = NodePath("..")
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=481358530]
+script = ExtResource("4_fv0n1")
+
+[node name="ScoreLabel" type="Label" parent="UI" unique_id=1994489266]
+anchors_preset = -1
+anchor_top = -0.009259259
+offset_top = 98.0
+offset_right = 40.0
+offset_bottom = 121.0
+theme_override_colors/font_shadow_color = Color(0.040624976, 0.028437482, 0.028437482, 0)
+theme_override_fonts/font = ExtResource("5_ph3n1")
+theme_override_font_sizes/font_size = 25
+metadata/_edit_use_anchors_ = true
+
+[node name="CloseCallLabel" type="Label" parent="UI" unique_id=2037535459]
+offset_left = -1.0
+offset_top = 120.0
+offset_right = 39.0
+offset_bottom = 143.0
+theme_override_fonts/font = ExtResource("5_ph3n1")
+theme_override_font_sizes/font_size = 20
+
+[node name="ComboBar" type="ProgressBar" parent="UI" unique_id=501992353]
+offset_left = 1.0
+offset_top = 170.0
+offset_right = 134.0
+offset_bottom = 186.0
+max_value = 1.0
+show_percentage = false
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1635896534]
+
+[node name="pause menu" parent="CanvasLayer" unique_id=1405658965 instance=ExtResource("6_jdy47")]
+
+[node name="SpawnPortal" parent="." unique_id=370306921 instance=ExtResource("7_ednoa")]
