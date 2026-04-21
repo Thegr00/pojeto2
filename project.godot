@@ -66,6 +66,7 @@ right={
 [physics]
 
 3d/physics_engine="Jolt Physics"
+jolt_physics_3d/limits/max_bodies=65545
 
 [rendering]
 

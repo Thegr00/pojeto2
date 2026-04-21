@@ -5,7 +5,7 @@ using System.Collections.Generic;
 [GlobalClass]
 public partial class ChunkBuilder : RefCounted
 {
-	public const int ChunkSize = 16; // UPDATED: Changed from 32 to 16
+	public const int ChunkSize = 16;
 	public const float VoxelSize = 2.0f;
 	public const float IsoLevel = 0.0f;
 
@@ -13,7 +13,6 @@ public partial class ChunkBuilder : RefCounted
 	public Vector3I chunk_pos;
 	public GodotObject noise_data;
 	
-	// NEW: We receive the pre-calculated array from GDScript here!
 	public Godot.Collections.Array local_segments_gd { get; set; }
 
 	public bool is_empty = true;
@@ -23,11 +22,15 @@ public partial class ChunkBuilder : RefCounted
 	public Color[] out_colors;
 	public Vector3[] out_collision_faces;
 
+	// === 🚨 HAZARD COORDINATES 🚨 ===
+	public Vector3[] out_bomb_positions;
+	public Vector3[] out_laser_positions;
+	// =====================================
+
 	private FastNoiseLite _warpNoise;
 	private FastNoiseLite _heightNoise;
 	private FastNoiseLite _detailNoise;
 
-	// A pure C# struct to hold our segment data fast!
 	private struct Segment
 	{
 		public Vector3 Start;
@@ -40,7 +43,6 @@ public partial class ChunkBuilder : RefCounted
 		_heightNoise = (FastNoiseLite)noise_data.Get("height_noise");
 		_detailNoise = (FastNoiseLite)noise_data.Get("detail_noise");
 
-		// 1. Translate the data GDScript handed us into a hyper-fast C# array
 		Segment[] localSegments = new Segment[local_segments_gd.Count];
 		for (int i = 0; i < local_segments_gd.Count; i++)
 		{
@@ -52,16 +54,65 @@ public partial class ChunkBuilder : RefCounted
 			};
 		}
 
-		// 2. Pass our pure C# array into the density field generator
+		// Calculate terrain density
 		float[] densityMap = GenerateDensityField(localSegments);
 
+		// === 🚨 THE FIX 🚨 ===
+		// We only generate meshes AND hazards if the chunk actually has terrain!
 		if (!is_empty)
 		{
+			GenerateHazardPositions(localSegments);
 			BuildMeshAndCollision(densityMap);
+		}
+		else
+		{
+			// Failsafe: If the chunk is empty air, ensure hazard arrays are empty, not null!
+			out_bomb_positions = new Vector3[0];
+			out_laser_positions = new Vector3[0];
 		}
 	}
 
-	// Pure C# Distance Math (No GDScript Toll Booths!)
+	// === 🚨 THE HAZARD GENERATOR 🚨 ===
+	private void GenerateHazardPositions(Segment[] segments)
+	{
+		List<Vector3> bombs = new List<Vector3>();
+		List<Vector3> lasers = new List<Vector3>();
+
+		// We use a seed based on the chunk position so the hazards don't randomize wildly every frame
+		int seed = (chunk_pos.X * 8921 ^ chunk_pos.Y * 239 ^ chunk_pos.Z * 34891).GetHashCode();
+		Random rng = new Random(seed);
+
+		// Check if we actually have segments to spawn on
+		if (segments != null && segments.Length > 0)
+		{
+			// 🚨 Roll a 100-sided die. Only spawn a bomb if we roll under 15! (15% chance)
+			bool spawnBomb = rng.Next(100) < 15; 
+			
+			if (spawnBomb)
+			{
+				int randomSegmentIndex = rng.Next(segments.Length);
+				float t = (float)rng.NextDouble();
+				Vector3 pos = segments[randomSegmentIndex].Start.Lerp(segments[randomSegmentIndex].End, t);
+				bombs.Add(pos);
+			}
+
+			// 🚨 Roll a 100-sided die. Only spawn a laser if we roll under 10! (10% chance)
+			//bool spawnLaser = rng.Next(100) < 10; 
+			bool spawnLaser = false;
+			if (spawnLaser)
+			{
+				int randomSegmentIndex = rng.Next(segments.Length);
+				float t = (float)rng.NextDouble();
+				Vector3 pos = segments[randomSegmentIndex].Start.Lerp(segments[randomSegmentIndex].End, t);
+				lasers.Add(pos);
+			}
+		}
+
+		out_bomb_positions = bombs.ToArray();
+		out_laser_positions = lasers.ToArray();
+	}
+	// =======================================
+
 	private float GetDistanceToSegments(Vector3 pos, Segment[] segments)
 	{
 		if (segments.Length == 0) return 9999.0f;
@@ -78,14 +129,12 @@ public partial class ChunkBuilder : RefCounted
 
 			float lineLenSq = lineVec.LengthSquared();
 			float t = 0.0f;
-			// Avoid division by zero
 			if (lineLenSq > 0.00001f) 
 			{
 				t = Mathf.Clamp(pointVec.Dot(lineVec) / lineLenSq, 0.0f, 1.0f);
 			}
 
 			Vector3 projection = p1 + lineVec * t;
-			// Use distance SQUARED for the loop to avoid slow square roots!
 			float dSq = pos.DistanceSquaredTo(projection);
 			if (dSq < minDistSq)
 			{
@@ -93,7 +142,6 @@ public partial class ChunkBuilder : RefCounted
 			}
 		}
 
-		// Only do the expensive square root ONCE at the very end
 		return Mathf.Sqrt(minDistSq);
 	}
 
@@ -106,7 +154,6 @@ public partial class ChunkBuilder : RefCounted
 		int totalInnerVoxels = ChunkSize * ChunkSize * ChunkSize;
 		is_empty = true;
 
-		// PASS 1: Generate normal map and count solid blocks
 		int idx = 0;
 		for (int z = -1; z < ChunkSize + 1; z++)
 		{
@@ -130,14 +177,12 @@ public partial class ChunkBuilder : RefCounted
 			}
 		}
 
-		// PASS 2: If the chunk is less than 4% solid, inject islands!
 		float fillRatio = (float)solidCount / totalInnerVoxels;
 		if (fillRatio < 0.04f)
 		{
 			InjectIslands(map, localSegments);
 		}
 
-		// Final check to see if the chunk actually contains any meshable data
 		idx = 0;
 		for (int z = -1; z < ChunkSize + 1; z++)
 		{
@@ -162,22 +207,20 @@ public partial class ChunkBuilder : RefCounted
 
 	private void InjectIslands(float[] map, Segment[] localSegments)
 	{
-		// Seed deterministically using chunk position so islands don't flicker
 		int seed = (chunk_pos.X * 73856 ^ chunk_pos.Y * 1919 ^ chunk_pos.Z * 83492791).GetHashCode();
 		Random rng = new Random(seed);
 
-		int numIslands = rng.Next(1, 4); // Inject 1 to 3 islands
+		int numIslands = rng.Next(1, 4);
 
 		for (int i = 0; i < numIslands; i++)
 		{
-			// Pick a local center between 3 and ChunkSize-3 to avoid touching chunk borders
 			Vector3 center = new Vector3(
 				rng.Next(3, ChunkSize - 2),
 				rng.Next(3, ChunkSize - 2),
 				rng.Next(3, ChunkSize - 2)
 			);
 			
-			float radius = (float)(rng.NextDouble() * 3.0 + 1.5); // Radius 1.5 to 4.5 voxels
+			float radius = (float)(rng.NextDouble() * 3.0 + 1.5);
 
 			int idx = 0;
 			for (int z = -1; z < ChunkSize + 1; z++)
@@ -189,17 +232,14 @@ public partial class ChunkBuilder : RefCounted
 						Vector3 localPos = new Vector3(x, y, z);
 						float dist = localPos.DistanceTo(center);
 						
-						// Sphere SDF: distance - radius (negative is inside)
-						float islandSdf = (dist - radius) * 10.0f; // Scale to match density map ranges
+						float islandSdf = (dist - radius) * 10.0f;
 						
-						// If this voxel is closer to the island core, we inject it
 						if (islandSdf < map[idx])
 						{
 							Vector3 worldPos = (localPos + new Vector3(chunk_pos.X * ChunkSize, chunk_pos.Y * ChunkSize, chunk_pos.Z * ChunkSize)) * VoxelSize;
 							float distToPath = GetDistanceToSegments(worldPos, localSegments);
 							float safetyTube = 10.0f - distToPath;
 							
-							// Ensure the safety tube still cuts a hole through the island
 							float finalD = Mathf.Max(islandSdf, safetyTube);
 							map[idx] = Mathf.Min(map[idx], finalD);
 						}
@@ -222,34 +262,20 @@ public partial class ChunkBuilder : RefCounted
 		float caveNoise = _detailNoise.GetNoise3D(pos.X * 0.8f, pos.Y * 1.5f, pos.Z * 0.8f);
 		float caveCarver = Mathf.Abs(caveNoise) * 90.0f;
 
-		// The normal procedural flight path tube
 		float distToPath = GetDistanceToSegments(pos, localSegments);
 		float safetyTube = 10.0f - distToPath;
 
 		float finalD = Mathf.Max(baseDensity, 25.0f - caveCarver);
 		finalD = Mathf.Max(finalD, safetyTube);
 
-		// === 🚨 NEW: THE SUMMONING GATE RUNWAY 🚨 ===
-		// This carves a perfectly straight, empty corridor at spawn (0,0,0).
-		// We assume your player launches forward down the negative Z-axis.
 		if (pos.Z < 20.0f && pos.Z > -80.0f)
 		{
-			// Get distance from the dead center of the runway (X=0, Y=0)
 			float distFromCenter = Mathf.Sqrt(pos.X * pos.X + pos.Y * pos.Y);
-			
-			// Calculate how far along the runway we are (0.0 at start, 1.0 at end)
-			// This allows us to taper the runway so it smoothly merges into the normal level!
 			float progress = Mathf.Clamp((pos.Z - 20.0f) / (-80.0f - 20.0f), 0.0f, 1.0f);
-			
-			// The runway starts massive (30m radius) and shrinks down to the normal tube size (10m)
 			float currentRadius = Mathf.Lerp(30.0f, 10.0f, progress);
-			
 			float runwayCarver = currentRadius - distFromCenter;
-			
-			// Force this space to be empty air (positive density)
 			finalD = Mathf.Max(finalD, runwayCarver);
 		}
-		// ============================================
 
 		return finalD;
 	}
@@ -267,27 +293,18 @@ public partial class ChunkBuilder : RefCounted
 	{
 		Color baseColor;
 		
-		// Peak heights: Pale, petrified ash/bone white
 		if (worldY > 60.0f)
 			baseColor = new Color(0.85f, 0.85f, 0.88f);
-			
-		// Mid levels: Cold, stark charcoal/gray
 		else if (worldY > -20.0f)
 			baseColor = new Color(0.25f, 0.25f, 0.28f);
-			
-		// Deep trenches: Obsidian black
 		else if (worldY > -60.0f)
 			baseColor = new Color(0.08f, 0.08f, 0.09f);
-			
-		// The very bottom: Dull, glowing hellfire embers
 		else
 			baseColor = new Color(0.6f, 0.1f, 0.05f);
 
-		// Checkerboard pattern for texture
 		int checker = Mathf.FloorToInt(Mathf.Floor(worldX / 2.0f) + Mathf.Floor(worldY / 2.0f) + Mathf.Floor(worldZ / 2.0f)) % 2;
 		float brightness = (checker == 0) ? 1.0f : 0.92f;
 
-		// Fake lighting/shading based on face direction
 		if (normal.Y == 0.0f)
 			brightness *= 0.85f;
 		else if (normal.Y < 0.0f)

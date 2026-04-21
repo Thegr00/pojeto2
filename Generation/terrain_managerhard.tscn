@@ -1,12 +1,38 @@
 [gd_scene format=3 uid="uid://d1wkfewqef0ns"]
 
-[ext_resource type="Script" uid="uid://1nloobvtrtnk" path="res://Generation/scripts/terrain_manager.gd" id="1_2lejl"]
+[ext_resource type="Script" uid="uid://bv6m2jnvqgawd" path="res://Generation/scripts/HardModeManager.gd" id="1_2lejl"]
+[ext_resource type="Script" uid="uid://bxxi8xaipynv8" path="res://Generation/ProximityBomb.cs" id="2_2x6rg"]
 [ext_resource type="PackedScene" uid="uid://co5w5k0vu1wm5" path="res://mangas_3p.tscn" id="2_w6tjg"]
 [ext_resource type="PackedScene" uid="uid://cjr74ks3pchc6" path="res://loading_screen.tscn" id="3_2x6rg"]
+[ext_resource type="Script" uid="uid://1nloobvtrtnk" path="res://Generation/scripts/terrain_manager.gd" id="3_fv0n1"]
 [ext_resource type="Script" uid="uid://c8t821521tdq" path="res://Generation/scripts/ui.gd" id="4_fv0n1"]
 [ext_resource type="FontFile" uid="uid://dr67jb4p840gj" path="res://SuperMario256.ttf" id="5_ph3n1"]
 [ext_resource type="PackedScene" uid="uid://davyxw8uya2ns" path="res://pause_menu.tscn" id="6_jdy47"]
 [ext_resource type="PackedScene" uid="uid://ci1lpreneiqdd" path="res://StartGate/StartGate.tscn" id="7_ednoa"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_awiba"]
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+emission_energy_multiplier = 4.05
+
+[sub_resource type="BoxMesh" id="BoxMesh_31wuk"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_awiba"]
+
+[sub_resource type="PackedScene" id="PackedScene_ph3n1"]
+_bundled = {
+"conn_count": 0,
+"conns": PackedInt32Array(),
+"editable_instances": [],
+"id_paths": [PackedInt32Array(), PackedInt32Array()],
+"names": PackedStringArray("Area3D", "Area3D", "script", "RotationSpeed", "MeshInstance3D", "MeshInstance3D", "material_override", "mesh", "CollisionShape3D", "CollisionShape3D", "shape"),
+"node_count": 3,
+"node_ids": PackedInt32Array(1513068495, 1096104518, 1470337556),
+"node_paths": [NodePath("."), NodePath(".")],
+"nodes": PackedInt32Array(-1, -1, 1, 0, -1, 2, 2, 0, 3, 1, 0, 1073741824, 0, 5, 4, -1, 2, 6, 2, 7, 3, 0, 1073741825, 0, 9, 8, -1, 1, 10, 4, 0),
+"variants": [ExtResource("2_2x6rg"), 10.0, SubResource("StandardMaterial3D_awiba"), SubResource("BoxMesh_31wuk"), SubResource("BoxShape3D_awiba")],
+"version": 3
+}
 
 [sub_resource type="Environment" id="Environment_atpbs"]
 background_mode = 1
@@ -23,9 +49,26 @@ volumetric_fog_albedo = Color(0.17211533, 0.1721153, 0.1721153, 1)
 adjustment_enabled = true
 adjustment_saturation = 0.4
 
+[sub_resource type="PackedScene" id="PackedScene_jdy47"]
+_bundled = {
+"conn_count": 0,
+"conns": PackedInt32Array(),
+"editable_instances": [],
+"id_paths": [],
+"names": PackedStringArray("TerrainManager", "script", "player", "Node3D", "mangas3p", "transform", "up_deceleration", "DirectionalLight3D", "light_color", "light_energy", "WorldEnvironment", "environment", "LoadingScreen", "world_manager", "UI", "CanvasLayer", "ScoreLabel", "anchors_preset", "anchor_top", "offset_top", "offset_right", "offset_bottom", "theme_override_colors/font_shadow_color", "theme_override_fonts/font", "theme_override_font_sizes/font_size", "metadata/_edit_use_anchors_", "Label", "CloseCallLabel", "offset_left", "ComboBar", "max_value", "show_percentage", "ProgressBar", "pause menu", "SpawnPortal"),
+"node_count": 12,
+"node_ids": PackedInt32Array(1387819765, 1479076587, 579636448, 1763960021, 387819251, 481358530, 1994489266, 2037535459, 501992353, 1635896534, 1405658965, 370306921),
+"node_paths": [],
+"nodes": PackedInt32Array(-1, -1, 3, 0, -1, 2, 1, 0, 1073741826, 1, 0, 0, 0, 2147483647, 4, 2, 2, 5, 3, 6, 4, 0, 0, 0, 7, 7, -1, 3, 5, 5, 8, 6, 9, 7, 0, 0, 0, 10, 10, -1, 1, 11, 8, 0, 0, 0, 2147483647, 12, 9, 1, 1073741837, 10, 0, 0, 0, 15, 14, -1, 1, 1, 11, 0, 5, 0, 26, 16, -1, 9, 17, 12, 18, 13, 19, 14, 20, 15, 21, 16, 22, 17, 23, 18, 24, 19, 25, 20, 0, 5, 0, 26, 27, -1, 6, 28, 21, 19, 22, 20, 23, 21, 24, 23, 18, 24, 25, 0, 5, 0, 32, 29, -1, 6, 28, 26, 19, 27, 20, 28, 21, 29, 30, 26, 31, 30, 0, 0, 0, 15, 15, -1, 0, 0, 9, 0, 2147483647, 33, 31, 0, 0, 0, 0, 2147483647, 34, 32, 0, 0),
+"variants": [ExtResource("3_fv0n1"), NodePath("mangas3p"), ExtResource("2_w6tjg"), Transform3D(1, 0, 0, 0, 0.99663603, -0.08195585, 0, 0.08195585, 0.99663603, 0, 0, 0), 45.0, Transform3D(1, 0, 0, 0, 0.2268383, 0.97393245, 0, -0.97393245, 0.2268383, 0, 56.015327, 0), Color(0.76862746, 0.8392157, 1, 1), 11.476, SubResource("Environment_atpbs"), ExtResource("3_2x6rg"), NodePath(".."), ExtResource("4_fv0n1"), -1, -0.009259259, 98.0, 40.0, 121.0, Color(0.040624976, 0.028437482, 0.028437482, 0), ExtResource("5_ph3n1"), 25, true, -1.0, 120.0, 39.0, 143.0, 20, 1.0, 170.0, 134.0, 186.0, false, ExtResource("6_jdy47"), ExtResource("7_ednoa")],
+"version": 3
+}
+
 [node name="TerrainManagerhard" type="Node3D" unique_id=1387819765 node_paths=PackedStringArray("player")]
 script = ExtResource("1_2lejl")
 player = NodePath("mangas3p")
+bomb_scene = SubResource("PackedScene_ph3n1")
+laser_scene = SubResource("PackedScene_jdy47")
 
 [node name="mangas3p" parent="." unique_id=1479076587 instance=ExtResource("2_w6tjg")]
 transform = Transform3D(1, 0, 0, 0, 0.99663603, -0.08195585, 0, 0.08195585, 0.99663603, 0, 0, 0)

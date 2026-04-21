@@ -7,6 +7,10 @@ var pending_recycle := false
 var is_waiting_to_mesh := false
 var is_waiting_to_collide := false 
 
+var bomb_scene: PackedScene = null
+var laser_scene: PackedScene = null
+var active_hazards: Array[Node3D] = [] # We need this to delete them later!
+
 var task_id: int = -1
 var builder: Variant = preload("res://Generation/scripts/ChunkBuilder.cs").new()
 
@@ -58,6 +62,11 @@ func _process(_delta: float) -> void:
 			_finish_recycle()
 		else:
 			is_waiting_to_mesh = true
+			
+			# === 🚨 NEW: CALL IT HERE! 🚨 ===
+			# The math is done! Spawn the hazards before we even start building the mesh!
+			_spawn_hazards()
+			# ================================
 
 	var wm = get_parent()
 	
@@ -96,6 +105,21 @@ func _apply_mesh_only() -> void:
 	
 	mesh_instance.mesh = new_mesh
 	show()
+func _spawn_hazards() -> void:
+	print("Found ", builder.out_bomb_positions.size(), " bombs to spawn!")
+	if bomb_scene != null:
+		for bomb_pos in builder.out_bomb_positions:
+			var bomb = bomb_scene.instantiate()
+			add_child(bomb)
+			bomb.global_position = bomb_pos # <-- CHANGED THIS!
+			active_hazards.append(bomb)
+			
+	if laser_scene != null:
+		for laser_pos in builder.out_laser_positions:
+			var laser = laser_scene.instantiate()
+			add_child(laser)
+			laser.global_position = laser_pos # <-- CHANGED THIS!
+			active_hazards.append(laser)
 
 func _apply_collision_only() -> void:
 	if builder.out_collision_faces != null and builder.out_collision_faces.size() > 0:
@@ -104,6 +128,14 @@ func _apply_collision_only() -> void:
 		collision_shape.shape = new_shape
 
 func recycle() -> void:
+	# === 🚨 NEW: CLEAN UP HAZARDS 🚨 ===
+	for hazard in active_hazards:
+		if is_instance_valid(hazard):
+			hazard.queue_free()
+	active_hazards.clear()
+	# ===================================
+	
+	# ... the rest of your recycle code (clearing meshes, setting is_in_use = false, etc.) ...
 	if not is_in_use: return
 	pending_recycle = true
 	is_waiting_to_mesh = false
@@ -113,6 +145,7 @@ func recycle() -> void:
 		_finish_recycle()
 
 func _finish_recycle() -> void:
+
 	is_in_use = false
 	pending_recycle = false
 	mesh_instance.mesh = null
