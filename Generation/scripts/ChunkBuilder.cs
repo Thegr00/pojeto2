@@ -57,11 +57,11 @@ public partial class ChunkBuilder : RefCounted
 		// Calculate terrain density
 		float[] densityMap = GenerateDensityField(localSegments);
 
-		// === 🚨 THE FIX 🚨 ===
 		// We only generate meshes AND hazards if the chunk actually has terrain!
 		if (!is_empty)
 		{
-			GenerateHazardPositions(localSegments);
+			// Pass the densityMap in so we can check for empty air!
+			GenerateHazardPositions(localSegments, densityMap);
 			BuildMeshAndCollision(densityMap);
 		}
 		else
@@ -72,46 +72,73 @@ public partial class ChunkBuilder : RefCounted
 		}
 	}
 
-	// === 🚨 THE HAZARD GENERATOR 🚨 ===
-	private void GenerateHazardPositions(Segment[] segments)
+	// === 🚨 THE SPATIALLY AWARE HAZARD GENERATOR 🚨 ===
+	private void GenerateHazardPositions(Segment[] segments, float[] densityMap)
 	{
 		List<Vector3> bombs = new List<Vector3>();
 		List<Vector3> lasers = new List<Vector3>();
 
-		// We use a seed based on the chunk position so the hazards don't randomize wildly every frame
 		int seed = (chunk_pos.X * 8921 ^ chunk_pos.Y * 239 ^ chunk_pos.Z * 34891).GetHashCode();
 		Random rng = new Random(seed);
 
-		// Check if we actually have segments to spawn on
-		if (segments != null && segments.Length > 0)
-		{
-			// 🚨 Roll a 100-sided die. Only spawn a bomb if we roll under 15! (15% chance)
-			bool spawnBomb = rng.Next(100) < 15; 
-			
-			if (spawnBomb)
-			{
-				int randomSegmentIndex = rng.Next(segments.Length);
-				float t = (float)rng.NextDouble();
-				Vector3 pos = segments[randomSegmentIndex].Start.Lerp(segments[randomSegmentIndex].End, t);
-				bombs.Add(pos);
-			}
+		// Bumped up to 15! The deep air check is strict, so we need more attempts to find a valid spot
+		int spawnAttempts = 15; 
+		int padding = 2; 
 
-			// 🚨 Roll a 100-sided die. Only spawn a laser if we roll under 10! (10% chance)
-			//bool spawnLaser = rng.Next(100) < 10; 
-			bool spawnLaser = false;
-			if (spawnLaser)
+		for (int i = 0; i < spawnAttempts; i++)
+		{
+			// Pick a random voxel, padded to avoid chunk boundaries
+			int x = rng.Next(padding, ChunkSize - padding);
+			int y = rng.Next(padding, ChunkSize - padding);
+			int z = rng.Next(padding, ChunkSize - padding);
+
+			// 1. Check if the center voxel is empty air
+			if (GetDensity(densityMap, x, y, z) < IsoLevel)
 			{
-				int randomSegmentIndex = rng.Next(segments.Length);
-				float t = (float)rng.NextDouble();
-				Vector3 pos = segments[randomSegmentIndex].Start.Lerp(segments[randomSegmentIndex].End, t);
-				lasers.Add(pos);
+				// 2. THE DEEP AIR CHECK
+				// Since densityMap already contains your segments/islands from GenerateDensityField,
+				// this 3x3x3 check automatically avoids BOTH natural cave walls AND your block bubbles!
+				bool isDeepAir = true;
+				for (int dz = -1; dz <= 1; dz++) {
+					for (int dy = -1; dy <= 1; dy++) {
+						for (int dx = -1; dx <= 1; dx++) {
+							if (GetDensity(densityMap, x + dx, y + dy, z + dz) >= IsoLevel) {
+								isDeepAir = false; 
+								break;
+							}
+						}
+						if (!isDeepAir) break;
+					}
+					if (!isDeepAir) break;
+				}
+
+				// 3. If safely surrounded by pure air on all sides, spawn it!
+				if (isDeepAir)
+				{
+					// THE COORDINATE FIX: Must be Global so they don't spawn at 0,0,0
+					float wx = (x + chunk_pos.X * ChunkSize) * VoxelSize;
+					float wy = (y + chunk_pos.Y * ChunkSize) * VoxelSize;
+					float wz = (z + chunk_pos.Z * ChunkSize) * VoxelSize;
+
+					bombs.Add(new Vector3(wx, wy, wz));
+				}
 			}
+		}
+
+		// Lasers temporarily disabled for debugging
+		bool spawnLaser = false; 
+		if (spawnLaser && segments != null && segments.Length > 0)
+		{
+			int randomSegmentIndex = rng.Next(segments.Length);
+			float t = (float)rng.NextDouble();
+			Vector3 pos = segments[randomSegmentIndex].Start.Lerp(segments[randomSegmentIndex].End, t);
+			lasers.Add(pos);
 		}
 
 		out_bomb_positions = bombs.ToArray();
 		out_laser_positions = lasers.ToArray();
 	}
-	// =======================================
+	// =================================================
 
 	private float GetDistanceToSegments(Vector3 pos, Segment[] segments)
 	{
