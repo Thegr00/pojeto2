@@ -80,49 +80,55 @@ public partial class ChunkBuilder : RefCounted
 
 		int seed = (chunk_pos.X * 8921 ^ chunk_pos.Y * 239 ^ chunk_pos.Z * 34891).GetHashCode();
 		Random rng = new Random(seed);
-
-		// Bumped up to 15! The deep air check is strict, so we need more attempts to find a valid spot
-		int spawnAttempts = 15; 
+		if (rng.NextDouble() > 0.25) 
+	{
+		out_bomb_positions = new Vector3[0];
+		out_laser_positions = new Vector3[0];
+		return;
+	}
+		// 1. We will sample a bunch of random spots to find the best ones
+		int sampleCount = 40; 
+		int maxBombsToSpawn = rng.Next(1, 3); // Maximum bombs you want per chunk
 		int padding = 2; 
 
-		for (int i = 0; i < spawnAttempts; i++)
+		// This will store our safe spots. Key = How "blank" the space is, Value = Coordinates
+		List<KeyValuePair<float, Vector3I>> safeCandidates = new List<KeyValuePair<float, Vector3I>>();
+
+		for (int i = 0; i < sampleCount; i++)
 		{
-			// Pick a random voxel, padded to avoid chunk boundaries
 			int x = rng.Next(padding, ChunkSize - padding);
 			int y = rng.Next(padding, ChunkSize - padding);
 			int z = rng.Next(padding, ChunkSize - padding);
 
-			// 1. Check if the center voxel is empty air
-			if (GetDensity(densityMap, x, y, z) < IsoLevel)
+			// Check the noise/density map!
+			float density = GetDensity(densityMap, x, y, z);
+
+			// 🚨 THE FIX: > IsoLevel means AIR! 
+			// We only consider spots where density > 5.0f (meaning it is a good distance away from ANY block/wall)
+			if (density > 5.0f) 
 			{
-				// 2. THE DEEP AIR CHECK
-				// Since densityMap already contains your segments/islands from GenerateDensityField,
-				// this 3x3x3 check automatically avoids BOTH natural cave walls AND your block bubbles!
-				bool isDeepAir = true;
-				for (int dz = -1; dz <= 1; dz++) {
-					for (int dy = -1; dy <= 1; dy++) {
-						for (int dx = -1; dx <= 1; dx++) {
-							if (GetDensity(densityMap, x + dx, y + dy, z + dz) >= IsoLevel) {
-								isDeepAir = false; 
-								break;
-							}
-						}
-						if (!isDeepAir) break;
-					}
-					if (!isDeepAir) break;
-				}
-
-				// 3. If safely surrounded by pure air on all sides, spawn it!
-				if (isDeepAir)
-				{
-					// THE COORDINATE FIX: Must be Global so they don't spawn at 0,0,0
-					float wx = (x + chunk_pos.X * ChunkSize) * VoxelSize;
-					float wy = (y + chunk_pos.Y * ChunkSize) * VoxelSize;
-					float wz = (z + chunk_pos.Z * ChunkSize) * VoxelSize;
-
-					bombs.Add(new Vector3(wx, wy, wz));
-				}
+				safeCandidates.Add(new KeyValuePair<float, Vector3I>(density, new Vector3I(x, y, z)));
 			}
+		}
+
+		// 2. YOUR IDEA: Sort the list so the spots with the LEAST noise / MOST open air are at the top!
+		safeCandidates.Sort((a, b) => b.Key.CompareTo(a.Key));
+
+		// 3. Spawn the bombs in those perfect blank spots
+		int spawned = 0;
+		foreach (var candidate in safeCandidates)
+		{
+				if (spawned >= maxBombsToSpawn) break;
+
+			Vector3I localPos = candidate.Value;
+			
+			// Convert to Global Coordinates so they actually appear in the chunk!
+			float wx = (localPos.X + chunk_pos.X * ChunkSize) * VoxelSize;
+			float wy = (localPos.Y + chunk_pos.Y * ChunkSize) * VoxelSize;
+			float wz = (localPos.Z + chunk_pos.Z * ChunkSize) * VoxelSize;
+
+			bombs.Add(new Vector3(wx, wy, wz));
+			spawned++;
 		}
 
 		// Lasers temporarily disabled for debugging
@@ -138,7 +144,6 @@ public partial class ChunkBuilder : RefCounted
 		out_bomb_positions = bombs.ToArray();
 		out_laser_positions = lasers.ToArray();
 	}
-	// =================================================
 
 	private float GetDistanceToSegments(Vector3 pos, Segment[] segments)
 	{
