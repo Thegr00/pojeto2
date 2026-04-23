@@ -74,7 +74,7 @@ func _process(_delta: float) -> void:
 	var wm = get_parent()
 	
 	# 2. Build visuals fast (We allow up to 3 meshes to build per frame)
-	if is_waiting_to_mesh and wm.meshes_built_this_frame < 3:
+	if is_waiting_to_mesh and wm.meshes_built_this_frame < 4:
 		wm.meshes_built_this_frame += 1
 		_apply_mesh_only()
 		is_waiting_to_mesh = false

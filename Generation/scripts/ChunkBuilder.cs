@@ -60,13 +60,12 @@ public partial class ChunkBuilder : RefCounted
 		// We only generate meshes AND hazards if the chunk actually has terrain!
 		if (!is_empty)
 		{
-			// Pass the densityMap in so we can check for empty air!
 			GenerateHazardPositions(localSegments, densityMap);
 			BuildMeshAndCollision(densityMap);
 		}
 		else
 		{
-			// Failsafe: If the chunk is empty air, ensure hazard arrays are empty, not null!
+			// Failsafe: If the chunk is empty air, ensure hazard arrays are empty!
 			out_bomb_positions = new Vector3[0];
 			out_laser_positions = new Vector3[0];
 		}
@@ -80,18 +79,24 @@ public partial class ChunkBuilder : RefCounted
 
 		int seed = (chunk_pos.X * 8921 ^ chunk_pos.Y * 239 ^ chunk_pos.Z * 34891).GetHashCode();
 		Random rng = new Random(seed);
-		if (rng.NextDouble() > 0.25) 
-	{
-		out_bomb_positions = new Vector3[0];
-		out_laser_positions = new Vector3[0];
-		return;
-	}
-		// 1. We will sample a bunch of random spots to find the best ones
+
+		// === INDEPENDENT RARITY CHECKS ===
+		// 25% chance for bombs, 40% chance for lasers. 
+		bool spawnBombs = rng.NextDouble() <= 0.25;
+		bool spawnLasers = rng.NextDouble() <= 0.45;
+
+		// If neither rolled successfully, bail out early to save performance!
+		if (!spawnBombs && !spawnLasers) 
+		{
+			out_bomb_positions = new Vector3[0];
+			out_laser_positions = new Vector3[0];
+			return;
+		}
+
+		// 1. Sample a bunch of random spots to find open air
 		int sampleCount = 40; 
-		int maxBombsToSpawn = rng.Next(1, 3); // Maximum bombs you want per chunk
 		int padding = 2; 
 
-		// This will store our safe spots. Key = How "blank" the space is, Value = Coordinates
 		List<KeyValuePair<float, Vector3I>> safeCandidates = new List<KeyValuePair<float, Vector3I>>();
 
 		for (int i = 0; i < sampleCount; i++)
@@ -100,45 +105,60 @@ public partial class ChunkBuilder : RefCounted
 			int y = rng.Next(padding, ChunkSize - padding);
 			int z = rng.Next(padding, ChunkSize - padding);
 
-			// Check the noise/density map!
 			float density = GetDensity(densityMap, x, y, z);
 
-			// 🚨 THE FIX: > IsoLevel means AIR! 
-			// We only consider spots where density > 5.0f (meaning it is a good distance away from ANY block/wall)
+			// Density > 5.0f means it is open air, away from walls
 			if (density > 5.0f) 
 			{
 				safeCandidates.Add(new KeyValuePair<float, Vector3I>(density, new Vector3I(x, y, z)));
 			}
 		}
 
-		// 2. YOUR IDEA: Sort the list so the spots with the LEAST noise / MOST open air are at the top!
+		// Sort to put the most "open" spots at the top of the list
 		safeCandidates.Sort((a, b) => b.Key.CompareTo(a.Key));
 
-		// 3. Spawn the bombs in those perfect blank spots
-		int spawned = 0;
-		foreach (var candidate in safeCandidates)
+		// === 💣 BOMB SPAWNER ===
+		if (spawnBombs && safeCandidates.Count > 0)
 		{
+			int maxBombsToSpawn = rng.Next(1, 3); // Spawns 1 or 2 bombs
+			int spawned = 0;
+			
+			foreach (var candidate in safeCandidates)
+			{
 				if (spawned >= maxBombsToSpawn) break;
 
-			Vector3I localPos = candidate.Value;
-			
-			// Convert to Global Coordinates so they actually appear in the chunk!
-			float wx = (localPos.X + chunk_pos.X * ChunkSize) * VoxelSize;
-			float wy = (localPos.Y + chunk_pos.Y * ChunkSize) * VoxelSize;
-			float wz = (localPos.Z + chunk_pos.Z * ChunkSize) * VoxelSize;
+				Vector3I localPos = candidate.Value;
+				float wx = (localPos.X + chunk_pos.X * ChunkSize) * VoxelSize;
+				float wy = (localPos.Y + chunk_pos.Y * ChunkSize) * VoxelSize;
+				float wz = (localPos.Z + chunk_pos.Z * ChunkSize) * VoxelSize;
 
-			bombs.Add(new Vector3(wx, wy, wz));
-			spawned++;
+				bombs.Add(new Vector3(wx, wy, wz));
+				spawned++;
+			}
 		}
 
-		// Lasers temporarily disabled for debugging
-		bool spawnLaser = false; 
-		if (spawnLaser && segments != null && segments.Length > 0)
+		// === ⚡ LASER TRAP SPAWNER ===
+		if (spawnLasers && safeCandidates.Count > 0)
 		{
-			int randomSegmentIndex = rng.Next(segments.Length);
-			float t = (float)rng.NextDouble();
-			Vector3 pos = segments[randomSegmentIndex].Start.Lerp(segments[randomSegmentIndex].End, t);
-			lasers.Add(pos);
+			// 📉 LOWERED LIMIT: Decide how many lasers to spawn in this chunk (1 or 2 maximum)
+			int maxLasersToSpawn = rng.Next(1, 3); 
+			int spawnedLasers = 0;
+			
+			foreach (var candidate in safeCandidates)
+			{
+				if (spawnedLasers >= maxLasersToSpawn) break;
+
+				// Pick the safe spot
+				Vector3I startPos = candidate.Value;
+
+				// Convert the local safe spot to global world space
+				float wx = (startPos.X + chunk_pos.X * ChunkSize) * VoxelSize;
+				float wy = (startPos.Y + chunk_pos.Y * ChunkSize) * VoxelSize;
+				float wz = (startPos.Z + chunk_pos.Z * ChunkSize) * VoxelSize;
+
+				lasers.Add(new Vector3(wx, wy, wz));
+				spawnedLasers++;
+			}
 		}
 
 		out_bomb_positions = bombs.ToArray();

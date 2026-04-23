@@ -65,6 +65,7 @@ right={
 
 [physics]
 
+3d/run_on_separate_thread=true
 3d/physics_engine="Jolt Physics"
 jolt_physics_3d/limits/max_bodies=65545
 
