@@ -1,4 +1,5 @@
 using Godot;
+using System;
 
 public partial class ProximityBomb : Area3D
 {
@@ -7,10 +8,16 @@ public partial class ProximityBomb : Area3D
 	[Export] public float MaxScale = 2.5f; // How big it gets when fully expanded
 	[Export] public float PulseSpeed = 4.0f; // How fast it breathes
 
+	// 1. Add a reference for the explosion scene
+	private PackedScene _explosionScene;
 	private double _timePassed = 0;
 
 	public override void _Ready()
 	{
+		// 2. Load the explosion scene. 
+		// MAKE SURE this path exactly matches what you named your explosion scene!
+		_explosionScene = GD.Load<PackedScene>("res://explosion_effect.tscn");
+
 		// Automatically connect the collision signal so we don't have to do it in the editor!
 		BodyEntered += OnBodyEntered;
 	}
@@ -19,12 +26,11 @@ public partial class ProximityBomb : Area3D
 	{
 		_timePassed += delta;
 
-		// 1. Tumble and rotate the cube
+		// Tumble and rotate the cube
 		RotateY(RotationSpeed * (float)delta);
 		RotateX((RotationSpeed * 0.5f) * (float)delta);
 
-		// 2. Calculate the pulsing scale using a Sine wave
-		// Mathf.Sin smoothly bounces between -1 and 1. We map it to 0 and 1.
+		// Calculate the pulsing scale using a Sine wave
 		float sinWave = (Mathf.Sin((float)_timePassed * PulseSpeed) + 1.0f) / 2.0f;
 		
 		// Lerp smoothly blends between your MinScale and MaxScale based on the wave
@@ -40,7 +46,33 @@ public partial class ProximityBomb : Area3D
 		if (body.Name == "Player") // Make sure "Player" exactly matches your player node's name!
 		{
 			GD.Print("Player touched the Pufferfish Bomb! BOOM!");
-			// Add your death logic here (e.g., reloading the scene)
+			Explode();
 		}
+	}
+
+	// 3. The new C# Explode function
+	private void Explode()
+	{
+		if (_explosionScene != null)
+		{
+			// Create the explosion as a GPU particle node
+			GpuParticles3D currentExplosion = _explosionScene.Instantiate<GpuParticles3D>();
+			
+			// Add it to the main game world (NOT as a child of the bomb, because the bomb is about to be deleted!)
+			GetTree().CurrentScene.AddChild(currentExplosion);
+			
+			// Move the explosion to exactly where the bomb is
+			currentExplosion.GlobalPosition = GlobalPosition;
+			
+			// Light the fuse!
+			currentExplosion.Emitting = true;
+		}
+		else
+		{
+			GD.PrintErr("Explosion scene not found! Check the file path.");
+		}
+
+		// Destroy the original bomb node so it disappears!
+		QueueFree();
 	}
 }

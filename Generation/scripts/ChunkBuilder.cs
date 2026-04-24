@@ -83,7 +83,7 @@ public partial class ChunkBuilder : RefCounted
 		// === INDEPENDENT RARITY CHECKS ===
 		// 25% chance for bombs, 40% chance for lasers. 
 		bool spawnBombs = rng.NextDouble() <= 0.25;
-		bool spawnLasers = rng.NextDouble() <= 0.45;
+		bool spawnLasers = rng.NextDouble() <= 0.50;
 
 		// If neither rolled successfully, bail out early to save performance!
 		if (!spawnBombs && !spawnLasers) 
@@ -141,7 +141,7 @@ public partial class ChunkBuilder : RefCounted
 		if (spawnLasers && safeCandidates.Count > 0)
 		{
 			// 📉 LOWERED LIMIT: Decide how many lasers to spawn in this chunk (1 or 2 maximum)
-			int maxLasersToSpawn = rng.Next(1, 3); 
+			int maxLasersToSpawn = rng.Next(3, 8); 
 			int spawnedLasers = 0;
 			
 			foreach (var candidate in safeCandidates)
