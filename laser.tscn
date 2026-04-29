@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://buass5hie5gsa"]
 
 [ext_resource type="Script" uid="uid://c358x83uejp3a" path="res://laser.gd" id="1_fn5yt"]
-[ext_resource type="AudioStream" uid="uid://crtr10r8a57nt" path="res://laser.mp3" id="2_6vqwg"]
+[ext_resource type="AudioStream" uid="uid://crtr10r8a57nt" path="res://sfx/laser.mp3" id="2_6vqwg"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4tymx"]
 albedo_color = Color(1, 0, 0, 1)

@@ -18,5 +18,6 @@ void vertex() {
 
 void fragment() {
 	ALBEDO = water_color;
-	ROUGHNESS = 0.1; // Makes the water glossy
+	ROUGHNESS = 0.6; // Makes the water glossy
+	SPECULAR = 0.1;  // <--- ADD THIS LINE! It completely hides the sun dot.
 }

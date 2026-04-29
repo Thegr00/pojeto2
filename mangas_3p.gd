@@ -30,9 +30,11 @@ const GAME_OVER_SCREEN = preload("res://game_over_screen.tscn")
 
 @onready var anim_player: AnimationPlayer = $Gajo/AnimationPlayer
 @onready var wind_particles = $"cam origin/AshSnowFall"
+@onready var wind_sound: AudioStreamPlayer = $WindSound # NEW: Added Wind Sound node reference
 @export var mesh_container: Node3D
 @onready var proximity_cast: ShapeCast3D = $ShapeCast3D
 @onready var crash_sound: AudioStreamPlayer = $CrashSound
+
 @export var is_cutscene: bool = false
 var current_speed = 10.0
 var cam_yaw: float = 0.0
@@ -49,8 +51,6 @@ func _ready():
 	spring_arm.set_as_top_level(true)
 	
 	ScoreManager.prepare_for_restart()
-	
-	# The Portal will now handle triggering the intro sequence!
 
 func _input(event):
 	if is_spawning: return # LOCK INPUT DURING SPAWN
@@ -187,12 +187,31 @@ func update_camera_effects(delta):
 	var target_tilt = smoothed_roll_ratio * deg_to_rad(15.0) 
 	camera.rotation.z = lerp_angle(camera.rotation.z, target_tilt, delta * 5.0)
 	
-	if not wind_particles.emitting:
-		wind_particles.emitting = true
+	# === NEW WIND LOGIC WITH 60% MAX SPEED THRESHOLD ===
+	var speed_threshold = max_speed * 0.3
 	
-	var _speed_ratio = clamp((current_speed - min_speed) / (max_speed - min_speed), 0.1, 1.0)
-	if abs(wind_particles.amount_ratio - _speed_ratio) > 0.05:
-		wind_particles.amount_ratio = _speed_ratio
+	if current_speed >= speed_threshold:
+		# 1. Turn on particles
+		if not wind_particles.emitting:
+			wind_particles.emitting = true
+			
+		# 2. Play the sound
+		if wind_sound and not wind_sound.playing:
+			wind_sound.play()
+			
+		# 3. Increase particle amount the faster you go above the threshold!
+		var _speed_ratio = clamp((current_speed - speed_threshold) / (max_speed - speed_threshold), 0.1, 1.0)
+		if abs(wind_particles.amount_ratio - _speed_ratio) > 0.05:
+			wind_particles.amount_ratio = _speed_ratio
+			
+	else:
+		# Turn off everything if we drop below 60% max speed
+		if wind_particles.emitting:
+			wind_particles.emitting = false
+			
+		if wind_sound and wind_sound.playing:
+			wind_sound.stop()
+	# ===================================================
 
 func crash_sequence():
 	if is_dead: return
@@ -206,8 +225,12 @@ func crash_sequence():
 	
 	if mesh_container:
 		mesh_container.hide()
+		
+	# NEW: Stop wind and sound immediately upon crashing!
 	if wind_particles:
 		wind_particles.emitting = false
+	if wind_sound and wind_sound.playing:
+		wind_sound.stop()
 		
 	if crash_sound:
 		crash_sound.play()

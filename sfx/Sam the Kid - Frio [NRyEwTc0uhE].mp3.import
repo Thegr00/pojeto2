@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bh8lwyk22rlde"
+path="res://.godot/imported/Sam the Kid - Frio [NRyEwTc0uhE].mp3-3c42045eace710841d1b2208375eb0b1.mp3str"
+
+[deps]
+
+source_file="res://sfx/Sam the Kid - Frio [NRyEwTc0uhE].mp3"
+dest_files=["res://.godot/imported/Sam the Kid - Frio [NRyEwTc0uhE].mp3-3c42045eace710841d1b2208375eb0b1.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

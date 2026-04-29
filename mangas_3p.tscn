@@ -2,8 +2,9 @@
 
 [ext_resource type="Script" uid="uid://du2kqcpk57x4h" path="res://mangas_3p.gd" id="1_yn4l2"]
 [ext_resource type="PackedScene" uid="uid://hj7if4ky8vf0" path="res://tentariva n1.blend" id="2_5k7j1"]
-[ext_resource type="AudioStream" uid="uid://u62h3bhcwonx" path="res://freesound_crunchpixstudio-rpg-sword-attack-combo-10-388930.mp3" id="3_5k7j1"]
+[ext_resource type="AudioStream" uid="uid://u62h3bhcwonx" path="res://sfx/freesound_crunchpixstudio-rpg-sword-attack-combo-10-388930.mp3" id="3_5k7j1"]
 [ext_resource type="Script" uid="uid://cxgxnk26yrsc0" path="res://label.gd" id="4_o2qoc"]
+[ext_resource type="AudioStream" uid="uid://dl5grvw6bcsg1" path="res://sfx/wind.mp3" id="5_odn01"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_5k7j1"]
 size = Vector3(1, 2.3358154, 0.57321167)
@@ -82,3 +83,10 @@ bus = &"Sfx"
 offset_right = 268.0
 offset_bottom = 83.0
 script = ExtResource("4_o2qoc")
+
+[node name="WindParticles" type="GPUParticles3D" parent="." unique_id=468424438]
+emitting = false
+
+[node name="WindSound" type="AudioStreamPlayer" parent="." unique_id=354832438]
+stream = ExtResource("5_odn01")
+volume_db = -27.941
