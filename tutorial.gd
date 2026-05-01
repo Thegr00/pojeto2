@@ -10,7 +10,16 @@ func pause_for_dialogue():
 
 
 func _input(event):
-	
 	if event.is_action_pressed("ui_accept") and waiting_for_input:
 		waiting_for_input = false
 		anim_player.play() 
+
+func pause_entire_game():
+	get_tree().paused = true
+
+func unpause_entire_game():
+	get_tree().paused = false
+
+func end_cutscene():
+	var player = $mangas3p
+	player.set_physics_process(true) 
