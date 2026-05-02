@@ -55,6 +55,7 @@ func play_portal_intro():
 	
 	# 7. SPEW THE PLAYER OUT
 	if target_entity and target_entity.has_method("spew_out"):
+		target_entity.visible = true
 		target_entity.spew_out(global_transform)
 
 	await get_tree().create_timer(0.2).timeout

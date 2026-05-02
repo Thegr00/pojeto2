@@ -1,5 +1,6 @@
 extends Node3D 
 
+@export var respawn_point: Marker3D
 @onready var anim_player = $AnimationPlayer 
 var waiting_for_input = false
 
