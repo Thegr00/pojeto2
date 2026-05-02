@@ -34,10 +34,13 @@ func end_cutscene():
 	var player = $mangas3p
 	if player:
 		player.set_physics_process(true) 
+		
+	# NEW: Tell the UI to start the rings the exact moment the player gets control!
+	if objective_manager:
+		objective_manager.start_ring_objective()
+	else:
+		print("ERROR: Could not find objective manager to start rings!")
 
-# --- NEW TUTORIAL BRIDGE FUNCTIONS ---
-
-# Call this from the AnimationPlayer right before gameplay starts
 func pause_cutscene_for_gameplay():
 	print("Pausing animation for gameplay...")
 	anim_player.pause()

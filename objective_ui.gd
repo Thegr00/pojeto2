@@ -6,6 +6,7 @@ var player: Node3D
 var current_objective: int = 0 
 @export var total_rings: int = 9
 var rings_caught: int = 0
+var active_fade_tween: Tween
 @export var target_y_level: float = 40.0 
 
 func _ready() -> void:
@@ -73,25 +74,25 @@ func finish_all_objectives() -> void:
 	# Wait 3 seconds
 	await get_tree().create_timer(3.0).timeout
 	
-	# THE FIX: Only fade out if a new objective hasn't started yet!
+	# THE FIX: Save the tween to our variable so we can track it!
 	if current_objective == 999:
-		var fade_tween = create_tween()
-		fade_tween.tween_property(label, "modulate:a", 0.0, 1.0)
+		active_fade_tween = create_tween()
+		active_fade_tween.tween_property(label, "modulate:a", 0.0, 1.0)
 
 func start_ring_objective() -> void:
-	# TRIPWIRE: If this doesn't show up in the bottom console, the AnimationPlayer isn't calling the function!
-	print("DEBUG: start_ring_objective is firing!") 
-	
 	current_objective = 5 
 	rings_caught = 0
 	
-	# BULLETPROOF VISIBILITY: Reset everything that could possibly hide the text
-	label.visible = true
-	label.modulate = Color(1, 1, 1, 1) # Force it back to solid white (fully opaque)
+	# NEW: If that old fade-out tween is still alive, KILL IT!
+	if active_fade_tween:
+		active_fade_tween.kill()
+	
+	# Now we can safely force it to be visible without a tug-of-war
+	var force_visible_tween = create_tween()
+	force_visible_tween.tween_property(label, "modulate:a", 1.0, 0.01)
 	
 	update_ring_text()
 
-# The Ring script calls this whenever the player flies through one
 func ring_collected() -> void:
 	if current_objective == 5:
 		rings_caught += 1
@@ -113,5 +114,8 @@ func finish_ring_objective() -> void:
 	label.text = "All rings collected!"
 	
 	await get_tree().create_timer(3.0).timeout
-	var fade_tween = create_tween()
-	fade_tween.tween_property(label, "modulate:a", 0.0, 1.0)
+	
+	# I went ahead and added the safety check here too, just in case you add more objectives later!
+	if current_objective == 999:
+		var fade_tween = create_tween()
+		fade_tween.tween_property(label, "modulate:a", 0.0, 1.0)
