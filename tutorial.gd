@@ -2,13 +2,22 @@ extends Node3D
 
 @export var respawn_point: Marker3D
 @onready var anim_player = $AnimationPlayer 
+
+# Make sure this name exactly matches what your CanvasLayer is called in the Scene Tree!
+@onready var objective_manager = $ObjectiveUI 
+
 var waiting_for_input = false
 
+func _ready():
+	# Connect the megaphone signal to our resume function
+	if objective_manager:
+		objective_manager.tutorial_finished.connect(resume_cutscene)
+	else:
+		print("ERROR: Level script could not find ObjectiveUI!")
 
 func pause_for_dialogue():
 	anim_player.pause()
 	waiting_for_input = true
-
 
 func _input(event):
 	if event.is_action_pressed("ui_accept") and waiting_for_input:
@@ -23,4 +32,17 @@ func unpause_entire_game():
 
 func end_cutscene():
 	var player = $mangas3p
-	player.set_physics_process(true) 
+	if player:
+		player.set_physics_process(true) 
+
+# --- NEW TUTORIAL BRIDGE FUNCTIONS ---
+
+# Call this from the AnimationPlayer right before gameplay starts
+func pause_cutscene_for_gameplay():
+	print("Pausing animation for gameplay...")
+	anim_player.pause()
+
+# The Objective Manager triggers this when the tutorial is done
+func resume_cutscene():
+	print("Tutorial finished! Resuming animation...")
+	anim_player.play()
