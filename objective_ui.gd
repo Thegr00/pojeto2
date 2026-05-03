@@ -2,6 +2,7 @@ extends CanvasLayer
 
 @onready var label = $Label
 signal tutorial_finished
+signal rings_finished
 var player: Node3D
 var current_objective: int = 0 
 @export var total_rings: int = 9
@@ -114,7 +115,7 @@ func finish_ring_objective() -> void:
 	label.text = "All rings collected!"
 	
 	await get_tree().create_timer(3.0).timeout
-	
+	rings_finished.emit()
 	# I went ahead and added the safety check here too, just in case you add more objectives later!
 	if current_objective == 999:
 		var fade_tween = create_tween()

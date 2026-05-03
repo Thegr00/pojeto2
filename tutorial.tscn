@@ -329,6 +329,42 @@ tracks/25/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/26/type = "value"
+tracks/26/imported = false
+tracks/26/enabled = true
+tracks/26/path = NodePath("Aneis 2:visible")
+tracks/26/interp = 1
+tracks/26/loop_wrap = true
+tracks/26/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/27/type = "value"
+tracks/27/imported = false
+tracks/27/enabled = true
+tracks/27/path = NodePath("cameras/CameraAneis2:position")
+tracks/27/interp = 1
+tracks/27/loop_wrap = true
+tracks/27/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-10.813659, 318.0775, 5.794588)]
+}
+tracks/28/type = "value"
+tracks/28/imported = false
+tracks/28/enabled = true
+tracks/28/path = NodePath("cameras/CameraAneis2:rotation")
+tracks/28/interp = 1
+tracks/28/loop_wrap = true
+tracks/28/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.9674023, 0.64696467, -0.110589035)]
+}
 
 [sub_resource type="Animation" id="Animation_ehuit"]
 resource_name = "intro"
@@ -643,10 +679,10 @@ tracks/25/path = NodePath("CanvasLayer:visible")
 tracks/25/interp = 1
 tracks/25/loop_wrap = true
 tracks/25/keys = {
-"times": PackedFloat32Array(0.13333334, 19.066668, 35.333332, 35.633335, 37.033333, 44.96237, 45.9, 58.266666),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0.13333334, 19.066668, 35.333332, 35.633335, 37.033333, 44.96237, 45.9, 58.033333, 59),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [false, true, true, false, true, false, true, false]
+"values": [false, true, true, false, true, false, true, false, true]
 }
 tracks/26/type = "value"
 tracks/26/imported = false
@@ -655,10 +691,10 @@ tracks/26/path = NodePath("CanvasLayer/Panel/RichTextLabel:visible_ratio")
 tracks/26/interp = 1
 tracks/26/loop_wrap = true
 tracks/26/keys = {
-"times": PackedFloat32Array(0.37956434, 19.066668, 20.866667, 21.2, 21.233334, 23.733334, 24.033333, 24.066668, 25.866667, 26, 26.033333, 27.166666, 27.3, 27.333334, 28.2, 28.533333, 28.6, 29.166666, 29.333334, 29.4, 32.433334, 32.733334, 32.8, 33.766666, 36.733334, 36.833332, 39.5, 40.466667, 40.566666, 43.966667, 44.866665, 45.633335, 48.733334, 49.333332, 49.5, 51.7, 52.733334, 52.8, 55.466667, 56.033333, 56.166668, 57),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0.37956434, 19.066668, 20.866667, 21.2, 21.233334, 23.733334, 24.033333, 24.066668, 25.866667, 26, 26.033333, 27.166666, 27.3, 27.333334, 28.2, 28.533333, 28.6, 29.166666, 29.333334, 29.4, 32.433334, 32.733334, 32.8, 33.766666, 36.733334, 36.833332, 40.266666, 41.333332, 41.366665, 44.533333, 44.966667, 45.033333, 48.733334, 49.333332, 49.4, 51.766666, 52.733334, 52.8, 55.466667, 56.066666, 56.166668, 57.366665, 58.066666, 58.6, 60.2, 61, 61.066666, 65.03333, 65.96667, 66, 68.56841, 69.53333, 69.566666, 72.182274),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0]
+"values": [1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0]
 }
 tracks/27/type = "value"
 tracks/27/imported = false
@@ -679,10 +715,10 @@ tracks/28/path = NodePath("CanvasLayer/Panel/RichTextLabel:text")
 tracks/28/interp = 1
 tracks/28/loop_wrap = true
 tracks/28/keys = {
-"times": PackedFloat32Array(19.066668, 21.233334, 24.066668, 26.1, 27.333334, 28.633333, 29.433332, 32.833332, 33.9, 36.766666, 40.633335, 45.633335, 49.5, 53.033333, 56.2),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(19.066668, 21.233334, 24.066668, 26.1, 27.333334, 28.633333, 29.433332, 32.833332, 33.9, 36.766666, 41.333332, 45.633335, 49.4, 52.833332, 56.166668, 58.6, 61.1, 66, 69.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": ["Much more peaceful don't you think?", "Well yes, apart from the landing... ", "Where even are we?", "Spoilers :/", "What the hell is a spoiler?", "Forget it.", "What matters is, we have clear enough space for you to learn your basics, so let's get you up", "What do you mean let's get you u-", "NONONONON-", "Well now that your are in the air, try to get a feel for your new wings by looking around (mouse) or moving your body (wasd).", "Also I have set up a barrier so don't worry about crashing.  If you hit it will simply teleport you back.", "Now that you got a feel for the controls, let's add a bit of a challenge.", "See those flying ring-like things? Your job is to go through all of them. ", "And don't worry they are not solid so you won't hurt yourself.", "Good Luck :)"]
+"values": ["Much more peaceful don't you think?", "Well yes, apart from the landing... ", "Where even are we?", "Spoilers :/", "What the hell is a spoiler?", "Forget it.", "What matters is, we have clear enough space for you to learn your basics, so let's get you up", "What do you mean let's get you u-", "NONONONON-", "Well now that your are in the air, try to get a feel for your new wings by looking around (mouse) or moving your body (wasd).", "Also I have set up a barrier so don't worry about crashing.  ", "Now that you got a feel for the controls, let's add a bit of a challenge.", "See those flying ring-like things? Your job is to go through all of them. ", "And don't worry they are not solid so you won't hurt yourself.", "Good Luck :)", "Not bad for a mortal! Especialy a french one...", "Anyway there's one final lesson before you are ready for whatever challenge may come your way", "If you press the \"e\" and or \"q\" keys you may find you can do some \"tricks\"", "Try doing some on your way down after those rings!"]
 }
 tracks/29/type = "method"
 tracks/29/imported = false
@@ -691,8 +727,8 @@ tracks/29/path = NodePath(".")
 tracks/29/interp = 1
 tracks/29/loop_wrap = true
 tracks/29/keys = {
-"times": PackedFloat32Array(21.166666, 23.966667, 25.9, 27.266666, 28.466667, 29.316223, 32.666668, 37.033333, 44.733334, 45.466667, 45.933334, 58.133335, 58.366665),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(21.166666, 23.966667, 25.9, 27.266666, 28.466667, 29.316223, 32.666668, 37.033333, 45.033333, 45.333332, 45.566666, 46.3, 57.166668, 57.5, 58.033333, 58.233334, 72.2, 72.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "values": [{
 "args": [],
 "method": &"pause_for_dialogue"
@@ -725,6 +761,9 @@ tracks/29/keys = {
 "method": &"pause_cutscene_for_gameplay"
 }, {
 "args": [],
+"method": &"resume_cutscene"
+}, {
+"args": [],
 "method": &"pause_entire_game"
 }, {
 "args": [],
@@ -732,6 +771,18 @@ tracks/29/keys = {
 }, {
 "args": [],
 "method": &"end_cutscene"
+}, {
+"args": [],
+"method": &"pause_cutscene_for_gameplay"
+}, {
+"args": [],
+"method": &"pause_entire_game"
+}, {
+"args": [],
+"method": &"pause_cutscene_for_gameplay"
+}, {
+"args": [],
+"method": &"unpause_entire_game"
 }]
 }
 tracks/30/type = "value"
@@ -789,10 +840,10 @@ tracks/34/path = NodePath("CanvasLayer/TextureRect:visible")
 tracks/34/interp = 1
 tracks/34/loop_wrap = true
 tracks/34/keys = {
-"times": PackedFloat32Array(0, 37.066666, 44.933334, 45.666668, 58.366665),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 37.066666, 44.933334, 45.666668, 58.033333, 59),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [false, true, false, true, false]
+"values": [false, true, false, true, false, true]
 }
 tracks/35/type = "value"
 tracks/35/imported = false
@@ -801,10 +852,10 @@ tracks/35/path = NodePath("CanvasLayer/ColorRect:visible")
 tracks/35/interp = 1
 tracks/35/loop_wrap = true
 tracks/35/keys = {
-"times": PackedFloat32Array(0, 37.066666, 44.933334, 45.666668, 58.366665),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 37.066666, 44.933334, 45.666668, 58.066666, 59),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [false, true, false, true, false]
+"values": [false, true, false, true, false, true]
 }
 tracks/36/type = "value"
 tracks/36/imported = false
@@ -837,10 +888,10 @@ tracks/38/path = NodePath("ObjectiveUI/Label:visible")
 tracks/38/interp = 1
 tracks/38/loop_wrap = true
 tracks/38/keys = {
-"times": PackedFloat32Array(0.0666666, 45.033333, 45.633335, 58.4, 65.6),
+"times": PackedFloat32Array(0.0666666, 45.033333, 45.633335, 58.033333, 59),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 1,
-"values": [false, true, false, true, true]
+"values": [false, true, false, true, false]
 }
 tracks/39/type = "value"
 tracks/39/imported = false
@@ -921,10 +972,46 @@ tracks/45/path = NodePath("Aneis:visible")
 tracks/45/interp = 1
 tracks/45/loop_wrap = true
 tracks/45/keys = {
-"times": PackedFloat32Array(0, 49.366665),
+"times": PackedFloat32Array(0, 49.366665, 62.566666),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+tracks/46/type = "value"
+tracks/46/imported = false
+tracks/46/enabled = true
+tracks/46/path = NodePath("Aneis 2:visible")
+tracks/46/interp = 1
+tracks/46/loop_wrap = true
+tracks/46/keys = {
+"times": PackedFloat32Array(0, 68.933334),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
+}
+tracks/47/type = "value"
+tracks/47/imported = false
+tracks/47/enabled = true
+tracks/47/path = NodePath("cameras/CameraAneis2:position")
+tracks/47/interp = 1
+tracks/47/loop_wrap = true
+tracks/47/keys = {
+"times": PackedFloat32Array(68.96667, 72.03333),
+"transitions": PackedFloat32Array(1, 0.39229202),
+"update": 0,
+"values": [Vector3(-10.813659, 318.0775, 5.794588), Vector3(-59.386765, 133.75267, 31.822887)]
+}
+tracks/48/type = "value"
+tracks/48/imported = false
+tracks/48/enabled = true
+tracks/48/path = NodePath("cameras/CameraAneis2:rotation")
+tracks/48/interp = 1
+tracks/48/loop_wrap = true
+tracks/48/keys = {
+"times": PackedFloat32Array(68.98477, 72.066666),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(-0.9674023, 0.64696467, -0.110589035), Vector3(-0.96740216, -0.92383146, -0.11058913)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_5mrt3"]
@@ -1519,11 +1606,12 @@ visible = false
 [node name="Audio player casa" type="AudioStreamPlayer3D" parent="." unique_id=699385043]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 0)
 stream = ExtResource("6_hu44a")
-volume_db = -80.0
+volume_db = -12.807
 max_distance = 4096.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1461237606]
 transform = Transform3D(1, 0, 0, 0, -0.06402715, 0.99794817, 0, -0.99794817, -0.06402715, 0, 844.9772, -474.10056)
+visible = false
 light_color = Color(0.990625, 0.990625, 0.990625, 1)
 light_energy = 3.136
 
@@ -1558,16 +1646,16 @@ transform = Transform3D(0.88142717, 0, -0.47232002, 0, 1, 0, 0.47232002, 0, 0.88
 
 [node name="Camera1" type="Camera3D" parent="cameras" unique_id=432048617]
 process_priority = 10
-transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0.14758348, 2.1342692, -0.8725357)
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0.14758372, -0.6693883, -0.8725357)
 current = true
 
 [node name="Camera2" type="Camera3D" parent="cameras" unique_id=1901217518]
 process_priority = 10
-transform = Transform3D(-0.8514183, 0.44804487, -0.27265772, -0.018443445, 0.49395832, 0.86928993, 0.52416235, 0.74515826, -0.4123018, -23.716982, 109.21216, -72.83709)
+transform = Transform3D(-0.8514183, 0.44804487, -0.27265772, -0.018443445, 0.49395832, 0.86928993, 0.52416235, 0.74515826, -0.4123018, -36.089245, 109.21216, -57.707134)
 current = true
 
 [node name="Camera3" type="Camera3D" parent="cameras" unique_id=1307961383]
-transform = Transform3D(0.8924087, 0.25855425, 0.36980498, 0.28397864, 0.31507638, -0.9055842, -0.3506594, 0.9131682, 0.20775315, 50.18736, 1848.473, -847.75397)
+transform = Transform3D(0.9178495, 0.39691374, 0.003325823, -0.15761589, 0.3721459, -0.91469365, -0.36429211, 0.8390271, 0.40413406, 50.18736, 1848.473, -847.75397)
 current = true
 
 [node name="Camera4" type="Camera3D" parent="cameras" unique_id=1619681698]
@@ -1582,6 +1670,9 @@ current = true
 [node name="CameraAneis" type="Camera3D" parent="cameras" unique_id=257889913]
 transform = Transform3D(0.9785808, 0.017515719, -0.205116, 0.17916118, 0.41828164, 0.8904727, 0.101393476, -0.9081485, 0.40618426, 0, 317.87015, 0)
 current = true
+
+[node name="CameraAneis2" type="Camera3D" parent="cameras" unique_id=323652415]
+transform = Transform3D(0.8478192, -0.40523416, 0.34203452, -0.06262486, 0.563974, 0.82341444, -0.5265742, -0.7195265, 0.4527704, -10.813659, 318.0775, 5.794588)
 
 [node name="Jp gajo" type="Node3D" parent="." unique_id=927502128]
 transform = Transform3D(-0.5, -7.54979e-08, 3.300118e-15, 0, -2.1855694e-08, -0.5, 7.54979e-08, -0.5, 2.1855694e-08, -0.93863803, 0.18304777, 11.068701)
@@ -2065,16 +2156,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5824337, 0.19015813, 4.007
 visible = false
 
 [node name="GeneralSkeleton" parent="Jp anjo/JP2/metarig" parent_id_path=PackedInt32Array(698658753, 1482431098) index="0" unique_id=1663792662]
-bones/0/position = Vector3(-0.00034581267, 0.27172774, -0.027242623)
-bones/0/rotation = Quaternion(-0.038082644, -0.11592916, -0.004448187, 0.99251723)
-bones/2/rotation = Quaternion(0.099924274, 0.000114583, 0.0002498887, 0.99499506)
-bones/3/rotation = Quaternion(-0.099924624, -0.00022096447, -0.00025715676, 0.994995)
+bones/0/position = Vector3(0.0013063537, 0.2716111, -0.026934449)
+bones/0/rotation = Quaternion(-0.0458512, -0.11589081, -0.005355574, 0.9921887)
+bones/2/rotation = Quaternion(0.0849059, 0.000110600915, 0.00025785976, 0.99638903)
+bones/3/rotation = Quaternion(-0.08490582, -0.00021282442, -0.00026333318, 0.9963889)
 bones/4/position = Vector3(-2.4320947e-08, 0.030464845, 0.004752765)
-bones/4/rotation = Quaternion(0.06703586, 0.095770404, 0.007316694, 0.99311674)
+bones/4/rotation = Quaternion(0.059008636, 0.095374234, 0.011401353, 0.9936256)
 bones/4/scale = Vector3(1.0000002, 1, 0.9999999)
-bones/5/rotation = Quaternion(0.4945629, 0.5241903, 0.52857506, -0.4485983)
-bones/6/rotation = Quaternion(-0.03994007, 0.82119906, -0.5691589, 0.0097487345)
-bones/7/rotation = Quaternion(0.18472995, -0.66579777, 0.18601714, 0.69856)
+bones/5/rotation = Quaternion(0.49495763, 0.5240528, 0.5286962, -0.44818082)
+bones/6/rotation = Quaternion(-0.038713586, 0.821389, -0.5689696, 0.009745519)
+bones/7/rotation = Quaternion(0.16704357, -0.6710269, 0.16955963, 0.7021887)
 bones/8/rotation = Quaternion(0.09913024, 0.70686626, 0.0629003, 0.69753635)
 bones/9/rotation = Quaternion(-0.123819165, 0.7195233, 0.2018354, 0.65285325)
 bones/10/rotation = Quaternion(0.62334186, 1.1175871e-08, -4.261732e-06, 0.7819494)
@@ -2091,9 +2182,9 @@ bones/22/rotation = Quaternion(0.6228982, -0.023505477, -4.5001498e-06, 0.781949
 bones/24/rotation = Quaternion(0.6630008, -0.044529784, 0.07369417, 0.7436506)
 bones/25/rotation = Quaternion(0.6203661, -0.06229401, 0.015573084, 0.7816796)
 bones/26/rotation = Quaternion(0.62192154, -0.04205184, -4.4703484e-06, 0.78194964)
-bones/28/rotation = Quaternion(0.5466694, -0.47290915, -0.47606483, -0.500871)
-bones/29/rotation = Quaternion(0.06866215, 0.8212514, -0.566337, -0.009700312)
-bones/30/rotation = Quaternion(0.28862616, 0.55486375, -0.20971137, 0.75156003)
+bones/28/rotation = Quaternion(0.54705036, -0.47282067, -0.47613847, -0.5004686)
+bones/29/rotation = Quaternion(0.08742329, 0.8243828, -0.55915886, -0.00957738)
+bones/30/rotation = Quaternion(0.29185882, 0.5438372, -0.20531757, 0.75954217)
 bones/31/rotation = Quaternion(0.12024976, -0.69903094, -0.056890074, 0.702609)
 bones/32/rotation = Quaternion(-0.12381923, -0.7195234, -0.2018356, 0.6528533)
 bones/33/rotation = Quaternion(0.62334144, 1.825392e-07, 4.485249e-06, 0.7819497)
@@ -2111,25 +2202,25 @@ bones/45/rotation = Quaternion(0.6228987, 0.02350526, 4.1723247e-06, 0.7819493)
 bones/47/rotation = Quaternion(0.6630007, 0.044529956, -0.07369393, 0.7436508)
 bones/48/rotation = Quaternion(0.62036633, 0.06229363, -0.015572906, 0.7816794)
 bones/49/rotation = Quaternion(0.62192184, 0.04205143, 4.4703484e-06, 0.7819494)
-bones/51/rotation = Quaternion(-0.00082372164, 0.14039135, 0.9830671, -0.1177658)
-bones/52/rotation = Quaternion(0.018439641, 0.97914827, -0.16898197, 0.11123717)
+bones/51/rotation = Quaternion(-0.0008035294, 0.1346198, 0.98421526, -0.11487915)
+bones/52/rotation = Quaternion(0.018815313, 0.97858834, -0.17212817, 0.11127821)
 bones/53/position = Vector3(0.014104397, 0.15062766, 0.026279537)
-bones/53/rotation = Quaternion(-0.0974896, 0.72280514, -0.6840842, 0.008802723)
+bones/53/rotation = Quaternion(-0.095387965, 0.721742, -0.6855326, 0.005888474)
 bones/53/scale = Vector3(1, 0.9999998, 1)
 bones/54/rotation = Quaternion(4.664862e-08, 1, 5.9604645e-08, 2.7766912e-08)
 bones/55/position = Vector3(-0.04320567, 0.0038873865, 0.002650404)
-bones/55/rotation = Quaternion(0.0008845389, -0.08672467, 0.98817325, 0.12645832)
+bones/55/rotation = Quaternion(0.00089051615, -0.096751854, 0.9871316, 0.1273173)
 bones/55/scale = Vector3(1.0000001, 1, 1)
 bones/56/position = Vector3(0.0068077496, 0.103363104, -0.003434873)
-bones/56/rotation = Quaternion(-0.04363244, 0.9257104, -0.12013745, -0.35598263)
+bones/56/rotation = Quaternion(-0.04098497, 0.9266098, -0.11328353, -0.35620412)
 bones/56/scale = Vector3(1, 1, 1.0000002)
 bones/57/position = Vector3(-0.014104409, 0.15062769, 0.026279513)
-bones/57/rotation = Quaternion(0.16954453, 0.6294288, -0.7583345, 0.0017445537)
+bones/57/rotation = Quaternion(0.17168647, 0.6337366, -0.7542558, -6.056577e-05)
 bones/57/scale = Vector3(1.0000001, 1, 1)
 bones/58/rotation = Quaternion(-6.703263e-08, 1, 8.940697e-08, 2.1454163e-09)
 
 [node name="head" parent="Jp anjo/JP2/metarig/GeneralSkeleton" index="0" unique_id=2097379203]
-transform = Transform3D(0.9990869, -0.015058456, -0.03998737, 0.012772038, 0.99830216, -0.056830764, 0.040775225, 0.056268156, 0.9975826, -0.0038906583, 0.527479, -0.012443543)
+transform = Transform3D(0.99902356, -0.017398031, -0.040617883, 0.016403377, 0.99956053, -0.024694353, 0.041029632, 0.024003968, 0.9988694, -0.00075315026, 0.52776855, -0.018415032)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=2105400401]
 visible = false
@@ -2240,6 +2331,29 @@ transform = Transform3D(0.258819, 0, -0.96592575, 0.9659257, 0, 0.258819, 7.4505
 
 [node name="Anel9" parent="Aneis" unique_id=8081201 instance=ExtResource("14_bsk3x")]
 transform = Transform3D(0.066987276, 0.9659258, -0.24999996, 0.9659258, -6.4523924e-09, 0.25881904, 0.25, -0.25881892, -0.93301266, -29.25856, 260.99014, -21.94571)
+
+[node name="Aneis 2" type="Node3D" parent="." unique_id=596639494]
+
+[node name="Anel" parent="Aneis 2" unique_id=1271959520 instance=ExtResource("14_bsk3x")]
+transform = Transform3D(2.2454773e-22, 0.9999998, 1.1920929e-07, 0.9999999, -3.5527137e-15, -2.0831671e-22, 2.0285895e-22, 1.1920929e-07, -0.9999998, -103.40944, 342.6603, 37.947823)
+
+[node name="Anel2" parent="Aneis 2" unique_id=144400493 instance=ExtResource("14_bsk3x")]
+transform = Transform3D(-3.856704e-09, 0.9659257, 0.2588191, 0.9979289, 0.01664811, -0.062131554, -0.06432329, 0.2582831, -0.9639253, -103.40944, 327.40778, -25.51258)
+
+[node name="Anel3" parent="Aneis 2" unique_id=867514345 instance=ExtResource("14_bsk3x")]
+transform = Transform3D(0.28934884, 0.6875802, 0.66596586, 0.9086225, 0.021581763, -0.41706058, -0.30113533, 0.7257874, -0.61850625, -53.75567, 300.03024, -87.3504)
+
+[node name="Anel4" parent="Aneis 2" unique_id=624264848 instance=ExtResource("14_bsk3x")]
+transform = Transform3D(0.40115118, 0.2325683, 0.8859965, 0.9086226, 0.021581763, -0.4170606, -0.11611648, 0.9723405, -0.20265919, -21.467237, 262.7478, -109.97182)
+
+[node name="Anel5" parent="Aneis 2" unique_id=1458876195 instance=ExtResource("14_bsk3x")]
+transform = Transform3D(0.40546533, -0.28476024, 0.86862504, 0.9086225, 0.021581776, -0.41706052, 0.10001577, 0.95835567, 0.26749024, 25.965267, 241.71878, -95.43154)
+
+[node name="Anel6" parent="Aneis 2" unique_id=1395345763 instance=ExtResource("14_bsk3x")]
+transform = Transform3D(0.21598543, -0.8790157, 0.42506647, 0.7851526, -0.10243018, -0.6107731, 0.5804188, 0.46566004, 0.66803795, 50.519363, 199.04022, -42.245358)
+
+[node name="Anel7" parent="Aneis 2" unique_id=59709003 instance=ExtResource("14_bsk3x")]
+transform = Transform3D(1.0000002, 0, 0, 0, -4.3711378e-08, 0.9999999, 0, -0.99999976, -4.371138e-08, 90.02492, 40, 4.77)
 
 [connection signal="body_exited" from="WorldBorder" to="WorldBorder" method="_on_body_exited"]
 

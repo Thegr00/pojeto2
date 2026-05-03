@@ -12,6 +12,7 @@ func _ready():
 	# Connect the megaphone signal to our resume function
 	if objective_manager:
 		objective_manager.tutorial_finished.connect(resume_cutscene)
+		objective_manager.rings_finished.connect(resume_cutscene) 
 	else:
 		print("ERROR: Level script could not find ObjectiveUI!")
 
@@ -44,7 +45,6 @@ func end_cutscene():
 func pause_cutscene_for_gameplay():
 	print("Pausing animation for gameplay...")
 	anim_player.pause()
-
 # The Objective Manager triggers this when the tutorial is done
 func resume_cutscene():
 	print("Tutorial finished! Resuming animation...")
