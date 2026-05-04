@@ -365,6 +365,18 @@ tracks/28/keys = {
 "update": 0,
 "values": [Vector3(-0.9674023, 0.64696467, -0.110589035)]
 }
+tracks/29/type = "value"
+tracks/29/imported = false
+tracks/29/enabled = true
+tracks/29/path = NodePath("cameras/CameraAneis2:current")
+tracks/29/interp = 1
+tracks/29/loop_wrap = true
+tracks/29/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 
 [sub_resource type="Animation" id="Animation_ehuit"]
 resource_name = "intro"
@@ -679,10 +691,10 @@ tracks/25/path = NodePath("CanvasLayer:visible")
 tracks/25/interp = 1
 tracks/25/loop_wrap = true
 tracks/25/keys = {
-"times": PackedFloat32Array(0.13333334, 19.066668, 35.333332, 35.633335, 37.033333, 44.96237, 45.9, 58.033333, 59),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0.13333334, 19.066668, 35.333332, 35.633335, 37.033333, 44.96237, 45.9, 58.033333, 59, 72.86667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [false, true, true, false, true, false, true, false, true]
+"values": [false, true, true, false, true, false, true, false, true, false]
 }
 tracks/26/type = "value"
 tracks/26/imported = false
@@ -691,7 +703,7 @@ tracks/26/path = NodePath("CanvasLayer/Panel/RichTextLabel:visible_ratio")
 tracks/26/interp = 1
 tracks/26/loop_wrap = true
 tracks/26/keys = {
-"times": PackedFloat32Array(0.37956434, 19.066668, 20.866667, 21.2, 21.233334, 23.733334, 24.033333, 24.066668, 25.866667, 26, 26.033333, 27.166666, 27.3, 27.333334, 28.2, 28.533333, 28.6, 29.166666, 29.333334, 29.4, 32.433334, 32.733334, 32.8, 33.766666, 36.733334, 36.833332, 40.266666, 41.333332, 41.366665, 44.533333, 44.966667, 45.033333, 48.733334, 49.333332, 49.4, 51.766666, 52.733334, 52.8, 55.466667, 56.066666, 56.166668, 57.366665, 58.066666, 58.6, 60.2, 61, 61.066666, 65.03333, 65.96667, 66, 68.56841, 69.53333, 69.566666, 72.182274),
+"times": PackedFloat32Array(0.37956434, 19.066668, 20.866667, 21.2, 21.233334, 23.733334, 24.033333, 24.066668, 25.866667, 26, 26.033333, 27.166666, 27.3, 27.333334, 28.2, 28.533333, 28.6, 29.166666, 29.333334, 29.4, 32.433334, 32.733334, 32.8, 33.766666, 36.733334, 36.833332, 41.066666, 41.633335, 41.666668, 44.733334, 45.133335, 45.166668, 48.733334, 49.333332, 49.4, 51.766666, 52.733334, 52.8, 55.6, 56.066666, 56.166668, 56.966667, 58.066666, 58.6, 60.2, 61, 61.066666, 65.03333, 65.96667, 66, 68.56841, 69.53333, 69.566666, 72.182274),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 0,
 "values": [1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0]
@@ -715,7 +727,7 @@ tracks/28/path = NodePath("CanvasLayer/Panel/RichTextLabel:text")
 tracks/28/interp = 1
 tracks/28/loop_wrap = true
 tracks/28/keys = {
-"times": PackedFloat32Array(19.066668, 21.233334, 24.066668, 26.1, 27.333334, 28.633333, 29.433332, 32.833332, 33.9, 36.766666, 41.333332, 45.633335, 49.4, 52.833332, 56.166668, 58.6, 61.1, 66, 69.6),
+"times": PackedFloat32Array(19.066668, 21.233334, 24.066668, 26.1, 27.333334, 28.633333, 29.433332, 32.833332, 33.9, 36.766666, 41.666668, 45.633335, 49.4, 52.833332, 56.166668, 58.6, 61.1, 66, 69.6),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": ["Much more peaceful don't you think?", "Well yes, apart from the landing... ", "Where even are we?", "Spoilers :/", "What the hell is a spoiler?", "Forget it.", "What matters is, we have clear enough space for you to learn your basics, so let's get you up", "What do you mean let's get you u-", "NONONONON-", "Well now that your are in the air, try to get a feel for your new wings by looking around (mouse) or moving your body (wasd).", "Also I have set up a barrier so don't worry about crashing.  ", "Now that you got a feel for the controls, let's add a bit of a challenge.", "See those flying ring-like things? Your job is to go through all of them. ", "And don't worry they are not solid so you won't hurt yourself.", "Good Luck :)", "Not bad for a mortal! Especialy a french one...", "Anyway there's one final lesson before you are ready for whatever challenge may come your way", "If you press the \"e\" and or \"q\" keys you may find you can do some \"tricks\"", "Try doing some on your way down after those rings!"]
@@ -727,7 +739,7 @@ tracks/29/path = NodePath(".")
 tracks/29/interp = 1
 tracks/29/loop_wrap = true
 tracks/29/keys = {
-"times": PackedFloat32Array(21.166666, 23.966667, 25.9, 27.266666, 28.466667, 29.316223, 32.666668, 37.033333, 45.033333, 45.333332, 45.566666, 46.3, 57.166668, 57.5, 58.033333, 58.233334, 72.2, 72.3),
+"times": PackedFloat32Array(21.166666, 23.966667, 25.9, 27.266666, 28.466667, 29.316223, 32.666668, 37.033333, 45.2, 45.333332, 45.566666, 46.3, 57.166668, 57.5, 58.033333, 58.066666, 72.86667, 73.1),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "values": [{
 "args": [],
@@ -779,10 +791,10 @@ tracks/29/keys = {
 "method": &"pause_entire_game"
 }, {
 "args": [],
-"method": &"pause_cutscene_for_gameplay"
+"method": &"end_second_cutscene"
 }, {
 "args": [],
-"method": &"unpause_entire_game"
+"method": &"pause_cutscene_for_gameplay"
 }]
 }
 tracks/30/type = "value"
@@ -888,10 +900,10 @@ tracks/38/path = NodePath("ObjectiveUI/Label:visible")
 tracks/38/interp = 1
 tracks/38/loop_wrap = true
 tracks/38/keys = {
-"times": PackedFloat32Array(0.0666666, 45.033333, 45.633335, 58.033333, 59),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0.0666666, 45.033333, 45.633335, 58.033333, 59, 73.1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [false, true, false, true, false]
+"values": [false, true, false, true, false, true]
 }
 tracks/39/type = "value"
 tracks/39/imported = false
@@ -996,7 +1008,7 @@ tracks/47/path = NodePath("cameras/CameraAneis2:position")
 tracks/47/interp = 1
 tracks/47/loop_wrap = true
 tracks/47/keys = {
-"times": PackedFloat32Array(68.96667, 72.03333),
+"times": PackedFloat32Array(68.96667, 72.86667),
 "transitions": PackedFloat32Array(1, 0.39229202),
 "update": 0,
 "values": [Vector3(-10.813659, 318.0775, 5.794588), Vector3(-59.386765, 133.75267, 31.822887)]
@@ -1008,10 +1020,22 @@ tracks/48/path = NodePath("cameras/CameraAneis2:rotation")
 tracks/48/interp = 1
 tracks/48/loop_wrap = true
 tracks/48/keys = {
-"times": PackedFloat32Array(68.98477, 72.066666),
+"times": PackedFloat32Array(68.98477, 72.833336),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Vector3(-0.9674023, 0.64696467, -0.110589035), Vector3(-0.96740216, -0.92383146, -0.11058913)]
+}
+tracks/49/type = "value"
+tracks/49/imported = false
+tracks/49/enabled = true
+tracks/49/path = NodePath("cameras/CameraAneis2:current")
+tracks/49/interp = 1
+tracks/49/loop_wrap = true
+tracks/49/keys = {
+"times": PackedFloat32Array(68.94291, 72.86667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_5mrt3"]
@@ -1576,11 +1600,11 @@ size = Vector3(300, 300, 300)
 transparency = 1
 cull_mode = 1
 depth_draw_mode = 1
-albedo_color = Color(0.99215686, 0, 0, 0.34901962)
+albedo_color = Color(0.99215686, 0, 0, 0.2627451)
 roughness = 0.0
 emission_enabled = true
 emission = Color(1, 0, 0, 1)
-emission_energy_multiplier = 0.5
+emission_energy_multiplier = 0.6
 
 [sub_resource type="BoxMesh" id="BoxMesh_tvjhf"]
 size = Vector3(300, 300, 300)
@@ -1672,7 +1696,8 @@ transform = Transform3D(0.9785808, 0.017515719, -0.205116, 0.17916118, 0.4182816
 current = true
 
 [node name="CameraAneis2" type="Camera3D" parent="cameras" unique_id=323652415]
-transform = Transform3D(0.8478192, -0.40523416, 0.34203452, -0.06262486, 0.563974, 0.82341444, -0.5265742, -0.7195265, 0.4527704, -10.813659, 318.0775, 5.794588)
+transform = Transform3D(0.84781915, -0.40523416, 0.34203452, -0.06262485, 0.563974, 0.82341444, -0.52657413, -0.7195265, 0.4527704, -10.813659, 318.0775, 5.794588)
+current = true
 
 [node name="Jp gajo" type="Node3D" parent="." unique_id=927502128]
 transform = Transform3D(-0.5, -7.54979e-08, 3.300118e-15, 0, -2.1855694e-08, -0.5, 7.54979e-08, -0.5, 2.1855694e-08, -0.93863803, 0.18304777, 11.068701)
@@ -2156,16 +2181,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5824337, 0.19015813, 4.007
 visible = false
 
 [node name="GeneralSkeleton" parent="Jp anjo/JP2/metarig" parent_id_path=PackedInt32Array(698658753, 1482431098) index="0" unique_id=1663792662]
-bones/0/position = Vector3(0.0013063537, 0.2716111, -0.026934449)
-bones/0/rotation = Quaternion(-0.0458512, -0.11589081, -0.005355574, 0.9921887)
-bones/2/rotation = Quaternion(0.0849059, 0.000110600915, 0.00025785976, 0.99638903)
-bones/3/rotation = Quaternion(-0.08490582, -0.00021282442, -0.00026333318, 0.9963889)
+bones/0/position = Vector3(0.00015084294, 0.27056912, -0.027229402)
+bones/0/rotation = Quaternion(-0.038504787, -0.115927264, -0.0044974866, 0.9925009)
+bones/2/rotation = Quaternion(0.08882101, 0.0001116299, 0.00025582808, 0.9960477)
+bones/3/rotation = Quaternion(-0.088820934, -0.00021493934, -0.0002617203, 0.9960476)
 bones/4/position = Vector3(-2.4320947e-08, 0.030464845, 0.004752765)
-bones/4/rotation = Quaternion(0.059008636, 0.095374234, 0.011401353, 0.9936256)
+bones/4/rotation = Quaternion(0.04453626, 0.09531968, 0.011840275, 0.99437946)
 bones/4/scale = Vector3(1.0000002, 1, 0.9999999)
-bones/5/rotation = Quaternion(0.49495763, 0.5240528, 0.5286962, -0.44818082)
-bones/6/rotation = Quaternion(-0.038713586, 0.821389, -0.5689696, 0.009745519)
-bones/7/rotation = Quaternion(0.16704357, -0.6710269, 0.16955963, 0.7021887)
+bones/5/rotation = Quaternion(0.5013552, 0.5217879, 0.53063786, -0.44136602)
+bones/6/rotation = Quaternion(-0.018499706, 0.8247357, -0.5651329, 0.009679792)
+bones/7/rotation = Quaternion(0.15717764, -0.6854142, 0.16639666, 0.6912415)
 bones/8/rotation = Quaternion(0.09913024, 0.70686626, 0.0629003, 0.69753635)
 bones/9/rotation = Quaternion(-0.123819165, 0.7195233, 0.2018354, 0.65285325)
 bones/10/rotation = Quaternion(0.62334186, 1.1175871e-08, -4.261732e-06, 0.7819494)
@@ -2182,9 +2207,9 @@ bones/22/rotation = Quaternion(0.6228982, -0.023505477, -4.5001498e-06, 0.781949
 bones/24/rotation = Quaternion(0.6630008, -0.044529784, 0.07369417, 0.7436506)
 bones/25/rotation = Quaternion(0.6203661, -0.06229401, 0.015573084, 0.7816796)
 bones/26/rotation = Quaternion(0.62192154, -0.04205184, -4.4703484e-06, 0.78194964)
-bones/28/rotation = Quaternion(0.54705036, -0.47282067, -0.47613847, -0.5004686)
-bones/29/rotation = Quaternion(0.08742329, 0.8243828, -0.55915886, -0.00957738)
-bones/30/rotation = Quaternion(0.29185882, 0.5438372, -0.20531757, 0.75954217)
+bones/28/rotation = Quaternion(0.5533329, -0.4713335, -0.4773351, -0.4937799)
+bones/29/rotation = Quaternion(0.070508644, 0.82155794, -0.56566536, -0.009688785)
+bones/30/rotation = Quaternion(0.28897506, 0.5536893, -0.20924334, 0.752422)
 bones/31/rotation = Quaternion(0.12024976, -0.69903094, -0.056890074, 0.702609)
 bones/32/rotation = Quaternion(-0.12381923, -0.7195234, -0.2018356, 0.6528533)
 bones/33/rotation = Quaternion(0.62334144, 1.825392e-07, 4.485249e-06, 0.7819497)
@@ -2202,25 +2227,25 @@ bones/45/rotation = Quaternion(0.6228987, 0.02350526, 4.1723247e-06, 0.7819493)
 bones/47/rotation = Quaternion(0.6630007, 0.044529956, -0.07369393, 0.7436508)
 bones/48/rotation = Quaternion(0.62036633, 0.06229363, -0.015572906, 0.7816794)
 bones/49/rotation = Quaternion(0.62192184, 0.04205143, 4.4703484e-06, 0.7819494)
-bones/51/rotation = Quaternion(-0.0008035294, 0.1346198, 0.98421526, -0.11487915)
-bones/52/rotation = Quaternion(0.018815313, 0.97858834, -0.17212817, 0.11127821)
+bones/51/rotation = Quaternion(-0.00083617837, 0.15131661, 0.9812294, -0.119547114)
+bones/52/rotation = Quaternion(0.020685745, 0.97536474, -0.1901165, 0.10996123)
 bones/53/position = Vector3(0.014104397, 0.15062766, 0.026279537)
-bones/53/rotation = Quaternion(-0.095387965, 0.721742, -0.6855326, 0.005888474)
+bones/53/rotation = Quaternion(-0.09710691, 0.7159891, -0.69128585, 0.0073374864)
 bones/53/scale = Vector3(1, 0.9999998, 1)
 bones/54/rotation = Quaternion(4.664862e-08, 1, 5.9604645e-08, 2.7766912e-08)
 bones/55/position = Vector3(-0.04320567, 0.0038873865, 0.002650404)
-bones/55/rotation = Quaternion(0.00089051615, -0.096751854, 0.9871316, 0.1273173)
+bones/55/rotation = Quaternion(0.00095124304, -0.07814649, 0.98762196, 0.13599744)
 bones/55/scale = Vector3(1.0000001, 1, 1)
 bones/56/position = Vector3(0.0068077496, 0.103363104, -0.003434873)
-bones/56/rotation = Quaternion(-0.04098497, 0.9266098, -0.11328353, -0.35620412)
+bones/56/rotation = Quaternion(-0.051759917, 0.92333615, -0.1421224, -0.35294843)
 bones/56/scale = Vector3(1, 1, 1.0000002)
 bones/57/position = Vector3(-0.014104409, 0.15062769, 0.026279513)
-bones/57/rotation = Quaternion(0.17168647, 0.6337366, -0.7542558, -6.056577e-05)
+bones/57/rotation = Quaternion(0.17043425, 0.6210593, -0.7650028, 0.0028941273)
 bones/57/scale = Vector3(1.0000001, 1, 1)
 bones/58/rotation = Quaternion(-6.703263e-08, 1, 8.940697e-08, 2.1454163e-09)
 
 [node name="head" parent="Jp anjo/JP2/metarig/GeneralSkeleton" index="0" unique_id=2097379203]
-transform = Transform3D(0.99902356, -0.017398031, -0.040617883, 0.016403377, 0.99956053, -0.024694353, 0.041029632, 0.024003968, 0.9988694, -0.00075315026, 0.52776855, -0.018415032)
+transform = Transform3D(0.99900454, -0.017730601, -0.040939078, 0.01732264, 0.9997969, -0.010298431, 0.041113377, 0.009579025, 0.9991084, -0.0029289213, 0.5265145, -0.014400093)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=2105400401]
 visible = false

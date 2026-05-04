@@ -49,3 +49,9 @@ func pause_cutscene_for_gameplay():
 func resume_cutscene():
 	print("Tutorial finished! Resuming animation...")
 	anim_player.play()
+
+func end_second_cutscene():
+	unpause_entire_game() 
+	
+	if objective_manager:
+		objective_manager.start_advanced_rings(7) # Starts the new objective with 7 rings!

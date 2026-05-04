@@ -1,59 +1,63 @@
 extends CanvasLayer
 
 @onready var label = $Label
+
 signal tutorial_finished
 signal rings_finished
+
 var player: Node3D
 var current_objective: int = 0 
 @export var total_rings: int = 9
 var rings_caught: int = 0
-var active_fade_tween: Tween
 @export var target_y_level: float = 40.0 
+
+var active_fade_tween: Tween
+
+# --- NEW TRICK VARIABLES ---
+var pressed_q: bool = false
+var pressed_e: bool = false
 
 func _ready() -> void:
 	player = get_tree().current_scene.find_child("mangas3p", true, false)
-	
 	if player == null:
 		print("ERROR: Objective UI couldn't find the player!")
-		
-	# Setup the very first text prompt
 	update_objective_text()
 
 func _process(_delta: float) -> void:
-	if player == null: return # Stop if the player doesn't exist
+	if player == null: return 
 	
-	# The match statement checks what step we are on and only runs that code!
 	match current_objective:
-		
-		0: # STEP 0: Wait for A
-			if Input.is_physical_key_pressed(KEY_A):
-				advance_objective()
+		0: 
+			if Input.is_physical_key_pressed(KEY_A): advance_objective()
+		1: 
+			if Input.is_physical_key_pressed(KEY_D): advance_objective()
+		2: 
+			if Input.is_physical_key_pressed(KEY_W): advance_objective()
+		3: 
+			if Input.is_physical_key_pressed(KEY_S): advance_objective()
+		4: 
+			if player.global_position.y <= target_y_level: finish_all_objectives()
+		6: # --- NEW ADVANCED PHASE CHECK ---
+			var changed = false
+			if not pressed_q and Input.is_physical_key_pressed(KEY_Q):
+				pressed_q = true
+				changed = true
+			if not pressed_e and Input.is_physical_key_pressed(KEY_E):
+				pressed_e = true
+				changed = true
 				
-		1: # STEP 1: Wait for D
-			if Input.is_physical_key_pressed(KEY_D):
-				advance_objective()
-				
-		2: # STEP 2: Wait for W
-			if Input.is_physical_key_pressed(KEY_W):
-				advance_objective()
-				
-		3: # STEP 3: Wait for S
-			if Input.is_physical_key_pressed(KEY_S):
-				advance_objective()
-				
-		4: # STEP 4: Fly down!
-			if player.global_position.y <= target_y_level:
-				finish_all_objectives()
-
+			# Only update text and check completion if a key was JUST pressed
+			if changed:
+				update_ring_text()
+				check_advanced_completion()
 
 # --- HELPER FUNCTIONS ---
 
 func advance_objective() -> void:
-	current_objective += 1 # Move to the next step
+	current_objective += 1 
 	update_objective_text()
 
 func update_objective_text() -> void:
-	# Update the text based on whatever the current step is
 	match current_objective:
 		0: label.text = "Objective: Hold/press A to go left!"
 		1: label.text = "Objective: Hold/press D to go right!"
@@ -61,7 +65,6 @@ func update_objective_text() -> void:
 		3: label.text = "Objective: Hold/press S to go back/up!"
 		4: label.text = "Objective: Fly down to the surface!"
 	
-	# Play the pop animation every time the text updates
 	var pop_tween = create_tween()
 	pop_tween.tween_property(label, "scale", Vector2(1.2, 1.2), 0.1)
 	pop_tween.tween_property(label, "scale", Vector2(1.0, 1.0), 0.1)
@@ -69,29 +72,23 @@ func update_objective_text() -> void:
 func finish_all_objectives() -> void:
 	current_objective = 999 
 	label.text = "Objectives Complete!"
-	
 	tutorial_finished.emit() 
 	
-	# Wait 3 seconds
 	await get_tree().create_timer(3.0).timeout
-	
-	# THE FIX: Save the tween to our variable so we can track it!
 	if current_objective == 999:
 		active_fade_tween = create_tween()
 		active_fade_tween.tween_property(label, "modulate:a", 0.0, 1.0)
+
+# --- RING PHASE 1 ---
 
 func start_ring_objective() -> void:
 	current_objective = 5 
 	rings_caught = 0
 	
-	# NEW: If that old fade-out tween is still alive, KILL IT!
-	if active_fade_tween:
-		active_fade_tween.kill()
-	
-	# Now we can safely force it to be visible without a tug-of-war
+	if active_fade_tween: active_fade_tween.kill()
+		
 	var force_visible_tween = create_tween()
 	force_visible_tween.tween_property(label, "modulate:a", 1.0, 0.01)
-	
 	update_ring_text()
 
 func ring_collected() -> void:
@@ -101,11 +98,21 @@ func ring_collected() -> void:
 		
 		if rings_caught >= total_rings:
 			finish_ring_objective()
+			
+	elif current_objective == 6: # --- ADVANCED PHASE ---
+		rings_caught += 1
+		update_ring_text()
+		check_advanced_completion()
 
 func update_ring_text() -> void:
-	label.text = "Objective: Fly through the rings! (" + str(rings_caught) + "/" + str(total_rings) + ")"
+	if current_objective == 5:
+		label.text = "Objective: Fly through the rings! (" + str(rings_caught) + "/" + str(total_rings) + ")"
+	elif current_objective == 6:
+		# Changes the text from an empty box to an 'X' when pressed!
+		var q_status = "[X]" if pressed_q else "[ ]"
+		var e_status = "[X]" if pressed_e else "[ ]"
+		label.text = "Objective: Rings (" + str(rings_caught) + "/" + str(total_rings) + ") | Tricks: Q " + q_status + " E " + e_status
 	
-	# Play the visual pop animation
 	var pop_tween = create_tween()
 	pop_tween.tween_property(label, "scale", Vector2(1.2, 1.2), 0.1)
 	pop_tween.tween_property(label, "scale", Vector2(1.0, 1.0), 0.1)
@@ -114,9 +121,43 @@ func finish_ring_objective() -> void:
 	current_objective = 999 
 	label.text = "All rings collected!"
 	
+	rings_finished.emit() 
+	
 	await get_tree().create_timer(3.0).timeout
-	rings_finished.emit()
-	# I went ahead and added the safety check here too, just in case you add more objectives later!
 	if current_objective == 999:
-		var fade_tween = create_tween()
-		fade_tween.tween_property(label, "modulate:a", 0.0, 1.0)
+		active_fade_tween = create_tween()
+		active_fade_tween.tween_property(label, "modulate:a", 0.0, 1.0)
+
+# --- RING PHASE 2 (ADVANCED) ---
+
+func start_advanced_rings(new_total: int) -> void:
+	current_objective = 6 
+	rings_caught = 0
+	total_rings = new_total 
+	
+	# Reset the keys just in case they pressed them earlier
+	pressed_q = false
+	pressed_e = false
+	
+	if active_fade_tween: active_fade_tween.kill()
+		
+	var force_visible_tween = create_tween()
+	force_visible_tween.tween_property(label, "modulate:a", 1.0, 0.01)
+	update_ring_text()
+
+# This checks if BOTH the rings are done AND the keys are pressed
+func check_advanced_completion() -> void:
+	if rings_caught >= total_rings and pressed_q and pressed_e:
+		finish_final_tutorial()
+
+func finish_final_tutorial() -> void:
+	current_objective = 999 
+	label.text = "Tutorial 100% Complete! You are ready."
+	
+	# Emit a signal here if you need to wake up the timeline for a final 3rd cutscene!
+	# rings_finished.emit() 
+	
+	await get_tree().create_timer(3.0).timeout
+	if current_objective == 999:
+		active_fade_tween = create_tween()
+		active_fade_tween.tween_property(label, "modulate:a", 0.0, 1.0)
