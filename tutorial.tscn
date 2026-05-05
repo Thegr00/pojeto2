@@ -1670,7 +1670,7 @@ transform = Transform3D(0.88142717, 0, -0.47232002, 0, 1, 0, 0.47232002, 0, 0.88
 
 [node name="Camera1" type="Camera3D" parent="cameras" unique_id=432048617]
 process_priority = 10
-transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0.14758372, -0.6693883, -0.8725357)
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0.14758362, 0.5397513, -0.8725357)
 current = true
 
 [node name="Camera2" type="Camera3D" parent="cameras" unique_id=1901217518]
