@@ -1,13 +1,13 @@
 [gd_scene format=3 uid="uid://cjr74ks3pchc6"]
 
 [ext_resource type="Script" uid="uid://bfvtspsp14jm3" path="res://loading_screen.gd" id="1_htrc2"]
-[ext_resource type="FontFile" uid="uid://dr67jb4p840gj" path="res://SuperMario256.ttf" id="2_74xf4"]
+[ext_resource type="FontFile" uid="uid://b8n51fqfnfkan" path="res://Montserrat-ExtraBoldItalic.ttf" id="2_pa1l2"]
 [ext_resource type="Texture2D" uid="uid://cq53nuyoqbdpl" path="res://pentagrama.png" id="2_weff3"]
 [ext_resource type="Texture2D" uid="uid://dire2ecen4qpj" path="res://cruz.png" id="3_weff3"]
 [ext_resource type="Texture2D" uid="uid://7eg3f8tfjjf8" path="res://balança.png" id="5_74xf4"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_weff3"]
-font = ExtResource("2_74xf4")
+font = ExtResource("2_pa1l2")
 font_size = 55
 font_color = Color(0.89492244, 0.89492244, 0.8949224, 1)
 shadow_size = 10
@@ -29,6 +29,7 @@ offset_left = 39.0
 offset_top = 39.0
 offset_right = 625.0
 offset_bottom = 182.0
+theme_override_fonts/font = ExtResource("2_pa1l2")
 text = "Loading terrain..."
 label_settings = SubResource("LabelSettings_weff3")
 vertical_alignment = 2

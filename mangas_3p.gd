@@ -167,9 +167,9 @@ func calculate_flight_speed(delta):
 func update_camera_soft_follow(delta: float):
 	var back_dir = pivot.global_transform.basis.z
 	var up_dir = pivot.global_transform.basis.y
-	var target_pos = global_position + (back_dir * 1.0) + (up_dir * 1.0)
+	var target_pos = global_position + (back_dir * 1.0) + (up_dir * 1.5)
 	
-	spring_arm.global_position = spring_arm.global_position.lerp(target_pos, delta * 15.0)
+	spring_arm.global_position = spring_arm.global_position.lerp(target_pos, delta * 20.0)
 	
 	var target_quat = pivot.global_transform.basis.get_rotation_quaternion()
 	var current_quat = spring_arm.global_transform.basis.get_rotation_quaternion()

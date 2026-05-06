@@ -32,9 +32,9 @@ func _process(_delta: float) -> void:
 		1: 
 			if Input.is_physical_key_pressed(KEY_D): advance_objective()
 		2: 
-			if Input.is_physical_key_pressed(KEY_W): advance_objective()
-		3: 
 			if Input.is_physical_key_pressed(KEY_S): advance_objective()
+		3: 
+			if Input.is_physical_key_pressed(KEY_W): advance_objective()
 		4: 
 			if player.global_position.y <= target_y_level: finish_all_objectives()
 		6: # --- NEW ADVANCED PHASE CHECK ---
@@ -61,8 +61,8 @@ func update_objective_text() -> void:
 	match current_objective:
 		0: label.text = "Objective: Hold/press A to go left!"
 		1: label.text = "Objective: Hold/press D to go right!"
-		2: label.text = "Objective: Hold/press W to go forward/down!"
-		3: label.text = "Objective: Hold/press S to go back/up!"
+		2: label.text = "Objective: Hold/press S to go back/up!"
+		3: label.text = "Objective: Hold/press W to go forward/down!"
 		4: label.text = "Objective: Fly down to the surface!"
 	
 	var pop_tween = create_tween()

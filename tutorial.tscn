@@ -10,10 +10,13 @@
 [ext_resource type="PackedScene" uid="uid://cng4lppnjdc3l" path="res://humano/jp_anjo.tscn" id="9_7vrqn"]
 [ext_resource type="Animation" uid="uid://bmpn0uq7j112v" path="res://humano/animaçoes/jump_land.res" id="9_tvjhf"]
 [ext_resource type="Animation" uid="uid://c46q5ljlf35fc" path="res://humano/animaçoes/tpose.res" id="10_vmw6g"]
+[ext_resource type="FontFile" uid="uid://b8n51fqfnfkan" path="res://Montserrat-ExtraBoldItalic.ttf" id="11_k08xv"]
 [ext_resource type="Script" uid="uid://bnmgd6f6mc82m" path="res://world_border.gd" id="11_tvjhf"]
 [ext_resource type="PackedScene" uid="uid://ci1lpreneiqdd" path="res://StartGate/StartGate.tscn" id="12_vmw6g"]
 [ext_resource type="Script" uid="uid://sefdnpm0iqqm" path="res://objective_ui.gd" id="13_4hjyh"]
 [ext_resource type="PackedScene" uid="uid://dxp5k4bo310bu" path="res://anel.tscn" id="14_bsk3x"]
+[ext_resource type="PackedScene" uid="uid://bxo6v4l6gjle2" path="res://arrow.tscn" id="15_dl7dh"]
+[ext_resource type="FontFile" uid="uid://cny2k8vvkc811" path="res://Montserrat-Bold.ttf" id="16_r4o0u"]
 
 [sub_resource type="Animation" id="Animation_0cr88"]
 length = 0.001
@@ -425,6 +428,174 @@ tracks/33/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/34/type = "value"
+tracks/34/imported = false
+tracks/34/enabled = true
+tracks/34/path = NodePath("Arrows/Arrow:visible")
+tracks/34/interp = 1
+tracks/34/loop_wrap = true
+tracks/34/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/35/type = "value"
+tracks/35/imported = false
+tracks/35/enabled = true
+tracks/35/path = NodePath("Arrows/Arrow2:visible")
+tracks/35/interp = 1
+tracks/35/loop_wrap = true
+tracks/35/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/36/type = "value"
+tracks/36/imported = false
+tracks/36/enabled = true
+tracks/36/path = NodePath("Arrows/Arrow3:visible")
+tracks/36/interp = 1
+tracks/36/loop_wrap = true
+tracks/36/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/37/type = "value"
+tracks/37/imported = false
+tracks/37/enabled = true
+tracks/37/path = NodePath("Arrows/Arrow4:visible")
+tracks/37/interp = 1
+tracks/37/loop_wrap = true
+tracks/37/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/38/type = "value"
+tracks/38/imported = false
+tracks/38/enabled = true
+tracks/38/path = NodePath("Arrows/Arrow5:visible")
+tracks/38/interp = 1
+tracks/38/loop_wrap = true
+tracks/38/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/39/type = "value"
+tracks/39/imported = false
+tracks/39/enabled = true
+tracks/39/path = NodePath("Arrows/Arrow6:visible")
+tracks/39/interp = 1
+tracks/39/loop_wrap = true
+tracks/39/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/40/type = "value"
+tracks/40/imported = false
+tracks/40/enabled = true
+tracks/40/path = NodePath("Arrows/Arrow7:visible")
+tracks/40/interp = 1
+tracks/40/loop_wrap = true
+tracks/40/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/41/type = "value"
+tracks/41/imported = false
+tracks/41/enabled = true
+tracks/41/path = NodePath("Arrows/Arrow8:visible")
+tracks/41/interp = 1
+tracks/41/loop_wrap = true
+tracks/41/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/42/type = "value"
+tracks/42/imported = false
+tracks/42/enabled = true
+tracks/42/path = NodePath("Arrows/Arrow9:visible")
+tracks/42/interp = 1
+tracks/42/loop_wrap = true
+tracks/42/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/43/type = "value"
+tracks/43/imported = false
+tracks/43/enabled = true
+tracks/43/path = NodePath("Arrows/Arrow10:visible")
+tracks/43/interp = 1
+tracks/43/loop_wrap = true
+tracks/43/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/44/type = "value"
+tracks/44/imported = false
+tracks/44/enabled = true
+tracks/44/path = NodePath("Arrows/Arrow11:visible")
+tracks/44/interp = 1
+tracks/44/loop_wrap = true
+tracks/44/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/45/type = "value"
+tracks/45/imported = false
+tracks/45/enabled = true
+tracks/45/path = NodePath("Arrows/Arrow12:visible")
+tracks/45/interp = 1
+tracks/45/loop_wrap = true
+tracks/45/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/46/type = "value"
+tracks/46/imported = false
+tracks/46/enabled = true
+tracks/46/path = NodePath("Label3D:visible")
+tracks/46/interp = 1
+tracks/46/loop_wrap = true
+tracks/46/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/47/type = "value"
+tracks/47/imported = false
+tracks/47/enabled = true
+tracks/47/path = NodePath("Label3D2:visible")
+tracks/47/interp = 1
+tracks/47/loop_wrap = true
+tracks/47/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 
 [sub_resource type="Animation" id="Animation_ehuit"]
 resource_name = "intro"
@@ -775,10 +946,10 @@ tracks/28/path = NodePath("CanvasLayer/Panel/RichTextLabel:text")
 tracks/28/interp = 1
 tracks/28/loop_wrap = true
 tracks/28/keys = {
-"times": PackedFloat32Array(19.066668, 21.233334, 24.066668, 26.1, 27.266666, 28.633333, 29.433332, 32.833332, 33.9, 36.766666, 42.566666, 47.1, 50.9, 55.533333, 59.333332, 62.3, 65.36667, 70.03333, 74.833336),
+"times": PackedFloat32Array(19.066668, 21.233334, 24.066668, 26.1, 27.266666, 28.633333, 29.433332, 32.833332, 33.9, 36.766666, 42.6, 47.1, 50.9, 55.533333, 59.333332, 62.3, 65.36667, 70.03333, 74.833336),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": ["Much more peaceful don't you think?", "Well yes, apart from the landing... ", "Where even are we?", "Spoilers :/", "What the hell is a spoiler?", "Forget it.", "What matters is, we have clear enough space for you to learn your basics, so let's get you up", "What do you mean let's get you u-", "NONONONON-", "Well now that your are in the air, try to get a feel for your new wings by looking around (mouse) or moving your body (wasd).", "Also I have set up a barrier so don't worry about crashing.  ", "Now that you got a feel for the controls, let's add a bit of a challenge.", "See those flying ring-like things? Your job is to go through all of them. ", "And don't worry they are not solid so you won't hurt yourself.", "Good Luck :)", "Not bad for a mortal! Especialy a french one...", "Anyway there's one final lesson before you are ready for whatever challenge may come your way", "If you press the \"e\" and or \"q\" keys you may find you can do some \"tricks\"", "Try doing some on your way down after those rings!"]
+"values": ["Much more peaceful don't you think?", "Well yes, apart from the landing... ", "Where even are we?", "Spoilers :/", "What the hell is a spoiler?", "Forget it.", "What matters is, we have clear enough space for you to learn your basics, so let's get you up", "What do you mean let's get you u-", "NONONONON-", "Well now that your are in the air, try to get a feel for your new wings by looking around (mouse) or moving your body (wasd).", "Also I have set up a barrier so don't worry about crashing.  ", "Now that you got a feel for the controls, let's add a bit of a challenge.", "See those flying ring-like things? Your job is to go through all of them. ", "And don't worry they are not solid so you won't hurt yourself.", "Good Luck :)", "Not bad for a mortal! Especialy a french one...", "Anyway there's one final lesson before you are ready for whatever challenge may come your way", "If you press the \"e\" and or \"q\" keys you may find you can do some \"tricks\"", "Try doing some on your way down while passing through those rings!"]
 }
 tracks/29/type = "method"
 tracks/29/imported = false
@@ -1116,10 +1287,178 @@ tracks/52/path = NodePath("cameras/CameraPos:current")
 tracks/52/interp = 1
 tracks/52/loop_wrap = true
 tracks/52/keys = {
-"times": PackedFloat32Array(56.6, 57.066666, 73.81535, 79.03363),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
+"times": PackedFloat32Array(56.633335, 73.81535, 79.03363),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
-"values": [true, false, true, true]
+"values": [true, true, true]
+}
+tracks/53/type = "value"
+tracks/53/imported = false
+tracks/53/enabled = true
+tracks/53/path = NodePath("Arrows/Arrow:visible")
+tracks/53/interp = 1
+tracks/53/loop_wrap = true
+tracks/53/keys = {
+"times": PackedFloat32Array(0, 46.366665, 47.166668),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+tracks/54/type = "value"
+tracks/54/imported = false
+tracks/54/enabled = true
+tracks/54/path = NodePath("Arrows/Arrow2:visible")
+tracks/54/interp = 1
+tracks/54/loop_wrap = true
+tracks/54/keys = {
+"times": PackedFloat32Array(-0.03333333, 46.366665, 47.166668),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+tracks/55/type = "value"
+tracks/55/imported = false
+tracks/55/enabled = true
+tracks/55/path = NodePath("Arrows/Arrow3:visible")
+tracks/55/interp = 1
+tracks/55/loop_wrap = true
+tracks/55/keys = {
+"times": PackedFloat32Array(0, 49.366665, 62.566666),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+tracks/56/type = "value"
+tracks/56/imported = false
+tracks/56/enabled = true
+tracks/56/path = NodePath("Arrows/Arrow4:visible")
+tracks/56/interp = 1
+tracks/56/loop_wrap = true
+tracks/56/keys = {
+"times": PackedFloat32Array(0, 49.366665, 62.533333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+tracks/57/type = "value"
+tracks/57/imported = false
+tracks/57/enabled = true
+tracks/57/path = NodePath("Arrows/Arrow5:visible")
+tracks/57/interp = 1
+tracks/57/loop_wrap = true
+tracks/57/keys = {
+"times": PackedFloat32Array(0, 49.373627, 62.566666),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+tracks/58/type = "value"
+tracks/58/imported = false
+tracks/58/enabled = true
+tracks/58/path = NodePath("Arrows/Arrow6:visible")
+tracks/58/interp = 1
+tracks/58/loop_wrap = true
+tracks/58/keys = {
+"times": PackedFloat32Array(0, 49.373627, 62.533333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+tracks/59/type = "value"
+tracks/59/imported = false
+tracks/59/enabled = true
+tracks/59/path = NodePath("Arrows/Arrow7:visible")
+tracks/59/interp = 1
+tracks/59/loop_wrap = true
+tracks/59/keys = {
+"times": PackedFloat32Array(0, 68.923676),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/60/type = "value"
+tracks/60/imported = false
+tracks/60/enabled = true
+tracks/60/path = NodePath("Arrows/Arrow8:visible")
+tracks/60/interp = 1
+tracks/60/loop_wrap = true
+tracks/60/keys = {
+"times": PackedFloat32Array(0, 68.923676),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/61/type = "value"
+tracks/61/imported = false
+tracks/61/enabled = true
+tracks/61/path = NodePath("Arrows/Arrow9:visible")
+tracks/61/interp = 1
+tracks/61/loop_wrap = true
+tracks/61/keys = {
+"times": PackedFloat32Array(0, 68.923676),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/62/type = "value"
+tracks/62/imported = false
+tracks/62/enabled = true
+tracks/62/path = NodePath("Arrows/Arrow10:visible")
+tracks/62/interp = 1
+tracks/62/loop_wrap = true
+tracks/62/keys = {
+"times": PackedFloat32Array(0, 68.923676),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/63/type = "value"
+tracks/63/imported = false
+tracks/63/enabled = true
+tracks/63/path = NodePath("Arrows/Arrow11:visible")
+tracks/63/interp = 1
+tracks/63/loop_wrap = true
+tracks/63/keys = {
+"times": PackedFloat32Array(0, 68.923676),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/64/type = "value"
+tracks/64/imported = false
+tracks/64/enabled = true
+tracks/64/path = NodePath("Arrows/Arrow12:visible")
+tracks/64/interp = 1
+tracks/64/loop_wrap = true
+tracks/64/keys = {
+"times": PackedFloat32Array(0, 68.933334),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/65/type = "value"
+tracks/65/imported = false
+tracks/65/enabled = true
+tracks/65/path = NodePath("Label3D:visible")
+tracks/65/interp = 1
+tracks/65/loop_wrap = true
+tracks/65/keys = {
+"times": PackedFloat32Array(0, 68.933334),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/66/type = "value"
+tracks/66/imported = false
+tracks/66/enabled = true
+tracks/66/path = NodePath("Label3D2:visible")
+tracks/66/interp = 1
+tracks/66/loop_wrap = true
+tracks/66/keys = {
+"times": PackedFloat32Array(0, 68.95578),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_5mrt3"]
@@ -1675,6 +2014,9 @@ _data = {
 &"tpose": ExtResource("10_vmw6g")
 }
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k08xv"]
+bg_color = Color(0.22812498, 0.22812498, 0.22812498, 1)
+
 [sub_resource type="CanvasTexture" id="CanvasTexture_bhfnd"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_bhfnd"]
@@ -1772,11 +2114,11 @@ current = true
 
 [node name="CameraCuts" type="Camera3D" parent="cameras" unique_id=897547639]
 process_priority = 10
-transform = Transform3D(0.3367008, 0, 0.94161147, 0, 0.9999999, 0, -0.9416117, 0, 0.3367007, 1.7029598, -1.7165513, -3.552724)
+transform = Transform3D(0.3367008, 0, 0.94161147, 0, 0.9999998, 0, -0.9416117, 0, 0.3367007, 1.7029598, -1.7165513, -3.552724)
 current = true
 
 [node name="CameraAneis" type="Camera3D" parent="cameras" unique_id=257889913]
-transform = Transform3D(0.9785808, 0.017515719, -0.205116, 0.17916118, 0.41828164, 0.8904727, 0.101393476, -0.9081485, 0.40618426, 0, 317.87015, 0)
+transform = Transform3D(0.9785807, 0.017515719, -0.205116, 0.17916116, 0.41828164, 0.8904727, 0.10139347, -0.9081485, 0.40618426, 0, 317.87015, 0)
 current = true
 
 [node name="CameraAneis2" type="Camera3D" parent="cameras" unique_id=323652415]
@@ -1784,7 +2126,7 @@ transform = Transform3D(0.84781915, -0.40523416, 0.34203452, -0.06262485, 0.5639
 current = true
 
 [node name="CameraPos" type="Camera3D" parent="cameras" unique_id=1048843464]
-transform = Transform3D(0.4990486, 0.22813018, -0.83600646, -0.008197424, 0.9659259, 0.25868922, 0.866535, -0.12224543, 0.48391402, -57.119064, 114.58217, 30.60773)
+transform = Transform3D(0.4990485, 0.22813018, -0.8360064, -0.008197422, 0.9659259, 0.2586892, 0.8665349, -0.12224543, 0.48391396, -57.119064, 114.58217, 30.60773)
 current = true
 
 [node name="Jp gajo" type="Node3D" parent="." unique_id=927502128]
@@ -1836,7 +2178,7 @@ bones/5/parent = 4
 bones/5/rest = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.17280002, -0.005600037)
 bones/5/enabled = true
 bones/5/position = Vector3(-0.024192326, 0.13295484, -0.07617181)
-bones/5/rotation = Quaternion(-0.07445411, 0.03025316, 0.0004645198, 0.9967653)
+bones/5/rotation = Quaternion(-0.28436142, 0.050575566, 0.08605547, 0.95350677)
 bones/5/scale = Vector3(0.9999998, 0.9999997, 0.9999999)
 bones/6/name = "Head"
 bones/6/parent = 5
@@ -2269,16 +2611,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5824337, 0.19015813, 4.007
 visible = false
 
 [node name="GeneralSkeleton" parent="Jp anjo/JP2/metarig" parent_id_path=PackedInt32Array(698658753, 1482431098) index="0" unique_id=1663792662]
-bones/0/position = Vector3(0.0015312933, 0.27243844, -0.02683067)
-bones/0/rotation = Quaternion(-0.0468809, -0.11588517, -0.0054758484, 0.99214053)
-bones/2/rotation = Quaternion(0.08638518, 0.00011099616, 0.00025712827, 0.99626184)
-bones/3/rotation = Quaternion(-0.08638521, -0.0002136272, -0.00026273378, 0.9962618)
+bones/0/position = Vector3(-0.00063513545, 0.2725277, -0.027067672)
+bones/0/rotation = Quaternion(-0.042438462, -0.11590852, -0.004956955, 0.99234056)
+bones/2/rotation = Quaternion(0.09727316, 0.00011389191, 0.00025128896, 0.9952578)
+bones/3/rotation = Quaternion(-0.097273156, -0.0002195386, -0.00025823692, 0.9952577)
 bones/4/position = Vector3(-2.4320947e-08, 0.030464845, 0.004752765)
-bones/4/rotation = Quaternion(0.07016016, 0.09554722, 0.0098405825, 0.9929006)
+bones/4/rotation = Quaternion(0.077200346, 0.09578968, 0.007072278, 0.99237823)
 bones/4/scale = Vector3(1.0000002, 1, 0.9999999)
-bones/5/rotation = Quaternion(0.48995242, 0.5257783, 0.52715194, -0.45344776)
-bones/6/rotation = Quaternion(-0.05445625, 0.8188841, -0.571286, 0.009785146)
-bones/7/rotation = Quaternion(0.17927441, -0.6584933, 0.17587437, 0.7094474)
+bones/5/rotation = Quaternion(0.48965445, 0.5258796, 0.5270593, -0.4537595)
+bones/6/rotation = Quaternion(-0.055393163, 0.8187378, -0.57140553, 0.009787199)
+bones/7/rotation = Quaternion(0.19196202, -0.6546705, 0.1873148, 0.7067321)
 bones/8/rotation = Quaternion(0.09913024, 0.70686626, 0.0629003, 0.69753635)
 bones/9/rotation = Quaternion(-0.123819165, 0.7195233, 0.2018354, 0.65285325)
 bones/10/rotation = Quaternion(0.62334186, 1.1175871e-08, -4.261732e-06, 0.7819494)
@@ -2295,9 +2637,9 @@ bones/22/rotation = Quaternion(0.6228982, -0.023505477, -4.5001498e-06, 0.781949
 bones/24/rotation = Quaternion(0.6630008, -0.044529784, 0.07369417, 0.7436506)
 bones/25/rotation = Quaternion(0.6203661, -0.06229401, 0.015573084, 0.7816796)
 bones/26/rotation = Quaternion(0.62192154, -0.04205184, -4.4703484e-06, 0.78194964)
-bones/28/rotation = Quaternion(0.54214597, -0.4739452, -0.47518182, -0.5056244)
-bones/29/rotation = Quaternion(0.09300617, 0.82532275, -0.5568674, -0.009538039)
-bones/30/rotation = Quaternion(0.29257214, 0.54135853, -0.2043302, 0.76130277)
+bones/28/rotation = Quaternion(0.54185367, -0.4740112, -0.47512418, -0.50592995)
+bones/29/rotation = Quaternion(0.080911964, 0.82329184, -0.56173956, -0.009621589)
+bones/30/rotation = Quaternion(0.29074073, 0.54768866, -0.20685199, 0.75678223)
 bones/31/rotation = Quaternion(0.12024976, -0.69903094, -0.056890074, 0.702609)
 bones/32/rotation = Quaternion(-0.12381923, -0.7195234, -0.2018356, 0.6528533)
 bones/33/rotation = Quaternion(0.62334144, 1.825392e-07, 4.485249e-06, 0.7819497)
@@ -2315,25 +2657,25 @@ bones/45/rotation = Quaternion(0.6228987, 0.02350526, 4.1723247e-06, 0.7819493)
 bones/47/rotation = Quaternion(0.6630007, 0.044529956, -0.07369393, 0.7436508)
 bones/48/rotation = Quaternion(0.62036633, 0.06229363, -0.015572906, 0.7816794)
 bones/49/rotation = Quaternion(0.62192184, 0.04205143, 4.4703484e-06, 0.7819494)
-bones/51/rotation = Quaternion(-0.00078588416, 0.12386925, 0.98591685, -0.11235586)
-bones/52/rotation = Quaternion(0.017113551, 0.98117054, -0.15621991, 0.11228086)
+bones/51/rotation = Quaternion(-0.00081058475, 0.12623638, 0.9852073, -0.11588908)
+bones/52/rotation = Quaternion(0.016487526, 0.9820119, -0.1509527, 0.1122237)
 bones/53/position = Vector3(0.014104397, 0.15062766, 0.026279537)
-bones/53/rotation = Quaternion(-0.09492832, 0.7268249, -0.68020463, 0.005996307)
+bones/53/rotation = Quaternion(-0.097830616, 0.7284225, -0.6780412, 0.009487426)
 bones/53/scale = Vector3(1, 0.9999998, 1)
 bones/54/rotation = Quaternion(4.664862e-08, 1, 5.9604645e-08, 2.7766912e-08)
 bones/55/position = Vector3(-0.04320567, 0.0038873865, 0.002650404)
-bones/55/rotation = Quaternion(0.0008325489, -0.10817163, 0.98698056, 0.11902791)
+bones/55/rotation = Quaternion(0.00082320004, -0.10005292, 0.98799694, 0.11768947)
 bones/55/scale = Vector3(1.0000001, 1, 1)
 bones/56/position = Vector3(0.0068077496, 0.103363104, -0.003434873)
-bones/56/rotation = Quaternion(-0.03247979, 0.9284063, -0.09064745, -0.35887307)
+bones/56/rotation = Quaternion(-0.035511337, 0.9276524, -0.09853417, -0.3584563)
 bones/56/scale = Vector3(1, 1, 1.0000002)
 bones/57/position = Vector3(-0.014104409, 0.15062769, 0.026279513)
-bones/57/rotation = Quaternion(0.17176309, 0.64287585, -0.7464614, -0.0019054352)
+bones/57/rotation = Quaternion(0.16932961, 0.63764465, -0.7514897, 0.0004525933)
 bones/57/scale = Vector3(1.0000001, 1, 1)
 bones/58/rotation = Quaternion(-6.703263e-08, 1, 8.940697e-08, 2.1454163e-09)
 
 [node name="head" parent="Jp anjo/JP2/metarig/GeneralSkeleton" index="0" unique_id=2097379203]
-transform = Transform3D(0.9990495, -0.016853176, -0.040205702, 0.015031485, 0.99886537, -0.04518898, 0.040921643, 0.0445417, 0.9981689, -0.00046108174, 0.5285977, -0.018593948)
+transform = Transform3D(0.9990902, -0.015320506, -0.03980556, 0.012566991, 0.99757016, -0.06852614, 0.040758684, 0.06796357, 0.99685484, -0.003563355, 0.5284462, -0.01487362)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=2105400401]
 visible = false
@@ -2346,6 +2688,7 @@ anchor_bottom = 1.0
 offset_top = -133.0
 grow_horizontal = 2
 grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_k08xv")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer/Panel" unique_id=493072434]
 layout_mode = 0
@@ -2353,6 +2696,7 @@ offset_left = 11.0
 offset_top = 19.0
 offset_right = 1150.0
 offset_bottom = 89.0
+theme_override_fonts/normal_font = ExtResource("11_k08xv")
 theme_override_font_sizes/normal_font_size = 23
 text = "Much more peaceful no?"
 visible_characters = 0
@@ -2365,6 +2709,7 @@ offset_left = 11.0
 offset_top = 91.0
 offset_right = 1150.0
 offset_bottom = 161.0
+theme_override_fonts/normal_font = ExtResource("11_k08xv")
 theme_override_font_sizes/normal_font_size = 18
 text = "(Press spacebar to continue)"
 
@@ -2377,11 +2722,11 @@ texture = SubResource("CanvasTexture_bhfnd")
 
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer" unique_id=1111236146]
 offset_right = 1156.0
-offset_bottom = 513.0
+offset_bottom = 514.0
 color = Color(0.37254903, 0.37254903, 0.37254903, 0.28235295)
 
 [node name="RespawnPoint" type="Marker3D" parent="." unique_id=289066146]
-transform = Transform3D(0.25881907, 0, 0.9659258, 0, 1, 0, -0.9659258, 0, 0.25881907, -89.035, 270.876, 0)
+transform = Transform3D(0.25881907, 0, 0.9659258, 0, 1, 0, -0.9659258, 0, 0.25881907, 45.9142, 270.876, 0)
 
 [node name="WorldBorder" type="Area3D" parent="." unique_id=1235891125 node_paths=PackedStringArray("respawn_point")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 191.96094, 0)
@@ -2451,22 +2796,74 @@ transform = Transform3D(0.066987276, 0.9659258, -0.24999996, 0.9659258, -6.45239
 transform = Transform3D(2.2454773e-22, 0.9999998, 1.1920929e-07, 0.9999999, -3.5527137e-15, -2.0831671e-22, 2.0285895e-22, 1.1920929e-07, -0.9999998, -103.40944, 342.6603, 37.947823)
 
 [node name="Anel2" parent="Aneis 2" unique_id=144400493 instance=ExtResource("14_bsk3x")]
-transform = Transform3D(-3.856704e-09, 0.9659257, 0.2588191, 0.9979289, 0.01664811, -0.062131554, -0.06432329, 0.2582831, -0.9639253, -103.40944, 327.40778, -25.51258)
+transform = Transform3D(-0.016648099, 0.99986124, 0.00051783025, 0.99792904, 0.016648114, -0.06213156, -0.062131535, -0.00051765144, -0.9980678, -103.4774, 319.46402, -59.21771)
 
 [node name="Anel3" parent="Aneis 2" unique_id=867514345 instance=ExtResource("14_bsk3x")]
-transform = Transform3D(0.28934884, 0.6875802, 0.66596586, 0.9086225, 0.021581763, -0.41706058, -0.30113533, 0.7257874, -0.61850625, -53.75567, 300.03024, -87.3504)
+transform = Transform3D(0.41753536, -0.027016595, 0.9082589, 0.9086224, 0.021581767, -0.41706043, -0.008334331, 0.9994017, 0.03355898, -29.65776, 293.61307, -104.720314)
 
 [node name="Anel4" parent="Aneis 2" unique_id=624264848 instance=ExtResource("14_bsk3x")]
-transform = Transform3D(0.40115118, 0.2325683, 0.8859965, 0.9086226, 0.021581763, -0.4170606, -0.11611648, 0.9723405, -0.20265919, -21.467237, 262.7478, -109.97182)
+transform = Transform3D(0.008334328, -0.9994019, -0.033559028, 0.98572797, 0.013853988, -0.16777486, 0.16813952, -0.03168179, 0.98525393, 13.053194, 269.12247, -31.87127)
 
 [node name="Anel5" parent="Aneis 2" unique_id=1458876195 instance=ExtResource("14_bsk3x")]
-transform = Transform3D(0.40546533, -0.28476024, 0.86862504, 0.9086225, 0.021581776, -0.41706052, 0.10001577, 0.95835567, 0.26749024, 25.965267, 241.71878, -95.43154)
+transform = Transform3D(0.008334385, -0.99940187, -0.033559024, 0.99565786, 0.0051821135, 0.09294452, -0.09271498, -0.034187872, 0.99510545, 58.832798, 231.51025, -59.244396)
 
 [node name="Anel6" parent="Aneis 2" unique_id=1395345763 instance=ExtResource("14_bsk3x")]
-transform = Transform3D(0.21598543, -0.8790157, 0.42506647, 0.7851526, -0.10243018, -0.6107731, 0.5804188, 0.46566004, 0.66803795, 50.519363, 199.04022, -42.245358)
+transform = Transform3D(-0.021070434, -0.9997662, -0.0048226994, 0.45117894, -0.013813125, 0.8923267, -0.8921852, 0.016625851, 0.45136452, 60.862236, 140.36932, -151.45984)
 
 [node name="Anel7" parent="Aneis 2" unique_id=59709003 instance=ExtResource("14_bsk3x")]
-transform = Transform3D(1.0000002, 0, 0, 0, -4.3711378e-08, 0.9999999, 0, -0.99999976, -4.371138e-08, 90.02492, 40, 4.77)
+transform = Transform3D(1.0000002, 0, 0, 0, -4.3711378e-08, 0.9999999, 0, -0.99999976, -4.371138e-08, 90.02492, 40, -108.42606)
+
+[node name="Arrows" type="Node3D" parent="." unique_id=1676326684]
+
+[node name="Arrow" parent="Arrows" unique_id=1376196226 instance=ExtResource("15_dl7dh")]
+transform = Transform3D(-1.3113416e-06, -30, 1.3113416e-06, 0, -1.3113416e-06, -30, 30, -1.3113416e-06, 5.732056e-14, 59.223, 249.93512, 0)
+
+[node name="Arrow2" parent="Arrows" unique_id=1462038757 instance=ExtResource("15_dl7dh")]
+transform = Transform3D(-1.3113416e-06, -30, 1.3113416e-06, 0, -1.3113416e-06, -30, 30, -1.3113416e-06, 5.732056e-14, 59.223, 154.65146, 0)
+visible = false
+
+[node name="Arrow3" parent="Arrows" unique_id=1001563087 instance=ExtResource("15_dl7dh")]
+transform = Transform3D(0.78881645, 3.533241, 19.669619, 19.777412, -2.9641361, -0.26069212, 2.869116, 19.460985, -3.610831, -116.559715, 253.5351, -90.690765)
+visible = false
+
+[node name="Arrow4" parent="Arrows" unique_id=226496187 instance=ExtResource("15_dl7dh")]
+transform = Transform3D(2.3474178, -19.56504, 3.4203196, 19.846106, 2.1737375, -1.186361, 0.78881687, 3.5332403, 19.669622, -19.373272, 228.49474, -94.729836)
+
+[node name="Arrow5" parent="Arrows" unique_id=1599821159 instance=ExtResource("15_dl7dh")]
+transform = Transform3D(-6.865469, 4.3989043, 18.26239, -18.661354, 0.6275791, -7.1666102, -2.1493173, -19.500141, 3.8890438, -35.352154, 212.88416, 27.369064)
+
+[node name="Arrow6" parent="Arrows" unique_id=15610503 instance=ExtResource("15_dl7dh")]
+transform = Transform3D(-5.1454744, -19.313524, 0.7152515, 12.797657, -3.9594984, -14.850676, 14.482556, -3.3630095, 13.377058, 104.78677, 151.8512, 7.9155273)
+
+[node name="Arrow7" parent="Arrows" unique_id=1408926308 instance=ExtResource("15_dl7dh")]
+transform = Transform3D(10, 8.660253, 15.000002, 17.32051, -4.9999986, -8.660253, 2.713925e-07, 17.320501, -9.999995, -100.649414, 278.14407, -95.81715)
+
+[node name="Arrow8" parent="Arrows" unique_id=131733885 instance=ExtResource("15_dl7dh")]
+transform = Transform3D(2.5881894, -17.3205, 9.659255, 19.318514, -7.6730475e-07, -5.1763787, 4.4828777, 9.999994, 16.73032, -0.4989395, 229.82657, -95.81715)
+
+[node name="Arrow9" parent="Arrows" unique_id=386084765 instance=ExtResource("15_dl7dh")]
+transform = Transform3D(-5.176383, -6.181719e-07, 19.318514, -19.318518, 1.0707056e-06, -5.176382, -8.742278e-07, -19.999992, -8.742276e-07, 9.277954, 205.38074, 28.297699)
+
+[node name="Arrow10" parent="Arrows" unique_id=1299102386 instance=ExtResource("15_dl7dh")]
+transform = Transform3D(-1.3397472, -19.318508, 4.9999986, -17.366154, -1.3397446, -9.829627, 9.82963, -4.9999976, -16.68467, 63.2174, 191.73883, 5.737381)
+
+[node name="Arrow11" parent="Arrows" unique_id=1318046387 instance=ExtResource("15_dl7dh")]
+transform = Transform3D(1.2499993, -19.95434, 0.5113173, -0.16013479, -0.5223266, -19.99253, 19.960253, 1.2454385, -0.19241762, 74.96402, 120.37225, -121.608795)
+
+[node name="Arrow12" parent="Arrows" unique_id=1542030036 instance=ExtResource("15_dl7dh")]
+transform = Transform3D(19.96025, 1.2454392, -0.19241762, -0.16013478, -0.52232647, -19.992529, -1.25, 19.954338, -0.5113172, 50.457077, 187.65337, -120.40794)
+
+[node name="Label3D" type="Label3D" parent="." unique_id=783394144]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -91.432274, 292.39114, -5.991003)
+text = "PRESS E TO DO A BARREL ROLL!"
+font = ExtResource("16_r4o0u")
+font_size = 500
+
+[node name="Label3D2" type="Label3D" parent="." unique_id=2057838508]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 1.180891, 218.27269, 12.394215)
+text = "PRESS Q TO QUICKLY TURN!"
+font = ExtResource("16_r4o0u")
+font_size = 500
 
 [connection signal="body_exited" from="WorldBorder" to="WorldBorder" method="_on_body_exited"]
 

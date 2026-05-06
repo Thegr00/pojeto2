@@ -1,0 +1,364 @@
+[gd_scene format=3 uid="uid://bxo6v4l6gjle2"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kks1g"]
+albedo_color = Color(0.565625, 0.519668, 0.519668, 1)
+emission = Color(0, 0.09803922, 0.99215686, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_l5ahi"]
+material = SubResource("StandardMaterial3D_kks1g")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2ndhl"]
+albedo_color = Color(0.5647059, 0.52156866, 0.52156866, 1)
+emission = Color(0, 0.09803922, 0.99215686, 1)
+
+[sub_resource type="PrismMesh" id="PrismMesh_acd0x"]
+material = SubResource("StandardMaterial3D_2ndhl")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6a6ax"]
+emission_enabled = true
+emission = Color(0.9312501, 1, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_i4m3f"]
+material = SubResource("StandardMaterial3D_6a6ax")
+radius = 0.03
+height = 0.04
+
+[node name="Arrow" type="Node3D" unique_id=1376196226]
+
+[node name="Modelo" type="Node3D" parent="." unique_id=1655948097]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Modelo" unique_id=955825259]
+transform = Transform3D(0.46699607, 0, 0, 0, -6.325408e-08, 0.048575275, 0, -1.4470845, -2.1232929e-09, 0, 0.038954496, 0)
+mesh = SubResource("BoxMesh_l5ahi")
+metadata/_edit_group_ = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Modelo/MeshInstance3D" unique_id=1383086154]
+transform = Transform3D(-2.1602736, 5.2586238e-08, 1.1384074e-13, -1.8885704e-07, -0.6015163, -2.6043713e-06, -2.45927e-13, -1.5665728e-06, 0.99999934, 0, -0.7729832, -1.013279e-06)
+mesh = SubResource("PrismMesh_acd0x")
+
+[node name="Balls" type="Node3D" parent="Modelo" unique_id=2113781025]
+transform = Transform3D(0.99999994, 0, 0, 0, 0.9999999, 0, 0, 0, 0.99999994, 0, 3.7252903e-09, 0)
+
+[node name="Balls" type="MeshInstance3D" parent="Modelo/Balls" unique_id=692516090]
+transform = Transform3D(0.9999995, 0, 0, 0, 0.9999991, 1.421086e-14, 0, -3.1974426e-14, 0.99999905, 0.19455509, 0.059803702, -2.2300251e-15)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls2" type="MeshInstance3D" parent="Modelo/Balls" unique_id=822919178]
+transform = Transform3D(0.99999946, 0, 0, 0, 0.9999991, 1.421086e-14, 0, -3.1974423e-14, 0.999999, 0.19455507, 0.059803702, 0.06964502)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls3" type="MeshInstance3D" parent="Modelo/Balls" unique_id=1572367638]
+transform = Transform3D(0.9999994, 0, 0, 0, 0.9999991, 1.421086e-14, 0, -3.197442e-14, 0.9999989, 0.19455506, 0.059803702, 0.13835463)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls4" type="MeshInstance3D" parent="Modelo/Balls" unique_id=157335680]
+transform = Transform3D(0.99999934, 0, 0, 0, 0.9999991, 1.421086e-14, 0, -3.1974416e-14, 0.99999887, 0.19455504, 0.059803702, 0.20823078)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls5" type="MeshInstance3D" parent="Modelo/Balls" unique_id=1516503207]
+transform = Transform3D(0.9999993, 0, 0, 0, 0.9999991, 1.421086e-14, 0, -3.1974413e-14, 0.9999988, 0.19455503, 0.059803702, 0.2728667)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls6" type="MeshInstance3D" parent="Modelo/Balls" unique_id=1647735056]
+transform = Transform3D(0.9999993, 0, 0, 0, 0.9999991, 1.421086e-14, 0, -3.1974413e-14, 0.9999988, 0.19455503, 0.059803702, 0.33517936)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls7" type="MeshInstance3D" parent="Modelo/Balls" unique_id=2054836344]
+transform = Transform3D(0.9999992, 0, 0, 0, 0.9999991, 1.421086e-14, 0, -3.197441e-14, 0.99999875, 0.19455501, 0.059803702, 0.40149236)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls8" type="MeshInstance3D" parent="Modelo/Balls" unique_id=212435340]
+transform = Transform3D(0.9999991, 0, 0, 0, 0.9999991, 1.4210858e-14, 0, -3.1974403e-14, 0.9999986, 0.19455498, 0.059803702, 0.4673701)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls9" type="MeshInstance3D" parent="Modelo/Balls" unique_id=675380634]
+transform = Transform3D(0.99999905, 0, 0, 0, 0.9999991, 1.4210858e-14, 0, -3.19744e-14, 0.99999857, 0.19455497, 0.059803702, 0.53305066)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls10" type="MeshInstance3D" parent="Modelo/Balls" unique_id=2030057301]
+transform = Transform3D(0.999999, 0, 0, 0, 0.9999991, 1.4210858e-14, 0, -3.1974396e-14, 0.9999985, 0.19455495, 0.059803702, 0.6060174)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls11" type="MeshInstance3D" parent="Modelo/Balls" unique_id=1898134034]
+transform = Transform3D(0.9999994, 0, 0, 0, 0.9999991, 1.421086e-14, 0, -3.197442e-14, 0.9999989, -0.19458394, 0.059803702, -2.2300247e-15)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls12" type="MeshInstance3D" parent="Modelo/Balls" unique_id=2132190566]
+transform = Transform3D(0.99999934, 0, 0, 0, 0.9999991, 1.421086e-14, 0, -3.1974416e-14, 0.99999887, -0.19458395, 0.059803702, 0.069645)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls13" type="MeshInstance3D" parent="Modelo/Balls" unique_id=687823085]
+transform = Transform3D(0.9999993, 0, 0, 0, 0.9999991, 1.421086e-14, 0, -3.1974413e-14, 0.9999988, -0.19458397, 0.059803702, 0.1383546)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls14" type="MeshInstance3D" parent="Modelo/Balls" unique_id=1927746867]
+transform = Transform3D(0.9999992, 0, 0, 0, 0.9999991, 1.421086e-14, 0, -3.197441e-14, 0.99999875, -0.19458398, 0.059803702, 0.20823075)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls15" type="MeshInstance3D" parent="Modelo/Balls" unique_id=1665915558]
+transform = Transform3D(0.99999917, 0, 0, 0, 0.9999991, 1.4210858e-14, 0, -3.1974406e-14, 0.9999987, -0.194584, 0.059803702, 0.27286664)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls16" type="MeshInstance3D" parent="Modelo/Balls" unique_id=1999141482]
+transform = Transform3D(0.99999917, 0, 0, 0, 0.9999991, 1.4210858e-14, 0, -3.1974406e-14, 0.9999987, -0.194584, 0.059803702, 0.3351793)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls17" type="MeshInstance3D" parent="Modelo/Balls" unique_id=1513102798]
+transform = Transform3D(0.9999991, 0, 0, 0, 0.9999991, 1.4210858e-14, 0, -3.1974403e-14, 0.9999986, -0.19458401, 0.059803702, 0.4014923)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls18" type="MeshInstance3D" parent="Modelo/Balls" unique_id=496565868]
+transform = Transform3D(0.999999, 0, 0, 0, 0.9999991, 1.4210858e-14, 0, -3.1974396e-14, 0.9999985, -0.19458404, 0.059803702, 0.46737003)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls19" type="MeshInstance3D" parent="Modelo/Balls" unique_id=1196631480]
+transform = Transform3D(0.9999989, 0, 0, 0, 0.9999991, 1.4210858e-14, 0, -3.1974393e-14, 0.99999845, -0.19458406, 0.059803702, 0.53305054)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls20" type="MeshInstance3D" parent="Modelo/Balls" unique_id=905877962]
+transform = Transform3D(0.99999887, 0, 0, 0, 0.9999991, 1.4210858e-14, 0, -3.197439e-14, 0.9999984, -0.19458407, 0.059803702, 0.6060173)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls21" type="MeshInstance3D" parent="Modelo/Balls" unique_id=1963578165]
+transform = Transform3D(0.99999946, 0, 0, 0, 0.9999991, 1.421086e-14, 0, -3.1974423e-14, 0.999999, 0.19455507, 0.059803702, -0.68103296)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls22" type="MeshInstance3D" parent="Modelo/Balls" unique_id=1717032128]
+transform = Transform3D(0.9999994, 0, 0, 0, 0.9999991, 1.421086e-14, 0, -3.197442e-14, 0.9999989, 0.19455506, 0.059803702, -0.61138797)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls23" type="MeshInstance3D" parent="Modelo/Balls" unique_id=699056307]
+transform = Transform3D(0.99999934, 0, 0, 0, 0.9999991, 1.421086e-14, 0, -3.1974416e-14, 0.99999887, 0.19455504, 0.059803702, -0.54267836)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls24" type="MeshInstance3D" parent="Modelo/Balls" unique_id=1751413055]
+transform = Transform3D(0.9999993, 0, 0, 0, 0.9999991, 1.421086e-14, 0, -3.1974413e-14, 0.9999988, 0.19455503, 0.059803702, -0.4728022)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls25" type="MeshInstance3D" parent="Modelo/Balls" unique_id=192106335]
+transform = Transform3D(0.9999992, 0, 0, 0, 0.9999991, 1.421086e-14, 0, -3.197441e-14, 0.99999875, 0.19455501, 0.059803702, -0.4081663)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls26" type="MeshInstance3D" parent="Modelo/Balls" unique_id=1158241127]
+transform = Transform3D(0.9999992, 0, 0, 0, 0.9999991, 1.421086e-14, 0, -3.197441e-14, 0.99999875, 0.19455501, 0.059803702, -0.34585363)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls27" type="MeshInstance3D" parent="Modelo/Balls" unique_id=908479935]
+transform = Transform3D(0.99999917, 0, 0, 0, 0.9999991, 1.4210858e-14, 0, -3.1974406e-14, 0.9999987, 0.194555, 0.059803702, -0.27954063)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls28" type="MeshInstance3D" parent="Modelo/Balls" unique_id=1146429627]
+transform = Transform3D(0.99999905, 0, 0, 0, 0.9999991, 1.4210858e-14, 0, -3.19744e-14, 0.99999857, 0.19455497, 0.059803702, -0.2136629)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls29" type="MeshInstance3D" parent="Modelo/Balls" unique_id=1758550074]
+transform = Transform3D(0.999999, 0, 0, 0, 0.9999991, 1.4210858e-14, 0, -3.1974396e-14, 0.9999985, 0.19455495, 0.059803702, -0.14798236)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls30" type="MeshInstance3D" parent="Modelo/Balls" unique_id=1026740269]
+transform = Transform3D(0.9999989, 0, 0, 0, 0.9999991, 1.4210858e-14, 0, -3.1974393e-14, 0.99999845, 0.19455494, 0.059803702, -0.075015604)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls31" type="MeshInstance3D" parent="Modelo/Balls" unique_id=382125997]
+transform = Transform3D(-4.371135e-08, -3.5527123e-14, 0.99999875, 3.5527113e-15, 0.99999917, 1.7763572e-14, -0.9999992, 3.552716e-15, -4.371133e-08, -0.12267974, 0.059803702, -0.6854968)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls32" type="MeshInstance3D" parent="Modelo/Balls" unique_id=1903469185]
+transform = Transform3D(-4.3711346e-08, -3.5527113e-14, 0.9999986, 3.552711e-15, 0.99999917, 1.776357e-14, -0.9999991, 3.5527113e-15, -4.3711324e-08, -0.053023174, 0.059803702, -0.6840101)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls33" type="MeshInstance3D" parent="Modelo/Balls" unique_id=976606020]
+transform = Transform3D(-4.3711353e-08, -3.5527123e-14, 0.99999875, 3.5527113e-15, 0.99999917, 1.7763572e-14, -0.9999992, 3.5527166e-15, -4.371133e-08, 0.01253691, 0.059803702, -0.68412995)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls34" type="MeshInstance3D" parent="Modelo/Balls" unique_id=776146887]
+transform = Transform3D(-4.3711342e-08, -3.552711e-14, 0.99999857, 3.5527107e-15, 0.99999917, 1.7763568e-14, -0.99999905, 3.5527116e-15, -4.371132e-08, 0.07569329, 0.059803702, -0.6843882)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls36" type="MeshInstance3D" parent="Modelo/Balls" unique_id=1548066383]
+transform = Transform3D(-4.371133e-08, -3.5527103e-14, 0.9999984, 3.55271e-15, 0.99999917, 1.776357e-14, -0.99999887, 3.552715e-15, -4.3711314e-08, 0.13581187, 0.059803702, -0.6835753)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls35" type="MeshInstance3D" parent="Modelo/Balls" unique_id=189972369]
+transform = Transform3D(0.99999946, 0, 0, 0, 0.9999992, 1.0658151e-14, 0, -2.8421713e-14, 0.999999, -0.19128591, 0.059803706, -0.6809629)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls37" type="MeshInstance3D" parent="Modelo/Balls" unique_id=944431508]
+transform = Transform3D(0.99999946, 0, 0, 0, 0.9999992, 1.0658151e-14, 0, -2.8421713e-14, 0.999999, -0.19128594, 0.059803706, -0.60449064)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls38" type="MeshInstance3D" parent="Modelo/Balls" unique_id=1583629637]
+transform = Transform3D(0.9999994, 0, 0, 0, 0.9999992, 1.0658151e-14, 0, -2.842171e-14, 0.9999989, -0.19128595, 0.059803706, -0.535781)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls39" type="MeshInstance3D" parent="Modelo/Balls" unique_id=1848019461]
+transform = Transform3D(0.99999934, 0, 0, 0, 0.9999992, 1.0658151e-14, 0, -2.8421706e-14, 0.99999887, -0.19128597, 0.059803706, -0.46590483)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls40" type="MeshInstance3D" parent="Modelo/Balls" unique_id=159506743]
+transform = Transform3D(0.9999993, 0, 0, 0, 0.9999992, 1.0658151e-14, 0, -2.8421703e-14, 0.9999988, -0.19128598, 0.059803706, -0.40126893)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls41" type="MeshInstance3D" parent="Modelo/Balls" unique_id=1601249397]
+transform = Transform3D(0.9999993, 0, 0, 0, 0.9999992, 1.0658151e-14, 0, -2.8421703e-14, 0.9999988, -0.19128598, 0.059803706, -0.33895627)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls42" type="MeshInstance3D" parent="Modelo/Balls" unique_id=928856334]
+transform = Transform3D(0.9999992, 0, 0, 0, 0.9999992, 1.0658152e-14, 0, -2.84217e-14, 0.99999875, -0.191286, 0.059803706, -0.27264327)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls43" type="MeshInstance3D" parent="Modelo/Balls" unique_id=447556368]
+transform = Transform3D(0.9999991, 0, 0, 0, 0.9999992, 1.065815e-14, 0, -2.8421692e-14, 0.9999986, -0.19128603, 0.059803706, -0.20676553)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls44" type="MeshInstance3D" parent="Modelo/Balls" unique_id=418109594]
+transform = Transform3D(0.99999905, 0, 0, 0, 0.9999992, 1.0658151e-14, 0, -2.8421689e-14, 0.99999857, -0.19128604, 0.059803706, -0.14108497)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls45" type="MeshInstance3D" parent="Modelo/Balls" unique_id=307913809]
+transform = Transform3D(0.999999, 0, 0, 0, 0.9999992, 1.0658151e-14, 0, -2.8421686e-14, 0.9999985, -0.19128606, 0.059803706, -0.068118215)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls46" type="MeshInstance3D" parent="Modelo/Balls" unique_id=2111633377]
+transform = Transform3D(0.86214143, 1.6200337e-14, -0.5066649, -1.8000354e-15, 0.99999917, 1.1147919e-14, 0.5066651, -2.4013787e-14, 0.862141, 0.26385143, 0.059803706, 1.0240253)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls47" type="MeshInstance3D" parent="Modelo/Balls" unique_id=5952419]
+transform = Transform3D(0.8678771, 1.5870931e-14, -0.49677598, 1.1452415e-17, 0.99999905, 1.4204269e-14, 0.4967762, -2.774989e-14, 0.8678767, 0.2611856, 0.059803702, 1.022479)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls48" type="MeshInstance3D" parent="Modelo/Balls" unique_id=1207590217]
+transform = Transform3D(0.8678771, 1.5870934e-14, -0.49677604, 1.1453156e-17, 0.9999993, 1.4204279e-14, 0.49677628, -2.7749887e-14, 0.8678767, 0.22658761, 0.059803702, 1.0829222)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls49" type="MeshInstance3D" parent="Modelo/Balls" unique_id=153710918]
+transform = Transform3D(0.86787707, 1.587093e-14, -0.49677595, 1.1453474e-17, 0.99999905, 1.4204274e-14, 0.49677625, -2.774987e-14, 0.8678766, 0.19245428, 0.059803702, 1.1425538)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls50" type="MeshInstance3D" parent="Modelo/Balls" unique_id=1618001137]
+transform = Transform3D(0.8678769, 1.5870934e-14, -0.49677598, 1.1453156e-17, 0.99999917, 1.4204277e-14, 0.49677616, -2.774988e-14, 0.8678765, 0.15774144, 0.059803702, 1.2031976)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls51" type="MeshInstance3D" parent="Modelo/Balls" unique_id=599934255]
+transform = Transform3D(0.8678769, 1.587093e-14, -0.49677598, 1.1453262e-17, 0.99999917, 1.4204275e-14, 0.4967762, -2.7749873e-14, 0.86787647, 0.12563178, 0.059803702, 1.2592937)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls52" type="MeshInstance3D" parent="Modelo/Balls" unique_id=875211994]
+transform = Transform3D(0.8678769, 1.587093e-14, -0.49677598, 1.1453262e-17, 0.99999917, 1.4204275e-14, 0.4967762, -2.7749873e-14, 0.86787647, 0.09467636, 0.059803702, 1.3133736)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls53" type="MeshInstance3D" parent="Modelo/Balls" unique_id=674428826]
+transform = Transform3D(0.867877, 1.5870926e-14, -0.49677593, 1.1453474e-17, 0.99999917, 1.4204275e-14, 0.4967762, -2.774987e-14, 0.8678765, 0.06173358, 0.059803702, 1.3709252)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls54" type="MeshInstance3D" parent="Modelo/Balls" unique_id=1897642714]
+transform = Transform3D(0.86787677, 1.5870927e-14, -0.4967759, 1.1452097e-17, 0.99999917, 1.4204273e-14, 0.49677607, -2.7749867e-14, 0.86787635, 0.029007085, 0.059803702, 1.428099)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls55" type="MeshInstance3D" parent="Modelo/Balls" unique_id=1281619969]
+transform = Transform3D(0.8678768, 1.5870919e-14, -0.4967758, 1.1453791e-17, 0.99999905, 1.4204273e-14, 0.4967761, -2.7749863e-14, 0.86787635, -0.0036215186, 0.059803702, 1.4851018)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls56" type="MeshInstance3D" parent="Modelo/Balls" unique_id=1624748130]
+transform = Transform3D(1.1920929e-07, -5.3163084e-14, 0.99999803, -3.5527188e-15, 0.9999982, 2.6517805e-14, -0.99999803, -1.8936343e-14, -3.874302e-07, 0.2378728, 0.06819801, 0.7168957)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls57" type="MeshInstance3D" parent="Modelo/Balls" unique_id=1213506567]
+transform = Transform3D(1.1920929e-07, -5.3163088e-14, 0.9999978, -3.5527188e-15, 0.9999982, 2.65178e-14, -0.99999803, -1.893635e-14, -3.5762787e-07, 0.30395877, 0.06607542, 0.7164758)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls58" type="MeshInstance3D" parent="Modelo/Balls" unique_id=259469273]
+transform = Transform3D(1.1920929e-07, -5.3163088e-14, 0.9999976, -3.552718e-15, 0.9999982, 2.6517801e-14, -0.99999803, -1.893635e-14, -2.682209e-07, 0.3738346, 0.064239465, 0.7214482)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls59" type="MeshInstance3D" parent="Modelo/Balls" unique_id=1043393566]
+transform = Transform3D(2.0861626e-07, -5.316308e-14, 0.99999774, -3.5527166e-15, 0.9999982, 2.65178e-14, -0.99999785, -1.8936357e-14, -2.3841858e-07, 0.43847042, 0.06696856, 0.7231188)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls60" type="MeshInstance3D" parent="Modelo/Balls" unique_id=432112711]
+transform = Transform3D(1.19209275e-07, -5.3163078e-14, 0.9999979, -3.5527188e-15, 0.9999982, 2.6517805e-14, -0.9999979, -1.893634e-14, -3.8743013e-07, -0.4393222, 0.06819801, 0.7168956)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls61" type="MeshInstance3D" parent="Modelo/Balls" unique_id=752204750]
+transform = Transform3D(1.19209275e-07, -5.316308e-14, 0.9999977, -3.5527188e-15, 0.9999982, 2.65178e-14, -0.9999979, -1.8936346e-14, -3.576278e-07, -0.37323624, 0.066075414, 0.71647567)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls62" type="MeshInstance3D" parent="Modelo/Balls" unique_id=1279860546]
+transform = Transform3D(1.19209275e-07, -5.316308e-14, 0.9999975, -3.552718e-15, 0.9999982, 2.6517801e-14, -0.9999979, -1.8936346e-14, -2.6822084e-07, -0.3033604, 0.06423946, 0.72144806)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls63" type="MeshInstance3D" parent="Modelo/Balls" unique_id=1386406160]
+transform = Transform3D(2.0861623e-07, -5.3163074e-14, 0.9999976, -3.552717e-15, 0.9999982, 2.65178e-14, -0.99999774, -1.8936353e-14, -2.3841855e-07, -0.23872459, 0.06696856, 0.72311866)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls64" type="MeshInstance3D" parent="Modelo/Balls" unique_id=1640395076]
+transform = Transform3D(0.86602485, -1.5987215e-14, 0.49999952, 1.7763547e-15, 0.9999992, 1.1134126e-14, -0.49999976, -2.4137952e-14, 0.8660245, -0.26857978, 0.059803706, 1.023979)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls56" type="MeshInstance3D" parent="Modelo/Balls/Balls64" unique_id=175416389]
+transform = Transform3D(-0.99999744, -3.314715e-14, -5.066395e-07, -1.7763565e-14, 0.9999977, 4.0728597e-14, -1.1920929e-07, 6.7373936e-14, -0.9999978, 0.001188755, 0.0046187304, -0.07577437)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls57" type="MeshInstance3D" parent="Modelo/Balls/Balls64" unique_id=1867479692]
+transform = Transform3D(-0.9999975, -3.3147154e-14, -3.5762787e-07, -1.7763565e-14, 0.99999774, 4.0728624e-14, -2.9802322e-08, 6.737392e-14, -0.99999774, 0.00087344646, 0.0024961196, -0.14550757)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls58" type="MeshInstance3D" parent="Modelo/Balls/Balls64" unique_id=1090713093]
+transform = Transform3D(-0.9999975, -3.3147154e-14, -3.2782555e-07, -1.7763565e-14, 0.99999774, 4.0728607e-14, -2.9802322e-08, 6.737392e-14, -0.9999975, 0.0029150248, 0.0006601773, -0.21707559)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls59" type="MeshInstance3D" parent="Modelo/Balls/Balls64" unique_id=570737098]
+transform = Transform3D(-0.99999744, -3.314717e-14, -3.2782555e-07, -1.7763562e-14, 0.99999774, 4.0728603e-14, -1.1920929e-07, 6.7373936e-14, -0.9999975, -0.0011743307, 0.0033892654, -0.28503674)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls59" type="MeshInstance3D" parent="Modelo/Balls/Balls64/Balls59" unique_id=843929122]
+transform = Transform3D(-0.4999988, 9.9271245e-15, -0.86602366, -3.1846843e-14, 0.9999979, 1.2086027e-14, 0.8660234, 6.026847e-14, -0.4999985, -0.24183613, 0.0033892915, -0.0069410503)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls59" type="MeshInstance3D" parent="Modelo/Balls/Balls64/Balls59/Balls59" unique_id=1221205680]
+transform = Transform3D(1.7053026e-12, 3.1625947e-14, -0.99999774, -3.3750733e-14, 0.999998, 4.9806016e-15, 0.9999977, 4.9134355e-14, 3.8743264e-07, 0.0010841489, 0.0033892915, 0.39508688)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls65" type="MeshInstance3D" parent="Modelo/Balls" unique_id=2139668962]
+transform = Transform3D(0.86602485, -1.5987212e-14, 0.49999952, 1.7763562e-15, 0.99999917, 1.1134123e-14, -0.49999976, -2.4137947e-14, 0.86602443, -0.23422502, 0.059803706, 1.0834832)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls66" type="MeshInstance3D" parent="Modelo/Balls" unique_id=2107107505]
+transform = Transform3D(0.86602485, -1.5987208e-14, 0.4999995, 1.7763545e-15, 0.9999992, 1.1134126e-14, -0.4999997, -2.4137949e-14, 0.86602443, -0.199287, 0.059803706, 1.1439977)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls67" type="MeshInstance3D" parent="Modelo/Balls" unique_id=1819008593]
+transform = Transform3D(0.86602485, -1.5987208e-14, 0.49999943, 1.7763559e-15, 0.99999917, 1.1134123e-14, -0.49999967, -2.4137945e-14, 0.86602443, -0.16696902, 0.059803706, 1.1999741)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls68" type="MeshInstance3D" parent="Modelo/Balls" unique_id=61997915]
+transform = Transform3D(0.86602485, -1.5987208e-14, 0.49999943, 1.7763559e-15, 0.99999917, 1.1134123e-14, -0.49999967, -2.4137945e-14, 0.86602443, -0.13581264, 0.059803706, 1.2539384)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls69" type="MeshInstance3D" parent="Modelo/Balls" unique_id=1943626205]
+transform = Transform3D(0.86602473, -1.5987208e-14, 0.49999943, 1.7763544e-15, 0.9999992, 1.1134126e-14, -0.49999967, -2.4137942e-14, 0.8660243, -0.10265617, 0.059803706, 1.3113673)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls70" type="MeshInstance3D" parent="Modelo/Balls" unique_id=393582929]
+transform = Transform3D(0.8660246, -1.5987205e-14, 0.49999934, 1.7763541e-15, 0.9999992, 1.1134125e-14, -0.49999958, -2.4137942e-14, 0.8660242, -0.06971732, 0.059803706, 1.3684189)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls71" type="MeshInstance3D" parent="Modelo/Balls" unique_id=974748004]
+transform = Transform3D(0.8660245, -1.5987205e-14, 0.4999993, 1.7763555e-15, 0.99999917, 1.1134122e-14, -0.49999955, -2.4137933e-14, 0.86602414, -0.03687702, 0.059803706, 1.4253001)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls72" type="MeshInstance3D" parent="Modelo/Balls" unique_id=273567772]
+transform = Transform3D(-0.86602485, -1.4083281e-14, 0.49999943, 6.9778896e-15, 0.99999917, 2.2489136e-14, -0.4999996, 3.8348797e-14, -0.8660248, 0.3049851, 0.059803702, 0.9606643)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls73" type="MeshInstance3D" parent="Modelo/Balls" unique_id=873671866]
+transform = Transform3D(-0.86602485, -1.4083297e-14, 0.49999928, 6.9778926e-15, 0.99999917, 2.2489135e-14, -0.49999958, 3.8348797e-14, -0.8660245, 0.33933985, 0.059803702, 0.90116006)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls74" type="MeshInstance3D" parent="Modelo/Balls" unique_id=1889882877]
+transform = Transform3D(-0.86602485, -1.4083292e-14, 0.49999928, 6.9778913e-15, 0.99999917, 2.2489133e-14, -0.49999964, 3.83488e-14, -0.8660243, 0.37427777, 0.059803702, 0.84064573)
+mesh = SubResource("SphereMesh_i4m3f")
+
+[node name="Balls75" type="MeshInstance3D" parent="Modelo/Balls" unique_id=1949405191]
+transform = Transform3D(-0.86602473, -1.40832865e-14, 0.49999943, 6.97789e-15, 0.99999917, 2.2489131e-14, -0.4999996, 3.834879e-14, -0.8660245, 0.4065959, 0.059803702, 0.7846694)
+mesh = SubResource("SphereMesh_i4m3f")
