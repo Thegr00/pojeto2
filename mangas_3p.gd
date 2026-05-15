@@ -236,18 +236,13 @@ func crash_sequence():
 	if crash_sound:
 		crash_sound.play()
 		
-	await get_tree().create_timer(2.0).timeout
 	
-	# 4. Bring up the UI!
 	await get_tree().create_timer(1.0).timeout
 	
 	var death_scene = DEATH_SCENE.instantiate()
 	get_tree().current_scene.add_child(death_scene)
 	
-	
-	
-	await get_tree().create_timer(1.0).timeout
-	death_scene.visible = false
+	await get_tree().create_timer(2.0).timeout
 	
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	var game_over_menu = GAME_OVER_SCREEN.instantiate()
