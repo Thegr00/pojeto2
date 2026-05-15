@@ -1,5 +1,6 @@
 extends CharacterBody3D
 
+const DEATH_SCENE = preload("res://death_scene.tscn")
 const GAME_OVER_SCREEN = preload("res://game_over_screen.tscn")
 
 @export_group("Flight Speed")
@@ -309,6 +310,16 @@ func crash_sequence():
 	await get_tree().create_timer(2.0).timeout
 	
 	# 4. Bring up the UI!
+	await get_tree().create_timer(1.0).timeout
+	
+	var death_scene = DEATH_SCENE.instantiate()
+	get_tree().current_scene.add_child(death_scene)
+	
+	
+	
+	await get_tree().create_timer(1.0).timeout
+	death_scene.visible = false
+	
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	var game_over_menu = GAME_OVER_SCREEN.instantiate()
 	get_tree().current_scene.add_child(game_over_menu)
