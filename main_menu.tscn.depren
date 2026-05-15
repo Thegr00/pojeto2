@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://cblalv8g1bs00"]
+
+[ext_resource type="Script" uid="uid://rdwfnwsfhojb" path="res://Main_Menu/main_menu.gd" id="1_jht8a"]
+[ext_resource type="Texture2D" path="res://Screenshot 2024-09-03 015442.png" id="2_6qckm"]
+[ext_resource type="PackedScene" uid="uid://xyw0fj5xlm2h" path="res://Settings_Menu/settings_menu.tscn" id="3_6qckm"]
+[ext_resource type="AudioStream" uid="uid://bh8lwyk22rlde" path="res://sfx/Sam the Kid - Frio [NRyEwTc0uhE].mp3" id="4_2jvup"]

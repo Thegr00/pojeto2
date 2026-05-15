@@ -6,7 +6,7 @@
 [ext_resource type="FontFile" uid="uid://dr67jb4p840gj" path="res://SuperMario256.ttf" id="4_7ivtl"]
 [ext_resource type="PackedScene" uid="uid://cjr74ks3pchc6" path="res://loading_screen.tscn" id="4_dq43s"]
 [ext_resource type="PackedScene" uid="uid://davyxw8uya2ns" path="res://pause_menu.tscn" id="5_7ivtl"]
-[ext_resource type="PackedScene" uid="uid://ci1lpreneiqdd" path="res://StartGate.tscn" id="7_1sf0h"]
+[ext_resource type="PackedScene" uid="uid://ci1lpreneiqdd" path="res://StartGate/StartGate.tscn" id="7_1sf0h"]
 
 [sub_resource type="Environment" id="Environment_atpbs"]
 background_mode = 1
@@ -15,7 +15,7 @@ tonemap_mode = 3
 glow_enabled = true
 glow_intensity = 1.0
 fog_enabled = true
-fog_light_color = Color(0.10940816, 0.09038266, 0.3860155, 1)
+fog_light_color = Color(0.38125002, 0.14587283, 0.03574219, 1)
 fog_density = 0.015
 volumetric_fog_enabled = true
 volumetric_fog_density = 0.02
@@ -32,9 +32,9 @@ transform = Transform3D(1, 0, 0, 0, 0.99663603, -0.08195585, 0, 0.08195585, 0.99
 up_deceleration = 45.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=579636448]
-transform = Transform3D(1, 0, 0, 0, 0.2268383, 0.97393245, 0, -0.97393245, 0.2268383, 0, 11.045761, 0)
+transform = Transform3D(1, 0, 0, 0, 0.2268383, 0.97393245, 0, -0.97393245, 0.2268383, 0, 56.015327, 0)
 light_color = Color(0.76862746, 0.8392157, 1, 1)
-light_energy = 8.032
+light_energy = 11.476
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1763960021]
 environment = SubResource("Environment_atpbs")

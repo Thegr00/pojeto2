@@ -7,8 +7,15 @@ var pending_recycle := false
 var is_waiting_to_mesh := false
 var is_waiting_to_collide := false 
 
+var bomb_scene: PackedScene = null
+var laser_scene: PackedScene = null
+var active_hazards: Array[Node3D] = [] # We need this to delete them later!
+
 var task_id: int = -1
 var builder: Variant = preload("res://Generation/scripts/ChunkBuilder.cs").new()
+
+var hazards_spawned := false
+var hazard_spawn_distance := 50.0 # Tweak this! How close you must be for them to spawn
 
 var mesh_instance: MeshInstance3D
 var collision_shape: CollisionShape3D
@@ -58,11 +65,16 @@ func _process(_delta: float) -> void:
 			_finish_recycle()
 		else:
 			is_waiting_to_mesh = true
+			
+			# === 🚨 NEW: CALL IT HERE! 🚨 ===
+			# The math is done! Spawn the hazards before we even start building the mesh!
+			_spawn_hazards()
+			# ================================
 
 	var wm = get_parent()
 	
 	# 2. Build visuals fast (We allow up to 3 meshes to build per frame)
-	if is_waiting_to_mesh and wm.meshes_built_this_frame < 3:
+	if is_waiting_to_mesh and wm.meshes_built_this_frame < 4:
 		wm.meshes_built_this_frame += 1
 		_apply_mesh_only()
 		is_waiting_to_mesh = false
@@ -74,6 +86,15 @@ func _process(_delta: float) -> void:
 		_apply_collision_only()
 		is_waiting_to_collide = false
 		set_process(false)
+	if not hazards_spawned and not is_waiting_to_mesh and not is_waiting_to_collide:
+		var cam = get_viewport().get_camera_3d()
+		if cam != null:
+			var dist = global_position.distance_to(cam.global_position)
+			
+			# If the player flies within range, spawn the bombs!
+			if dist < hazard_spawn_distance:
+				hazards_spawned = true
+				_spawn_hazards()
 
 func _apply_mesh_only() -> void:
 	if builder.is_empty or builder.out_vertices == null or builder.out_vertices.is_empty():
@@ -96,7 +117,36 @@ func _apply_mesh_only() -> void:
 	
 	mesh_instance.mesh = new_mesh
 	show()
-
+func _spawn_hazards() -> void:
+	# print("Found ", builder.out_bomb_positions.size(), " bombs to spawn!")
+	
+	if bomb_scene != null:
+		for bomb_pos in builder.out_bomb_positions:
+			# 🚨 SAFETY CHECK: If the chunk unloads while we are waiting, stop spawning!
+			if not is_in_use or pending_recycle:
+				return
+				
+			var bomb = bomb_scene.instantiate()
+			add_child(bomb)
+			bomb.global_position = bomb_pos
+			active_hazards.append(bomb)
+			
+			# Wait until the next frame to spawn the next bomb
+			await get_tree().process_frame
+			
+	if laser_scene != null:
+		for laser_pos in builder.out_laser_positions:
+			# 🚨 SAFETY CHECK
+			if not is_in_use or pending_recycle:
+				return
+				
+			var laser = laser_scene.instantiate()
+			add_child(laser)
+			laser.global_position = laser_pos
+			active_hazards.append(laser)
+			
+			# Wait until the next frame
+			await get_tree().process_frame
 func _apply_collision_only() -> void:
 	if builder.out_collision_faces != null and builder.out_collision_faces.size() > 0:
 		var new_shape = ConcavePolygonShape3D.new()
@@ -104,6 +154,14 @@ func _apply_collision_only() -> void:
 		collision_shape.shape = new_shape
 
 func recycle() -> void:
+	# === 🚨 NEW: CLEAN UP HAZARDS 🚨 ===
+	for hazard in active_hazards:
+		if is_instance_valid(hazard):
+			hazard.queue_free()
+	active_hazards.clear()
+	# ===================================
+	
+	# ... the rest of your recycle code (clearing meshes, setting is_in_use = false, etc.) ...
 	if not is_in_use: return
 	pending_recycle = true
 	is_waiting_to_mesh = false
@@ -113,6 +171,7 @@ func recycle() -> void:
 		_finish_recycle()
 
 func _finish_recycle() -> void:
+
 	is_in_use = false
 	pending_recycle = false
 	mesh_instance.mesh = null

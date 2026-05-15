@@ -1,7 +1,9 @@
-class_name TerrainManager
+class_name WorldManagerHard
 extends Node3D
 
 @export var player: Node3D
+@export var bomb_scene: PackedScene  # <-- NEW: Drag your ProximityBomb.tscn here in the inspector!
+@export var laser_scene: PackedScene # <-- NEW: Drag your Laser.tscn here in the inspector!
 const VIEW_DISTANCE = 8 # UPDATED: Changed from 4 to 8 to keep horizon same distance
 const CHUNKS_PER_FRAME = 3 
 
@@ -70,6 +72,14 @@ func _dispatch_queued_chunks() -> void:
 		var pos = chunk_queue.pop_front()
 		
 		active_chunks[pos] = available_chunk
+		
+		# === 🚨 NEW: PASS THE HAZARDS DOWN 🚨 ===
+		# If this is the Hard Manager, it hands over the bombs. 
+		# If it's the Normal Manager, it doesn't do this step!
+		available_chunk.bomb_scene = bomb_scene
+		available_chunk.laser_scene = laser_scene
+		# ========================================
+		
 		available_chunk.begin_generation(pos, flight_path, shared_noise)
 		
 		dispatched += 1

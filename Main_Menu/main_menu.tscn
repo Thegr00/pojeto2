@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://rdwfnwsfhojb" path="res://Main_Menu/main_menu.gd" id="1_jht8a"]
 [ext_resource type="Texture2D" uid="uid://di31kll7fls0k" path="res://Welcome to the amto.jpg" id="2_6qckm"]
 [ext_resource type="PackedScene" uid="uid://xyw0fj5xlm2h" path="res://Settings_Menu/settings_menu.tscn" id="3_6qckm"]
-[ext_resource type="AudioStream" uid="uid://bh8lwyk22rlde" path="res://Sam the Kid - Frio [NRyEwTc0uhE].mp3" id="4_2jvup"]
+[ext_resource type="AudioStream" uid="uid://bh8lwyk22rlde" path="res://sfx/Sam the Kid - Frio [NRyEwTc0uhE].mp3" id="4_2jvup"]
 
 [sub_resource type="SystemFont" id="SystemFont_6qckm"]
 subpixel_positioning = 0

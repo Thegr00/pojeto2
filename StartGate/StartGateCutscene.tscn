@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://dgyvpfkijvp5w"]
+
+[ext_resource type="Script" uid="uid://uaotvrqhfl4a" path="res://StartGate/startgatecutscene.gd" id="1_m1drd"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hf78y"]
+cull_mode = 2
+albedo_color = Color(0, 0, 0, 1)
+emission_enabled = true
+emission = Color(1, 0.89411765, 0.5372549, 1)
+emission_energy_multiplier = 3.28
+
+[sub_resource type="QuadMesh" id="QuadMesh_m1drd"]
+
+[node name="PortalCutscene" type="Node3D" unique_id=150254991]
+script = ExtResource("1_m1drd")
+is_cutscene = true
+
+[node name="PortalGraphic" type="MeshInstance3D" parent="." unique_id=2138088168]
+material_override = SubResource("StandardMaterial3D_hf78y")
+mesh = SubResource("QuadMesh_m1drd")
