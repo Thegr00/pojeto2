@@ -17,6 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://dxp5k4bo310bu" path="res://anel.tscn" id="14_bsk3x"]
 [ext_resource type="PackedScene" uid="uid://bxo6v4l6gjle2" path="res://arrow.tscn" id="15_dl7dh"]
 [ext_resource type="FontFile" uid="uid://cny2k8vvkc811" path="res://Montserrat-Bold.ttf" id="16_r4o0u"]
+[ext_resource type="PackedScene" uid="uid://davyxw8uya2ns" path="res://pause_menu.tscn" id="18_g52lx"]
 
 [sub_resource type="Animation" id="Animation_0cr88"]
 length = 0.001
@@ -2053,6 +2054,9 @@ transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -89.
 [node name="AshSnowFall" parent="mangas3p/cam origin" parent_id_path=PackedInt32Array(1479076587, 1068079872) index="1" unique_id=1533343449]
 visible = false
 
+[node name="WindSound" parent="mangas3p" index="7" unique_id=354832438]
+bus = &"Sfx"
+
 [node name="Audio player casa" type="AudioStreamPlayer3D" parent="." unique_id=699385043]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 0)
 stream = ExtResource("6_hu44a")
@@ -2126,7 +2130,7 @@ transform = Transform3D(0.84781915, -0.40523416, 0.34203452, -0.06262485, 0.5639
 current = true
 
 [node name="CameraPos" type="Camera3D" parent="cameras" unique_id=1048843464]
-transform = Transform3D(0.4990485, 0.22813018, -0.8360064, -0.008197422, 0.9659259, 0.2586892, 0.8665349, -0.12224543, 0.48391396, -57.119064, 114.58217, 30.60773)
+transform = Transform3D(0.49904844, 0.22813018, -0.8360064, -0.008197421, 0.9659259, 0.2586892, 0.86653477, -0.12224543, 0.48391396, -57.119064, 114.58217, 30.60773)
 current = true
 
 [node name="Jp gajo" type="Node3D" parent="." unique_id=927502128]
@@ -2864,6 +2868,10 @@ transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 1.18
 text = "PRESS Q TO QUICKLY TURN!"
 font = ExtResource("16_r4o0u")
 font_size = 500
+
+[node name="CanvasLayer2" type="CanvasLayer" parent="." unique_id=27675500]
+
+[node name="pause menu" parent="CanvasLayer2" unique_id=1405658965 instance=ExtResource("18_g52lx")]
 
 [connection signal="body_exited" from="WorldBorder" to="WorldBorder" method="_on_body_exited"]
 

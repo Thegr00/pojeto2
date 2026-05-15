@@ -1,12 +1,15 @@
 [gd_scene format=3 uid="uid://up8rwgpj6eq7"]
 
 [ext_resource type="Script" uid="uid://rdwfnwsfhojb" path="res://Main_Menu/main_menu.gd" id="1_jht8a"]
-[ext_resource type="Texture2D" uid="uid://di31kll7fls0k" path="res://Welcome to the amto.jpg" id="2_6qckm"]
+[ext_resource type="Texture2D" uid="uid://bcw5qca7kaseg" path="res://Sky_prov.png" id="2_ra02u"]
 [ext_resource type="PackedScene" uid="uid://xyw0fj5xlm2h" path="res://Settings_Menu/settings_menu.tscn" id="3_6qckm"]
+[ext_resource type="FontFile" uid="uid://bv0540qp4uc61" path="res://commando/commando.ttf" id="3_ra02u"]
 [ext_resource type="AudioStream" uid="uid://bh8lwyk22rlde" path="res://sfx/Sam the Kid - Frio [NRyEwTc0uhE].mp3" id="4_2jvup"]
 
-[sub_resource type="SystemFont" id="SystemFont_6qckm"]
-subpixel_positioning = 0
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2jvup"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ra02u"]
+bg_color = Color(0, 1, 1, 1)
 
 [sub_resource type="SystemFont" id="SystemFont_2jvup"]
 subpixel_positioning = 0
@@ -27,7 +30,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_6qckm")
+texture = ExtResource("2_ra02u")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1332984598]
 layout_mode = 1
@@ -50,7 +53,7 @@ layout_mode = 2
 
 [node name="Nome do jogo" type="Label" parent="MarginContainer/VBoxContainer" unique_id=666131899]
 layout_mode = 2
-theme_override_fonts/font = SubResource("SystemFont_6qckm")
+theme_override_fonts/font = ExtResource("3_ra02u")
 theme_override_font_sizes/font_size = 64
 text = "A tailors end"
 horizontal_alignment = 1
@@ -72,6 +75,8 @@ layout_mode = 2
 custom_minimum_size = Vector2(120, 32)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxEmpty_2jvup")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ra02u")
 text = "Start"
 
 [node name="Seperator3" type="Control" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=1371682529]
@@ -81,6 +86,8 @@ layout_mode = 2
 custom_minimum_size = Vector2(120, 32)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxEmpty_2jvup")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ra02u")
 text = "Settings"
 
 [node name="Seperator4" type="Control" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=746468945]
@@ -91,6 +98,8 @@ custom_minimum_size = Vector2(120, 32)
 layout_mode = 2
 theme_override_fonts/font = SubResource("SystemFont_2jvup")
 theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxEmpty_2jvup")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ra02u")
 text = "Exit"
 
 [node name="Settings_menu" parent="." unique_id=1906715036 instance=ExtResource("3_6qckm")]
