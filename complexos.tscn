@@ -1439,6 +1439,14 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_d0vyd")
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_13gd0"]
+albedo_texture = ExtResource("1_13gd0")
+emission_enabled = true
+emission = Color(0.4392157, 0.91764706, 0.11372549, 1)
+emission_energy_multiplier = 0.2
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_pe4xw"]
+
 [node name="Complexos" type="Node3D" unique_id=1457649085]
 
 [node name="Casitas" type="Node3D" parent="." unique_id=673230853]
@@ -2132,3 +2140,10 @@ mesh = SubResource("ArrayMesh_vqwib")
 [node name="Cube_102" type="MeshInstance3D" parent="Complexo casas1" unique_id=370462028]
 transform = Transform3D(1.6372937, 0, -1.8560543, 0, 2.475009, 0, 1.8560543, 0, 1.6372937, 285.17334, 0, -171.11993)
 mesh = SubResource("ArrayMesh_b5vws")
+
+[node name="Mais um" type="Node3D" parent="." unique_id=922807159]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -284.10992, 0, -163.49313)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Mais um" unique_id=1872386757]
+material_override = SubResource("StandardMaterial3D_13gd0")
+mesh = SubResource("PlaneMesh_pe4xw")
