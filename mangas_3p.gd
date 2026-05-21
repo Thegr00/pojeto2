@@ -45,6 +45,8 @@ var current_pitch_angle: float = 0.0
 var is_doing_trick: bool = false 
 var is_dead: bool = false 
 var is_spawning: bool = false 
+var is_in_wind: bool = false
+var current_wind_speed: float = 0.0
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -74,7 +76,12 @@ func _physics_process(delta: float) -> void:
 		
 	if Input.is_physical_key_pressed(KEY_Q) and not is_doing_trick:
 		do_u_turn()
-
+	if is_in_wind:
+		velocity.y = current_wind_speed
+	else:
+		# Otherwise, apply normal gravity when they aren't in the wind
+		if not is_on_floor():
+			velocity.y -= 9.8 * delta
 	if not is_doing_trick:
 		var turn_ratio = current_roll_angle / max_roll_angle
 		cam_yaw += turn_ratio * bank_turn_speed * delta 
@@ -327,3 +334,11 @@ func finish_spawn():
 	is_spawning = false
 	set_physics_process(true) # UNFREEZE
 	ScoreManager.start_flying()
+
+func enter_wind(speed: float) -> void:
+	is_in_wind = true
+	current_wind_speed = speed
+
+func exit_wind() -> void:
+	is_in_wind = false
+	current_wind_speed = 0.0

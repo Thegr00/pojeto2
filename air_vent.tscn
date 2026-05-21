@@ -1,0 +1,71 @@
+[gd_scene format=3 uid="uid://cpn8lgam2jyiv"]
+
+[ext_resource type="Script" uid="uid://e6fyhwwqqwp2" path="res://air_vent.gd" id="1_jqynr"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_4ohvb"]
+height = 49.7583
+radius = 5.0
+
+[sub_resource type="Curve" id="Curve_n6xo2"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.0013717413), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_2lqps"]
+curve = SubResource("Curve_n6xo2")
+
+[sub_resource type="Curve" id="Curve_5t2ya"]
+_limits = [-200.0, 200.0, 0.0, 3.0]
+_data = [Vector2(0, -24.181854), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_snkva"]
+curve = SubResource("Curve_5t2ya")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_hi43s"]
+emission_shape = 6
+emission_ring_axis = Vector3(0, 0, 1)
+emission_ring_height = 1.0
+emission_ring_radius = 1.0
+emission_ring_inner_radius = 0.8
+emission_ring_cone_angle = 90.0
+direction = Vector3(0, 1, 0)
+spread = 5.0
+initial_velocity_min = 50.0
+initial_velocity_max = 50.0
+gravity = Vector3(0, 0, 0)
+tangential_accel_min = 2.9999976
+tangential_accel_max = 4.9999976
+tangential_accel_curve = SubResource("CurveTexture_snkva")
+scale_curve = SubResource("CurveTexture_2lqps")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8umnm"]
+blend_mode = 1
+cull_mode = 2
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.46666667, 0.5176471, 0.62352943, 0.73333335)
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_yroi4"]
+material = SubResource("StandardMaterial3D_8umnm")
+
+[node name="AirVent" type="Area3D" unique_id=1503789356]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0)
+script = ExtResource("1_jqynr")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=216274846]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 24.479368, 0)
+shape = SubResource("CylinderShape3D_4ohvb")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="." unique_id=1538921025]
+amount = 2000
+speed_scale = 0.5
+visibility_aabb = AABB(-11.745855, -1.9345546, -12.529476, 23.769855, 53.801292, 24.689236)
+draw_order = 3
+process_material = SubResource("ParticleProcessMaterial_hi43s")
+draw_pass_1 = SubResource("QuadMesh_yroi4")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]
