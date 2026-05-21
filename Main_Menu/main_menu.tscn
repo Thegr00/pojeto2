@@ -11,9 +11,6 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ra02u"]
 bg_color = Color(0, 1, 1, 1)
 
-[sub_resource type="SystemFont" id="SystemFont_2jvup"]
-subpixel_positioning = 0
-
 [node name="Main_Menu" type="Control" unique_id=173472075]
 layout_mode = 3
 anchors_preset = 15
@@ -39,68 +36,73 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 12
+theme_override_constants/margin_left = 75
+theme_override_constants/margin_top = 65
 theme_override_constants/margin_right = 12
 theme_override_constants/margin_bottom = 12
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=260336106]
 layout_mode = 2
+size_flags_horizontal = 0
 theme_override_constants/separation = 60
-
-[node name="Seperator" type="Control" parent="MarginContainer/VBoxContainer" unique_id=184737541]
-layout_mode = 2
 
 [node name="Nome do jogo" type="Label" parent="MarginContainer/VBoxContainer" unique_id=666131899]
 layout_mode = 2
+size_flags_horizontal = 0
 theme_override_fonts/font = ExtResource("3_ra02u")
 theme_override_font_sizes/font_size = 80
-text = "A tailors end"
+text = "A tailor's end"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=265428987]
+[node name="Seperator" type="Control" parent="MarginContainer/VBoxContainer" unique_id=184737541]
+custom_minimum_size = Vector2(0, 120)
 layout_mode = 2
-alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer" unique_id=1294954390]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1294954390]
 layout_mode = 2
+size_flags_horizontal = 0
 theme_override_constants/separation = 18
 alignment = 1
 
-[node name="Seperator2" type="Control" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=1963426748]
+[node name="Seperator2" type="Control" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=1963426748]
 layout_mode = 2
 
-[node name="Start_button" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=609159818]
-custom_minimum_size = Vector2(120, 32)
+[node name="Start_button" type="Button" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=609159818]
+custom_minimum_size = Vector2(270, 40)
 layout_mode = 2
-theme_override_font_sizes/font_size = 32
+theme_override_fonts/font = ExtResource("3_ra02u")
+theme_override_font_sizes/font_size = 42
 theme_override_styles/normal = SubResource("StyleBoxEmpty_2jvup")
 theme_override_styles/hover = SubResource("StyleBoxFlat_ra02u")
 text = "Start"
+alignment = 0
 
-[node name="Seperator3" type="Control" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=1371682529]
+[node name="Seperator3" type="Control" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=1371682529]
 layout_mode = 2
 
-[node name="Opt_button" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=2084469445]
-custom_minimum_size = Vector2(120, 32)
+[node name="Opt_button" type="Button" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=2084469445]
+custom_minimum_size = Vector2(270, 40)
 layout_mode = 2
-theme_override_font_sizes/font_size = 32
+theme_override_fonts/font = ExtResource("3_ra02u")
+theme_override_font_sizes/font_size = 42
 theme_override_styles/normal = SubResource("StyleBoxEmpty_2jvup")
 theme_override_styles/hover = SubResource("StyleBoxFlat_ra02u")
 text = "Settings"
+alignment = 0
 
-[node name="Seperator4" type="Control" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=746468945]
+[node name="Seperator4" type="Control" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=746468945]
 layout_mode = 2
 
-[node name="Exit_button" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=529854112]
-custom_minimum_size = Vector2(120, 32)
+[node name="Exit_button" type="Button" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=529854112]
+custom_minimum_size = Vector2(270, 40)
 layout_mode = 2
-theme_override_fonts/font = SubResource("SystemFont_2jvup")
-theme_override_font_sizes/font_size = 32
+theme_override_fonts/font = ExtResource("3_ra02u")
+theme_override_font_sizes/font_size = 42
 theme_override_styles/normal = SubResource("StyleBoxEmpty_2jvup")
 theme_override_styles/hover = SubResource("StyleBoxFlat_ra02u")
 text = "Exit"
+alignment = 0
 
 [node name="Settings_menu" parent="." unique_id=1906715036 instance=ExtResource("3_6qckm")]
 visible = false
