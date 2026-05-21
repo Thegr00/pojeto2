@@ -1,0 +1,67 @@
+[gd_scene format=3 uid="uid://ccx65vt1v27ce"]
+
+[ext_resource type="Script" uid="uid://ch065cbpmmy2d" path="res://selecao_de_modo.gd" id="1_uwd7h"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uwd7h"]
+bg_color = Color(0.09803922, 0.09803922, 0.09803922, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[node name="SelecaoDeModo" type="Control" unique_id=2108746746]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_uwd7h")
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=874423900]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer" unique_id=1048645920]
+layout_mode = 2
+theme_override_constants/separation = 50
+
+[node name="Tutorial" type="Button" parent="CenterContainer/HBoxContainer" unique_id=1679203837]
+custom_minimum_size = Vector2(250, 425)
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_uwd7h")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_uwd7h")
+theme_override_styles/hover = SubResource("StyleBoxFlat_uwd7h")
+theme_override_styles/focus = SubResource("StyleBoxFlat_uwd7h")
+text = "Tutorial"
+
+[node name="Campanha" type="Button" parent="CenterContainer/HBoxContainer" unique_id=1461015886]
+custom_minimum_size = Vector2(250, 425)
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_uwd7h")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_uwd7h")
+theme_override_styles/hover = SubResource("StyleBoxFlat_uwd7h")
+theme_override_styles/focus = SubResource("StyleBoxFlat_uwd7h")
+text = "Campanha"
+
+[node name="Free_to_play" type="Button" parent="CenterContainer/HBoxContainer" unique_id=1306531550]
+custom_minimum_size = Vector2(250, 425)
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_uwd7h")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_uwd7h")
+theme_override_styles/hover = SubResource("StyleBoxFlat_uwd7h")
+theme_override_styles/focus = SubResource("StyleBoxFlat_uwd7h")
+text = "Free
+ to
+ Play"
+
+[connection signal="pressed" from="CenterContainer/HBoxContainer/Tutorial" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="CenterContainer/HBoxContainer/Campanha" to="." method="_on_button_2_pressed"]
+[connection signal="pressed" from="CenterContainer/HBoxContainer/Free_to_play" to="." method="_on_button_3_pressed"]
