@@ -47,6 +47,7 @@ var is_dead: bool = false
 var is_spawning: bool = false 
 var is_in_wind: bool = false
 var current_wind_speed: float = 0.0
+var wind_tween: Tween
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -336,9 +337,26 @@ func finish_spawn():
 	ScoreManager.start_flying()
 
 func enter_wind(speed: float) -> void:
+	# If the player jumps BACK into the wind while the fade-out is happening, 
+	# we need to cancel the fade-out!
+	if wind_tween:
+		wind_tween.kill() 
+		
 	is_in_wind = true
 	current_wind_speed = speed
 
 func exit_wind() -> void:
+	if wind_tween:
+		wind_tween.kill()
+		
+	# Create a new animation tween
+	wind_tween = create_tween()
+	
+	# This tells Godot: "Change 'current_wind_speed' to 0.0, over exactly 1.0 second."
+	wind_tween.tween_property(self, "current_wind_speed", 0.0, 1.0)
+	
+	# Wait for that 1-second fade to finish
+	await wind_tween.finished
+	
+	# Now that the speed has smoothly hit 0, we finally let normal gravity take over
 	is_in_wind = false
-	current_wind_speed = 0.0
