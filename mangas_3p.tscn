@@ -37,7 +37,7 @@ size = Vector2(0.05, 0.05)
 [sub_resource type="SphereShape3D" id="SphereShape3D_qay7o"]
 radius = 15.0
 
-[node name="mangas3p" type="CharacterBody3D" unique_id=1479076587 node_paths=PackedStringArray("mesh_container")]
+[node name="mangas3p" type="CharacterBody3D" unique_id=1479076587 node_paths=PackedStringArray("mesh_container") groups=["Player"]]
 script = ExtResource("1_yn4l2")
 max_speed = 50.0
 dive_acceleration = 20.0
