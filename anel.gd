@@ -1,20 +1,24 @@
 extends Area3D
 
 func _ready() -> void:
-	# This connects the touch sensor via code!
 	body_entered.connect(_on_body_entered)
 
 func _on_body_entered(body: Node3D) -> void:
-	# Check if the thing flying through the ring is the player
-	if body.name == "mangas3p":
-		print("Player flew through a ring!")
+	print("RING WAS TOUCHED BY: ", body.name) 
+	
+	if body.is_in_group("Player"):
+		print("THE PLAYER IS IN THE GROUP!") 
 		
-		# Find our Objective Manager and tell it we got a ring
 		var objective_manager = get_tree().current_scene.find_child("ObjectiveUI", true, false)
 		
-		if objective_manager and objective_manager.has_method("ring_collected"):
-			objective_manager.ring_collected()
+		if objective_manager:
+			print("FOUND THE OBJECTIVE UI!") 
 			
-		# Optional: Play a sound effect here!
-		
-		queue_free()
+			if objective_manager.has_method("ring_collected"):
+				print("SUCCESS! ADDING RING AND DELETING!")
+				objective_manager.ring_collected()
+				queue_free()
+			else:
+				print("ERROR: UI found, but it doesn't have the ring_collected() function.")
+		else:
+			print("ERROR: Could not find a node named exactly 'ObjectiveUI' in this level.")
