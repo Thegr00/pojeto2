@@ -1,9 +1,13 @@
 extends CanvasLayer
 
 @onready var label = $Label
-
+@export var transition_rect: ColorRect
 signal tutorial_finished
 signal rings_finished
+
+# === 🚀 SCENE TRANSITION CONFIGURATION ===
+@export var loading_screen_path: String = "res://LoadingScreen.tscn" # Path to your loading screen
+# ========================================
 
 var player: Node3D
 var current_objective: int = 0 
@@ -108,7 +112,6 @@ func update_ring_text() -> void:
 	if current_objective == 5:
 		label.text = "Objective: Fly through the rings! (" + str(rings_caught) + "/" + str(total_rings) + ")"
 	elif current_objective == 6:
-		# Changes the text from an empty box to an 'X' when pressed!
 		var q_status = "[X]" if pressed_q else "[ ]"
 		var e_status = "[X]" if pressed_e else "[ ]"
 		label.text = "Objective: Rings (" + str(rings_caught) + "/" + str(total_rings) + ") | Tricks: Q " + q_status + " E " + e_status
@@ -135,7 +138,6 @@ func start_advanced_rings(new_total: int) -> void:
 	rings_caught = 0
 	total_rings = new_total 
 	
-	# Reset the keys just in case they pressed them earlier
 	pressed_q = false
 	pressed_e = false
 	
@@ -145,19 +147,33 @@ func start_advanced_rings(new_total: int) -> void:
 	force_visible_tween.tween_property(label, "modulate:a", 1.0, 0.01)
 	update_ring_text()
 
-# This checks if BOTH the rings are done AND the keys are pressed
 func check_advanced_completion() -> void:
 	if rings_caught >= total_rings and pressed_q and pressed_e:
 		finish_final_tutorial()
 
+# ⚡ UPDATED: Now triggers the scene change instead of an animation
+# ⚡ UPDATED: Now includes the sliding screen wipe transition!
 func finish_final_tutorial() -> void:
 	current_objective = 999 
 	label.text = "Tutorial 100% Complete! You are ready."
 	
-	# Emit a signal here if you need to wake up the timeline for a final 3rd cutscene!
-	# rings_finished.emit() 
-	
+	# 1. Wait 3 seconds for the player to read the completion text
 	await get_tree().create_timer(3.0).timeout
+	
 	if current_objective == 999:
+		# 2. Fade out the tutorial text cleanly
 		active_fade_tween = create_tween()
 		active_fade_tween.tween_property(label, "modulate:a", 0.0, 1.0)
+		await active_fade_tween.finished
+		
+		# 3. Slide the TransitionRect in from the left!
+		# This moves its X position from -2500 to 0 over 1 second.
+		var slide_tween = create_tween()
+		slide_tween.tween_property(transition_rect, "position:x", 0.0, 1.0).set_trans(Tween.TRANS_SINE)
+		
+		# Wait for the slide to finish covering the screen
+		await slide_tween.finished
+		
+		# 4. Safety check, then immediately swap to the loading screen behind the black rect!
+		if is_inside_tree():
+			get_tree().change_scene_to_file("res://loading_screen.tscn")
