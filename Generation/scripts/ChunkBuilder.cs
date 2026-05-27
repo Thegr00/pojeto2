@@ -31,10 +31,13 @@ public partial class ChunkBuilder : RefCounted
 	private FastNoiseLite _heightNoise;
 	private FastNoiseLite _detailNoise;
 
+	// ⚡ TWEAK 2: Cached Segment Math
 	private struct Segment
 	{
 		public Vector3 Start;
 		public Vector3 End;
+		public Vector3 LineVec;
+		public float LineLenSq;
 	}
 
 	public void execute_job()
@@ -47,10 +50,17 @@ public partial class ChunkBuilder : RefCounted
 		for (int i = 0; i < local_segments_gd.Count; i++)
 		{
 			Godot.Collections.Dictionary dict = (Godot.Collections.Dictionary)local_segments_gd[i];
+			Vector3 p1 = (Vector3)dict["start"];
+			Vector3 p2 = (Vector3)dict["end"];
+			Vector3 lineVec = p2 - p1;
+
+			// ⚡ TWEAK 2: Pre-calculate line vector and length here, exactly once!
 			localSegments[i] = new Segment
 			{
-				Start = (Vector3)dict["start"],
-				End = (Vector3)dict["end"]
+				Start = p1,
+				End = p2,
+				LineVec = lineVec,
+				LineLenSq = lineVec.LengthSquared()
 			};
 		}
 
@@ -165,6 +175,7 @@ public partial class ChunkBuilder : RefCounted
 		out_laser_positions = lasers.ToArray();
 	}
 
+	// ⚡ TWEAK 2: Using the cached math so we don't recalculate lines 5,000+ times!
 	private float GetDistanceToSegments(Vector3 pos, Segment[] segments)
 	{
 		if (segments.Length == 0) return 9999.0f;
@@ -173,20 +184,15 @@ public partial class ChunkBuilder : RefCounted
 
 		for (int i = 0; i < segments.Length; i++)
 		{
-			Vector3 p1 = segments[i].Start;
-			Vector3 p2 = segments[i].End;
-
-			Vector3 lineVec = p2 - p1;
-			Vector3 pointVec = pos - p1;
-
-			float lineLenSq = lineVec.LengthSquared();
+			Vector3 pointVec = pos - segments[i].Start;
 			float t = 0.0f;
-			if (lineLenSq > 0.00001f) 
+			
+			if (segments[i].LineLenSq > 0.00001f) 
 			{
-				t = Mathf.Clamp(pointVec.Dot(lineVec) / lineLenSq, 0.0f, 1.0f);
+				t = Mathf.Clamp(pointVec.Dot(segments[i].LineVec) / segments[i].LineLenSq, 0.0f, 1.0f);
 			}
 
-			Vector3 projection = p1 + lineVec * t;
+			Vector3 projection = segments[i].Start + segments[i].LineVec * t;
 			float dSq = pos.DistanceSquaredTo(projection);
 			if (dSq < minDistSq)
 			{
@@ -206,6 +212,9 @@ public partial class ChunkBuilder : RefCounted
 		int totalInnerVoxels = ChunkSize * ChunkSize * ChunkSize;
 		is_empty = true;
 
+		// ⚡ TWEAK 1: Calculate the chunk world offset ONCE outside the loop
+		Vector3 chunkWorldOffset = new Vector3(chunk_pos.X * ChunkSize, chunk_pos.Y * ChunkSize, chunk_pos.Z * ChunkSize) * VoxelSize;
+
 		int idx = 0;
 		for (int z = -1; z < ChunkSize + 1; z++)
 		{
@@ -213,7 +222,8 @@ public partial class ChunkBuilder : RefCounted
 			{
 				for (int x = -1; x < ChunkSize + 1; x++)
 				{
-					Vector3 worldPos = (new Vector3(x, y, z) + new Vector3(chunk_pos.X * ChunkSize, chunk_pos.Y * ChunkSize, chunk_pos.Z * ChunkSize)) * VoxelSize;
+					// ⚡ TWEAK 1: Simply add the offset instead of multiplying every time
+					Vector3 worldPos = (new Vector3(x, y, z) * VoxelSize) + chunkWorldOffset;
 					float d = CalculateSdf(worldPos, localSegments);
 					map[idx] = d;
 
@@ -264,6 +274,9 @@ public partial class ChunkBuilder : RefCounted
 
 		int numIslands = rng.Next(1, 4);
 
+		// ⚡ TWEAK 1: Calculate the chunk world offset ONCE
+		Vector3 chunkWorldOffset = new Vector3(chunk_pos.X * ChunkSize, chunk_pos.Y * ChunkSize, chunk_pos.Z * ChunkSize) * VoxelSize;
+
 		for (int i = 0; i < numIslands; i++)
 		{
 			Vector3 center = new Vector3(
@@ -288,7 +301,8 @@ public partial class ChunkBuilder : RefCounted
 						
 						if (islandSdf < map[idx])
 						{
-							Vector3 worldPos = (localPos + new Vector3(chunk_pos.X * ChunkSize, chunk_pos.Y * ChunkSize, chunk_pos.Z * ChunkSize)) * VoxelSize;
+							// ⚡ TWEAK 1: Apply pre-calculated offset
+							Vector3 worldPos = (localPos * VoxelSize) + chunkWorldOffset;
 							float distToPath = GetDistanceToSegments(worldPos, localSegments);
 							float safetyTube = 10.0f - distToPath;
 							
@@ -367,10 +381,11 @@ public partial class ChunkBuilder : RefCounted
 
 	private void BuildMeshAndCollision(float[] densityMap)
 	{
-		List<Vector3> vertices = new List<Vector3>();
-		List<Vector3> normals = new List<Vector3>();
-		List<int> indices = new List<int>();
-		List<Color> colors = new List<Color>();
+		// ⚡ TWEAK 3: Pre-allocate capacity to prevent Garbage Collection spikes
+		List<Vector3> vertices = new List<Vector3>(2000);
+		List<Vector3> normals = new List<Vector3>(2000);
+		List<int> indices = new List<int>(3000);
+		List<Color> colors = new List<Color>(2000);
 
 		Vector3I[] dirs = new Vector3I[]
 		{
@@ -389,6 +404,11 @@ public partial class ChunkBuilder : RefCounted
 
 		int indexOffset = 0;
 
+		// ⚡ TWEAK 4: Loop Hoisting. Calculate the world offset ONCE outside the loops.
+		float offsetX = chunk_pos.X * ChunkSize * VoxelSize;
+		float offsetY = chunk_pos.Y * ChunkSize * VoxelSize;
+		float offsetZ = chunk_pos.Z * ChunkSize * VoxelSize;
+
 		for (int z = 0; z < ChunkSize; z++)
 		{
 			for (int y = 0; y < ChunkSize; y++)
@@ -399,9 +419,11 @@ public partial class ChunkBuilder : RefCounted
 					if (d >= IsoLevel) continue;
 
 					Vector3 worldPos = (new Vector3(x, y, z) - (Vector3.One * 0.5f)) * VoxelSize;
-					float wx = (x + chunk_pos.X * ChunkSize) * VoxelSize;
-					float wy = (y + chunk_pos.Y * ChunkSize) * VoxelSize;
-					float wz = (z + chunk_pos.Z * ChunkSize) * VoxelSize;
+					
+					// ⚡ TWEAK 4: Simply add the pre-calculated offsets
+					float wx = (x * VoxelSize) + offsetX;
+					float wy = (y * VoxelSize) + offsetY;
+					float wz = (z * VoxelSize) + offsetZ;
 
 					for (int i = 0; i < 6; i++)
 					{
