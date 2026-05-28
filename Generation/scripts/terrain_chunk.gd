@@ -56,7 +56,6 @@ func begin_generation(pos: Vector3i, flight_path: FlightPath, shared_noise: Terr
 	set_process(true)
 
 func _process(_delta: float) -> void:
-	# 1. Did the background math finish?
 	if task_id != -1 and WorkerThreadPool.is_task_completed(task_id):
 		WorkerThreadPool.wait_for_task_completion(task_id) 
 		task_id = -1
