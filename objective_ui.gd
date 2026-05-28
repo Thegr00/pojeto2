@@ -176,6 +176,4 @@ func finish_final_tutorial() -> void:
 		
 		# 4. Safety check, then immediately swap to the loading screen behind the black rect!
 		if is_inside_tree():
-			#get_tree().change_scene_to_file("res://loading_screen.tscn")
-			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-			get_tree().change_scene_to_file("res://Main_Menu/main_menu.tscn")
+			get_tree().change_scene_to_file("res://loading_screen.tscn")
