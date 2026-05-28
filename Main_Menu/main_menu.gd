@@ -6,6 +6,7 @@ extends Control
 @onready var exit_button: Button = $MarginContainer/VBoxContainer/VBoxContainer/Exit_button
 @onready var settings_menu: SettingsMenu = $Settings_menu
 @onready var margin_container: MarginContainer = $MarginContainer
+@onready var selecao_de_modo: Control = $SelecaoDeModo
 
 @onready var start_level = preload("res://Generation/terrain_manager.tscn") as PackedScene
 
@@ -39,8 +40,8 @@ func setup_button_pivots() -> void:
 func _on_button_hover(btn: Button) -> void:
 	var tween = create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 	
-	# Aumenta o tamanho em 10% (funciona bem se o pivot estiver no centro)
-	tween.tween_property(btn, "scale", Vector2(1.1, 1.1), 0.15)
+	# Aumenta o tamanho em 15% (funciona bem se o pivot estiver no centro)
+	tween.tween_property(btn, "scale", Vector2(1.15, 1.15), 0.15)
 	# Aumenta o brilho do botão para dar feedback visual sem mover o botão do sítio
 	tween.parallel().tween_property(btn, "modulate", Color(1.3, 1.3, 1.3, 1.0), 0.15)
 
@@ -51,7 +52,9 @@ func _on_button_exit(btn: Button) -> void:
 	tween.parallel().tween_property(btn, "modulate", Color.WHITE, 0.15)
 
 func on_start_pressed() -> void:
-	get_tree().change_scene_to_file("res://selecao_de_modo.tscn")
+	margin_container.visible = false
+	selecao_de_modo.set_process(true)
+	selecao_de_modo.visible = true
 
 func on_options_pressed() -> void:
 	margin_container.visible = false

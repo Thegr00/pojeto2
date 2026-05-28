@@ -1,15 +1,16 @@
 [gd_scene format=3 uid="uid://up8rwgpj6eq7"]
 
 [ext_resource type="Script" uid="uid://rdwfnwsfhojb" path="res://Main_Menu/main_menu.gd" id="1_jht8a"]
-[ext_resource type="Texture2D" uid="uid://bcw5qca7kaseg" path="res://Sky_prov.png" id="2_ra02u"]
+[ext_resource type="Texture2D" uid="uid://cxsr0byf032c4" path="res://imagem_da_intro.png" id="2_ra02u"]
 [ext_resource type="PackedScene" uid="uid://xyw0fj5xlm2h" path="res://Settings_Menu/settings_menu.tscn" id="3_6qckm"]
 [ext_resource type="FontFile" uid="uid://bv0540qp4uc61" path="res://commando/commando.ttf" id="3_ra02u"]
 [ext_resource type="AudioStream" uid="uid://bh8lwyk22rlde" path="res://sfx/Sam the Kid - Frio [NRyEwTc0uhE].mp3" id="4_2jvup"]
+[ext_resource type="PackedScene" uid="uid://ccx65vt1v27ce" path="res://selecao_de_modo.tscn" id="5_2ytag"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2jvup"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ra02u"]
-bg_color = Color(0, 1, 1, 1)
+bg_color = Color(0.45490196, 0.6627451, 0.93333334, 1)
 
 [node name="Main_Menu" type="Control" unique_id=173472075]
 layout_mode = 3
@@ -28,6 +29,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_ra02u")
+expand_mode = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1332984598]
 layout_mode = 1
@@ -36,7 +38,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 75
+theme_override_constants/margin_left = 70
 theme_override_constants/margin_top = 65
 theme_override_constants/margin_right = 12
 theme_override_constants/margin_bottom = 12
@@ -105,6 +107,10 @@ text = "Exit"
 alignment = 0
 
 [node name="Settings_menu" parent="." unique_id=1906715036 instance=ExtResource("3_6qckm")]
+visible = false
+layout_mode = 1
+
+[node name="SelecaoDeModo" parent="." unique_id=2108746746 instance=ExtResource("5_2ytag")]
 visible = false
 layout_mode = 1
 

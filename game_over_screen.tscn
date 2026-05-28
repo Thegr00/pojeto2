@@ -1,32 +1,78 @@
-[gd_scene format=3 uid="uid://xmo1t7e6e56w"]
+[gd_scene format=3 uid="uid://cvdpt6f4yxp2p"]
 
-[ext_resource type="Script" uid="uid://jdxcbklynr0" path="res://Generation/scripts/game_over_screen.gd" id="1_gt22q"]
+[ext_resource type="Script" uid="uid://ojsdykctta46" path="res://canvas_layer.gd" id="1_gt22q"]
 
-[node name="GameOverScreen" type="CanvasLayer" unique_id=1953861193]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gt22q"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gt22q"]
+bg_color = Color(0.09803922, 0.09803922, 0.09803922, 1)
+
+[node name="game_over_screen" type="CanvasLayer" unique_id=699422218]
 process_mode = 3
 script = ExtResource("1_gt22q")
 
-[node name="Label" type="Label" parent="." unique_id=2090127177]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=859630536]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -752.0
-offset_bottom = -348.0
 grow_horizontal = 2
 grow_vertical = 2
+color = Color(0, 0, 0, 0.47058824)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Label" unique_id=208647999]
-layout_mode = 0
-offset_left = 89.0
-offset_top = 87.0
-offset_right = 1050.0
-offset_bottom = 384.0
-alignment = 1
-
-[node name="Label" type="Label" parent="Label/VBoxContainer" unique_id=1310527324]
-layout_mode = 2
+[node name="score_label" type="Label" parent="." unique_id=60647663]
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -11.5
+offset_right = 76.0
+offset_bottom = 11.5
+grow_vertical = 2
+theme_override_font_sizes/font_size = 24
 text = "CRASHED"
+metadata/_edit_use_anchors_ = true
 
-[node name="RestartButton" type="Button" parent="Label/VBoxContainer" unique_id=282876490]
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=511457618]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -128.25
+offset_top = -403.0
+offset_right = 128.25
+offset_bottom = -204.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=108872842]
+custom_minimum_size = Vector2(256.5, 199)
 layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Button" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1541592517]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxEmpty_gt22q")
+theme_override_styles/hover = SubResource("StyleBoxFlat_gt22q")
 text = "Restart"
+icon_alignment = 1
+
+[node name="Button2" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1594397704]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxEmpty_gt22q")
+theme_override_styles/hover = SubResource("StyleBoxFlat_gt22q")
+text = "Select Mode"
+icon_alignment = 1
+
+[node name="Button3" type="Button" parent="CenterContainer/VBoxContainer" unique_id=696564594]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxEmpty_gt22q")
+theme_override_styles/hover = SubResource("StyleBoxFlat_gt22q")
+text = "Exit to menu"
+icon_alignment = 1
+
+[connection signal="pressed" from="CenterContainer/VBoxContainer/Button" to="." method="_on_restart_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/Button2" to="." method="_on_select_mode_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/Button3" to="." method="_on_exit_to_menu_pressed"]

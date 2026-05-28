@@ -1918,3 +1918,4 @@ emitting = false
 [node name="WindSound" type="AudioStreamPlayer" parent="." unique_id=354832438]
 stream = ExtResource("5_odn01")
 volume_db = -27.941
+bus = &"Sfx"
