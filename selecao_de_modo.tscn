@@ -1,19 +1,48 @@
 [gd_scene format=3 uid="uid://ccx65vt1v27ce"]
 
 [ext_resource type="Script" uid="uid://ch065cbpmmy2d" path="res://selecao_de_modo.gd" id="1_uwd7h"]
-[ext_resource type="Texture2D" uid="uid://bcw5qca7kaseg" path="res://Sky_prov.png" id="2_ql5ag"]
+[ext_resource type="Texture2D" uid="uid://do3a63b5473r" path="res://imagem_da_2_.png" id="2_sntfx"]
 [ext_resource type="FontFile" uid="uid://bv0540qp4uc61" path="res://commando/commando.ttf" id="3_y6men"]
-[ext_resource type="Texture2D" uid="uid://c0iilexwlrh2g" path="res://pla.jpg" id="4_y6men"]
+[ext_resource type="Texture2D" uid="uid://2dupwmmhvkr3" path="res://tutorial.png" id="4_eownn"]
+[ext_resource type="Script" uid="uid://briurmxa6se0k" path="res://hover_button.gd" id="5_sntfx"]
+[ext_resource type="Texture2D" uid="uid://s8x4qe4shrca" path="res://campanha.png" id="5_ucogb"]
+[ext_resource type="Texture2D" uid="uid://dv5eaiyvsogmb" path="res://imagem_do_infinito.png" id="7_sntfx"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_eownn"]
-texture = ExtResource("4_y6men")
+texture = ExtResource("4_eownn")
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uwd7h"]
-bg_color = Color(0.09803922, 0.09803922, 0.09803922, 1)
-corner_radius_top_left = 20
-corner_radius_top_right = 20
-corner_radius_bottom_right = 20
-corner_radius_bottom_left = 20
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0mfh0"]
+texture = ExtResource("4_eownn")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ucogb"]
+texture = ExtResource("4_eownn")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hjiun"]
+texture = ExtResource("4_eownn")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_sntfx"]
+texture = ExtResource("5_ucogb")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_xeop1"]
+texture = ExtResource("5_ucogb")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_wwg0b"]
+texture = ExtResource("5_ucogb")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_wopq7"]
+texture = ExtResource("5_ucogb")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_r4qao"]
+texture = ExtResource("7_sntfx")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8gfml"]
+texture = ExtResource("7_sntfx")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_jx1pa"]
+texture = ExtResource("7_sntfx")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1a20p"]
+texture = ExtResource("7_sntfx")
 
 [node name="SelecaoDeModo" type="Control" unique_id=2108746746]
 layout_mode = 3
@@ -31,7 +60,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_ql5ag")
+texture = ExtResource("2_sntfx")
+expand_mode = 1
 
 [node name="CenterContainer" type="CenterContainer" parent="TextureRect" unique_id=874423900]
 layout_mode = 1
@@ -51,33 +81,37 @@ layout_mode = 2
 theme_override_fonts/font = ExtResource("3_y6men")
 theme_override_font_sizes/font_size = 40
 theme_override_styles/normal = SubResource("StyleBoxTexture_eownn")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_uwd7h")
-theme_override_styles/hover = SubResource("StyleBoxFlat_uwd7h")
-theme_override_styles/focus = SubResource("StyleBoxFlat_uwd7h")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_0mfh0")
+theme_override_styles/hover = SubResource("StyleBoxTexture_ucogb")
+theme_override_styles/focus = SubResource("StyleBoxTexture_hjiun")
 text = "Tutorial"
+script = ExtResource("5_sntfx")
 
 [node name="Campanha" type="Button" parent="TextureRect/CenterContainer/HBoxContainer" unique_id=1461015886]
 custom_minimum_size = Vector2(250, 425)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_y6men")
 theme_override_font_sizes/font_size = 40
-theme_override_styles/normal = SubResource("StyleBoxTexture_eownn")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_uwd7h")
-theme_override_styles/hover = SubResource("StyleBoxFlat_uwd7h")
-theme_override_styles/focus = SubResource("StyleBoxFlat_uwd7h")
+theme_override_styles/normal = SubResource("StyleBoxTexture_sntfx")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_xeop1")
+theme_override_styles/hover = SubResource("StyleBoxTexture_wwg0b")
+theme_override_styles/focus = SubResource("StyleBoxTexture_wopq7")
 text = "Campanha"
+script = ExtResource("5_sntfx")
 
 [node name="Free_to_play" type="Button" parent="TextureRect/CenterContainer/HBoxContainer" unique_id=1306531550]
+clip_children = 2
 custom_minimum_size = Vector2(250, 425)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_y6men")
 theme_override_font_sizes/font_size = 40
-theme_override_styles/normal = SubResource("StyleBoxTexture_eownn")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_uwd7h")
-theme_override_styles/hover = SubResource("StyleBoxFlat_uwd7h")
-theme_override_styles/focus = SubResource("StyleBoxFlat_uwd7h")
+theme_override_styles/normal = SubResource("StyleBoxTexture_r4qao")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_8gfml")
+theme_override_styles/hover = SubResource("StyleBoxTexture_jx1pa")
+theme_override_styles/focus = SubResource("StyleBoxTexture_1a20p")
 text = "Endless 
 Mode"
+script = ExtResource("5_sntfx")
 
 [connection signal="pressed" from="TextureRect/CenterContainer/HBoxContainer/Tutorial" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="TextureRect/CenterContainer/HBoxContainer/Campanha" to="." method="_on_button_2_pressed"]
