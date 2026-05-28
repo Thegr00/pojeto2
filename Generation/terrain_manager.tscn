@@ -39,8 +39,7 @@ light_energy = 11.476
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1763960021]
 environment = SubResource("Environment_atpbs")
 
-[node name="LoadingScreen" parent="." unique_id=387819251 node_paths=PackedStringArray("world_manager") instance=ExtResource("4_dq43s")]
-world_manager = NodePath("..")
+[node name="LoadingScreen" parent="." unique_id=387819251 instance=ExtResource("4_dq43s")]
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=481358530]
 script = ExtResource("3_w5nei")

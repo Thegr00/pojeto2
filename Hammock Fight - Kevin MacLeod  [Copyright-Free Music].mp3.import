@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b2tvlluo5lpbo"
+path="res://.godot/imported/Hammock Fight - Kevin MacLeod  [Copyright-Free Music].mp3-efea9666d0b1f3645e8a5812a64591c9.mp3str"
+
+[deps]
+
+source_file="res://Hammock Fight - Kevin MacLeod  [Copyright-Free Music].mp3"
+dest_files=["res://.godot/imported/Hammock Fight - Kevin MacLeod  [Copyright-Free Music].mp3-efea9666d0b1f3645e8a5812a64591c9.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
